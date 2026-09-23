@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "ObraSync",
+    "slug": "obrasync",
+    "version": "1.2.0",
+    "scheme": "obrasync",
+    "orientation": "portrait",
+    "icon": "./src/assets/app/icon.png",
+    "userInterfaceStyle": "light",
+    "description": "Gestão de obras, materiais, compras, estoque e custos.",
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permita que o ObraSync use a câmera para ler etiquetas, QR Codes e códigos de barras.",
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": true
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.planengen.obrasync"
+    },
+    "android": {
+      "package": "br.com.planengen.obrasync",
+      "adaptiveIcon": {
+        "backgroundColor": "#FAF8F5",
+        "foregroundImage": "./src/assets/app/android-icon-foreground.png"
+      }
+    },
+    "web": {
+      "favicon": "./src/assets/app/favicon.png"
+    }
+  }
+}

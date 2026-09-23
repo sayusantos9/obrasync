@@ -1,0 +1,26 @@
+[
+  {
+    "id": "LBL-375FFFAC",
+    "materialCode": "ACO-014",
+    "name": "Aço CA-50 10 mm",
+    "lot": "4587",
+    "unit": "Barra 12 m",
+    "location": "Galpão A • Setor 03",
+    "project": "Residencial Aurora",
+    "receivedAt": "17/09/2026",
+    "qrPayload": "obrasync://label/LBL-375FFFAC",
+    "createdAt": "2026-09-17T13:48:14.812Z"
+  },
+  {
+    "id": "LBL-190DB059",
+    "materialCode": "ACO-014",
+    "name": "Aço CA-50 10 mm",
+    "lot": "4587",
+    "unit": "Barra 12 m",
+    "location": "Galpão A • Setor 03",
+    "project": "Residencial Aurora",
+    "receivedAt": "17/09/2026",
+    "qrPayload": "obrasync://label/LBL-190DB059",
+    "createdAt": "2026-09-17T13:49:55.305Z"
+  }
+]
