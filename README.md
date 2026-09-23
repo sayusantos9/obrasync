@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ObraSync
 
 Protótipo mobile multiplataforma em React Native + Expo para gestão de obras, insumos, compras, recebimentos, estoque e custos. O mesmo código roda em Android e iOS.
@@ -126,3 +127,6 @@ backend/
 ```
 
 O backend utiliza um arquivo JSON para demonstrar a persistência. Em produção, o repositório poderá ser substituído por PostgreSQL ou outro banco sem alterar as rotas e os controladores.
+=======
+# obrasync
+>>>>>>> c8a985012579d913cddc092e991cbaea0849c7a1
