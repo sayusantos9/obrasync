@@ -28,6 +28,7 @@ import {
   StockScreen,
   TransfersScreen,
 } from '../screens';
+import { USER_ROLES } from '../data/authData';
 import { SCREENS, TABS } from './routes';
 
 const TAB_COMPONENTS = Object.freeze({
@@ -77,6 +78,17 @@ const BOTTOM_TAB_SCREENS = new Set([
   SCREENS.TRANSFERS,
 ]);
 
+const MASTER_TAB_SCREENS = new Set([
+  SCREENS.TABS,
+  SCREENS.MASTER_PANEL,
+  SCREENS.COMPANIES,
+  SCREENS.CREATE_MEMBER,
+  SCREENS.COMPANY_PERMISSIONS,
+  SCREENS.REPORTS,
+  SCREENS.SETTINGS,
+  SCREENS.PROFILE,
+]);
+
 export function resolveScreenComponent(screenId, activeTab) {
   if (screenId === SCREENS.TABS) {
     return TAB_COMPONENTS[activeTab] ?? HomeScreen;
@@ -85,6 +97,7 @@ export function resolveScreenComponent(screenId, activeTab) {
   return SCREEN_COMPONENTS[screenId] ?? HomeScreen;
 }
 
-export function shouldShowBottomTabs(screenId) {
+export function shouldShowBottomTabs(screenId, role) {
+  if (role === USER_ROLES.MASTER) return MASTER_TAB_SCREENS.has(screenId);
   return BOTTOM_TAB_SCREENS.has(screenId);
 }

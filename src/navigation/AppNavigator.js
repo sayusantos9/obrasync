@@ -32,7 +32,7 @@ export function AppNavigator() {
 
   const screenContent = <ScreenComponent type={currentScreen} />;
 
-  if (!shouldShowBottomTabs(currentScreen)) return screenContent;
+  if (!shouldShowBottomTabs(currentScreen, currentUser.role)) return screenContent;
 
   return (
     <View style={{ flex: 1 }}>

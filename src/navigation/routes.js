@@ -45,6 +45,16 @@ const baseTabs = [
 ];
 
 export function getRoleTabs(role) {
+  if (role === USER_ROLES.MASTER) {
+    return [
+      { id: 'home', label: 'Início', icon: 'home', tab: TABS.HOME },
+      { id: 'companies', label: 'Empresas', icon: 'business', screen: SCREENS.COMPANIES },
+      { id: 'members', label: 'Usuários', icon: 'people', screen: SCREENS.CREATE_MEMBER },
+      { id: 'projects', label: 'Obras', icon: 'business', tab: TABS.PROJECTS },
+      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.PROFILE },
+    ];
+  }
+
   if (role === USER_ROLES.PURCHASING) {
     return [
       { id: 'home', label: 'Início', icon: 'home', tab: TABS.HOME },

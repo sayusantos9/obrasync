@@ -49,6 +49,8 @@ export function BottomTabs() {
         const isMoreScreen = item.id === 'more' && [
           SCREENS.PROFILE,
           SCREENS.REPORTS,
+          SCREENS.SETTINGS,
+          SCREENS.COMPANY_PERMISSIONS,
         ].includes(currentScreen);
         const isStockFlow = item.id === 'stock' && [
           SCREENS.STOCK,
@@ -61,7 +63,8 @@ export function BottomTabs() {
           SCREENS.RECEIPT,
         ].includes(currentScreen);
         const active = item.tab
-          ? currentScreen === SCREENS.TABS && activeTab === item.tab
+          ? (currentScreen === SCREENS.TABS || (item.id === 'home' && currentScreen === SCREENS.MASTER_PANEL))
+            && activeTab === item.tab
           : currentScreen === item.screen || isMoreScreen || isStockFlow || isPurchaseFlow;
         const icon = active ? item.icon : `${item.icon}-outline`;
 
