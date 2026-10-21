@@ -3,7 +3,7 @@ import { useTheme } from 'styled-components/native';
 import { BottomTabs } from '../components/layout/BottomTabs';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
-import { LoginScreen, MasterPanelScreen } from '../screens';
+import { EngineeringHomeScreen, LoginScreen, MasterPanelScreen } from '../screens';
 import { SCREENS, TABS } from './routes';
 import { resolveScreenComponent, shouldShowBottomTabs } from './screenRegistry';
 
@@ -25,10 +25,15 @@ export function AppNavigator() {
   const isMasterHome = currentUser.role === USER_ROLES.MASTER
     && currentScreen === SCREENS.TABS
     && activeTab === TABS.HOME;
+  const isEngineeringHome = currentUser.role === USER_ROLES.ENGINEERING
+    && currentScreen === SCREENS.TABS
+    && activeTab === TABS.HOME;
 
   const ScreenComponent = isMasterHome
     ? MasterPanelScreen
-    : resolveScreenComponent(currentScreen, activeTab);
+    : isEngineeringHome
+      ? EngineeringHomeScreen
+      : resolveScreenComponent(currentScreen, activeTab);
 
   const screenContent = <ScreenComponent type={currentScreen} />;
 

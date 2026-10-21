@@ -8,6 +8,7 @@ export { CreateBudgetScreen } from './CreateBudgetScreen';
 export { CreateQuoteScreen } from './CreateQuoteScreen';
 export { FeatureScreen } from './FeatureScreen';
 export { GuideScreen } from './GuideScreen';
+export { EngineeringHomeScreen } from './EngineeringHomeScreen';
 export { HomeScreen } from './HomeScreen';
 export { LabelScreen } from './LabelScreen';
 export { LoginScreen } from './LoginScreen';

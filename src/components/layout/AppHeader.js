@@ -9,6 +9,9 @@ const Wrapper = styled.View`
   background-color: ${({ theme }) => theme.colors.primary};
 `;
 const Top = styled.View`flex-direction: row; align-items: center; justify-content: space-between;`;
+const OperationalLabel = styled.View`margin-top: 12px; flex-direction: row; align-items: center;`;
+const OperationalDot = styled.View`width: 8px; height: 8px; margin-right: 7px; background-color: #34D399; border-radius: 4px;`;
+const OperationalText = styled.Text`color: #BFDBFE; font-size: 10px; font-weight: 800; letter-spacing: 1px;`;
 const Brand = styled.Text`color: white; font-size: ${({ theme }) => 27 * theme.fontScale}px; font-weight: 900;`;
 const Accent = styled.Text`color: ${({ theme }) => theme.colors.accent};`;
 const Actions = styled.View`flex-direction: row; gap: 8px;`;
@@ -20,7 +23,7 @@ const Subtitle = styled.Text`margin-top:3px; color:rgba(255,255,255,.75); font-s
 const ProjectButton = styled.TouchableOpacity`min-height:46px; margin-top:16px; padding:0 14px; flex-direction:row; align-items:center; background-color:rgba(255,255,255,.14); border-radius:14px;`;
 const ProjectName = styled.Text`flex:1; margin-left:9px; color:white; font-size:${({theme})=>14*theme.fontScale}px; font-weight:800;`;
 
-export function AppHeader() {
+export function AppHeader({ showOperationalLabel = false }) {
   const { currentUser, dashboard, openScreen, selectedProject, selectTab } = useApp();
   const firstName = currentUser?.name?.split(' ')[0] || 'Usuário';
   const roleLabel = ROLE_LABELS[currentUser?.role] || currentUser?.role || 'Usuário';
@@ -39,6 +42,7 @@ export function AppHeader() {
           </Action>
         </Actions>
       </Top>
+      {showOperationalLabel ? <OperationalLabel><OperationalDot /><OperationalText>PAINEL OPERACIONAL</OperationalText></OperationalLabel> : null}
       <Greeting>Olá, {firstName}</Greeting>
       <Subtitle>{roleLabel} • {currentUser?.companyName}</Subtitle>
       <ProjectButton accessibilityRole="button" accessibilityLabel={`Obra ativa: ${selectedProject?.name}. Toque para trocar.`} onPress={() => selectTab(TABS.PROJECTS)}>
