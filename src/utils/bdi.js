@@ -43,6 +43,7 @@ export function calculateBudget(items=[],bdi=DEFAULT_BDI) {
   if (!items.length) throw new Error('Selecione ao menos um insumo.');
   const calc=calculateBdi(bdi);
   const lines=items.map((item,index)=>{
+    if (item.inputType !== 'MATERIAL' || !['shared','company'].includes(item.source)) throw new Error('Selecione somente materiais do cat?logo.');
     const quantity=parseDecimal(item.quantity);
     const unitPrice=parseDecimal(item.unitPrice ?? item.unit_price);
     if (!item.inputId || !item.code || !item.description || !item.unit) throw new Error(`Selecione um insumo cadastrado na linha ${index+1}.`);

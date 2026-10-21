@@ -8,7 +8,7 @@ import { theme } from '../../theme';
 
 const EMPTY={description:'',unit:'un',unitPrice:'',inputType:'MATERIAL'};
 export function CostInputEditor({items,onChange,disabled}) {
-  const {costInputs=[],createCostInput,refreshCostInputs}=useApp();
+  const {costInputs=[],costInputsError,createCostInput,refreshCostInputs}=useApp();
   const [query,setQuery]=useState('');
   const [selected,setSelected]=useState(null);
   const [quantity,setQuantity]=useState('1');
@@ -22,7 +22,7 @@ export function CostInputEditor({items,onChange,disabled}) {
     const q=parseDecimal(quantity);
     const p=Number(selected.unitPrice);
     if(!Number.isFinite(q)||q<=0)return Alert.alert('Quantidade inválida','Informe um coeficiente ou quantidade maior que zero.');
-    const item={id:`TEMP-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,inputId:selected.id,code:selected.code,inputType:selected.inputType,
+    const item={id:`TEMP-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,inputId:selected.id,source:selected.source,code:selected.code,inputType:selected.inputType,
       description:selected.description,unit:selected.unit,quantity:q,unitPrice:p,total:roundMoney(q*p)};
     onChange([...items,item]);setSelected(null);setQuantity('1');setQuery('');
   }
@@ -37,7 +37,8 @@ export function CostInputEditor({items,onChange,disabled}) {
     }catch(e){Alert.alert('Erro ao cadastrar insumo',e?.message||'Não foi possível salvar.');}
     finally{setLoading(false);}
   }
-  return <View style={styles.root}>
+  return <View style={styles.root} pointerEvents={disabled ? 'none' : 'auto'}>
+    {!!costInputsError && <Text accessibilityRole="alert" style={styles.empty}>Falha ao carregar materiais: {costInputsError}. Toque em atualizar para tentar novamente.</Text>}
     <Text style={styles.title}>Insumos do orçamento</Text>
     <Text style={styles.description}>Selecione um insumo por código, nome ou unidade. Quantidade/coeficiente × preço unitário = custo do item sem BDI.</Text>
     <View style={styles.searchRow}><TextInput placeholder="Pesquisar código ou nome do insumo" placeholderTextColor="#8692A4" style={[styles.input,{flex:1}]} value={query} onChangeText={setQuery} />
@@ -59,7 +60,7 @@ export function CostInputEditor({items,onChange,disabled}) {
     <TouchableOpacity style={styles.newInput} onPress={()=>setCreating(v=>!v)}><Ionicons name={creating?'close':'add'} size={18} color={theme.colors.primary}/><Text style={styles.newText}>{creating?'Fechar cadastro':'Cadastrar novo insumo (código automático)'}</Text></TouchableOpacity>
     {creating&&<View style={styles.form}>
       <Text style={styles.label}>NOME / DESCRIÇÃO</Text><TextInput value={draft.description} onChangeText={v=>setDraft(d=>({...d,description:v}))} placeholder="Ex.: Cabo de cobre 10 mm²" style={styles.input}/>
-      <Text style={styles.label}>TIPO DE INSUMO</Text><View style={styles.types}>{['MATERIAL','MAO_DE_OBRA','EQUIPAMENTO','OUTROS'].map(t=><TouchableOpacity key={t} onPress={()=>setDraft(d=>({...d,inputType:t}))} style={[styles.type,draft.inputType===t&&styles.typeSelected]}><Text style={styles.typeName}>{t.replaceAll('_',' ')}</Text></TouchableOpacity>)}</View>
+      <Text style={styles.label}>TIPO DE INSUMO</Text><View style={styles.types}>{['MATERIAL'].map(t=><TouchableOpacity key={t} onPress={()=>setDraft(d=>({...d,inputType:t}))} style={[styles.type,draft.inputType===t&&styles.typeSelected]}><Text style={styles.typeName}>{t.replaceAll('_',' ')}</Text></TouchableOpacity>)}</View>
       <Text style={styles.label}>UNIDADE (UN, M, KG, H, M², M³...)</Text><TextInput value={draft.unit} onChangeText={v=>setDraft(d=>({...d,unit:v}))} style={styles.input}/>
       <Text style={styles.label}>PREÇO UNITÁRIO (R$)</Text><TextInput keyboardType="decimal-pad" value={draft.unitPrice} onChangeText={v=>setDraft(d=>({...d,unitPrice:v}))} placeholder="0,00" style={styles.input}/>
       <TouchableOpacity disabled={loading} style={styles.save} onPress={saveInput}><Text style={styles.white}>{loading?'Cadastrando...':'Salvar insumo no Supabase'}</Text></TouchableOpacity>

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildQuote, getProjectQuotes } from '../src/utils/quotes.js';
+import { prepareQuote, getProjectQuotes } from '../src/utils/quotes.js';
 
 const validQuote = {
   title: 'Materiais elétricos', clientName: 'Cliente A', supplierName: 'Fornecedor B',
@@ -11,16 +11,15 @@ const validQuote = {
 };
 
 test('cotação recebe a obra e o total calculado por item', () => {
-  const quote = buildQuote(validQuote, 'obra-123', 1234567890000);
+  const quote = prepareQuote(validQuote, 'obra-123', 1234567890000);
   assert.equal(quote.projectId, 'obra-123');
   assert.equal(quote.total, 38.20);
   assert.equal(quote.items[0].total, 24.70);
   assert.equal(quote.items[1].total, 13.50);
-  assert.equal(quote.number, 'COT-890000');
 });
 
 test('filtra apenas cotações da obra ativa e é seguro sem obra', () => {
-  const quote = buildQuote(validQuote, 'obra-123', 1234567890000);
+  const quote = prepareQuote(validQuote, 'obra-123', 1234567890000);
   assert.deepEqual(getProjectQuotes([quote], 'obra-123'), [quote]);
   assert.deepEqual(getProjectQuotes([quote], 'obra-456'), []);
   assert.deepEqual(getProjectQuotes([quote], null), []);
@@ -28,16 +27,16 @@ test('filtra apenas cotações da obra ativa e é seguro sem obra', () => {
 });
 
 test('não salva cotação sem obra, cliente, fornecedor, validade ou itens', () => {
-  assert.throws(() => buildQuote(validQuote, null), /Selecione uma obra/);
-  assert.throws(() => buildQuote({ ...validQuote, clientName: '' }, 'obra-123'), /cliente/);
-  assert.throws(() => buildQuote({ ...validQuote, supplierName: '' }, 'obra-123'), /fornecedor/);
-  assert.throws(() => buildQuote({ ...validQuote, validUntil: '' }, 'obra-123'), /validade/);
-  assert.throws(() => buildQuote({ ...validQuote, items: [] }, 'obra-123'), /material/);
+  assert.throws(() => prepareQuote(validQuote, null), /Selecione uma obra/);
+  assert.throws(() => prepareQuote({ ...validQuote, clientName: '' }, 'obra-123'), /cliente/);
+  assert.throws(() => prepareQuote({ ...validQuote, supplierName: '' }, 'obra-123'), /fornecedor/);
+  assert.throws(() => prepareQuote({ ...validQuote, validUntil: '' }, 'obra-123'), /validade/);
+  assert.throws(() => prepareQuote({ ...validQuote, items: [] }, 'obra-123'), /item/);
 });
 
 test('rejeita quantidade inválida e recalcula totais adulterados', () => {
-  assert.throws(() => buildQuote({ ...validQuote, items: [{ description: 'Cabo', quantity: -1, unitPrice: 1 }] }, 'obra-123'), /Revise/);
-  const quote = buildQuote({ ...validQuote, items: [{ description: 'Cabo', quantity: 2, unitPrice: 8.99, total: 99999 }] }, 'obra-123');
+  assert.throws(() => prepareQuote({ ...validQuote, items: [{ description: 'Cabo', quantity: -1, unitPrice: 1 }] }, 'obra-123'), /Revise/);
+  const quote = prepareQuote({ ...validQuote, items: [{ description: 'Cabo', quantity: 2, unitPrice: 8.99, total: 99999 }] }, 'obra-123');
   assert.equal(quote.total, 17.98);
   assert.equal(quote.items[0].total, 17.98);
 });

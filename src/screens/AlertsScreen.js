@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
 import { Text } from 'react-native';
+import { ScreenHeader } from '../components/layout/ScreenHeader';
 import { Content, Screen, Scroll } from '../components/ui/primitives';
 import { useApp } from '../contexts/AppContext';
 import {
@@ -12,10 +13,8 @@ import {
   FilterChip,
   FilterRow,
   FilterText,
-  Header,
   MarkButton,
   Time,
-  Title,
 } from './AlertsScreen.styles';
 
 const ALERT_FILTERS = ['Todos', 'Custos', 'Prazos', 'Aprovações'];
@@ -111,14 +110,12 @@ export function AlertsScreen() {
 
   return (
     <Screen>
-      <Scroll>
-        <Header>
-          <Title>Alertas</Title>
+      <ScreenHeader title="Alertas" right={
           <MarkButton accessibilityRole="button" accessibilityLabel="Alertas atualizados">
             <Ionicons name="checkmark-done" size={25} color="white" />
           </MarkButton>
-        </Header>
-
+      } />
+      <Scroll>
         <Content>
           <FilterRow>
             {ALERT_FILTERS.map((label) => {

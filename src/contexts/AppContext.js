@@ -5,6 +5,10 @@ import { USER_ROLES } from '../data/authData';
 import { useAppNavigation } from '../hooks/useAppNavigation';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import { SCREENS, TABS } from '../navigation/routes';
+import { fetchCostInputs, saveCompanyInput } from '../services/costInputService';
+import { calculateBudget } from '../utils/bdi';
+import { prepareQuote, encodeQuoteMeta, toQuote } from '../utils/quotes';
+import { toDatabaseDate } from '../utils/dates';
 
 const AppContext = createContext(null);
 
@@ -58,6 +62,10 @@ function toBudget(row) {
     clientDocument: row.client_document || '',
     clientEmail: row.client_email || '',
     clientPhone: row.client_phone || '',
+    subtotal: row.subtotal_without_bdi == null ? undefined : Number(row.subtotal_without_bdi),
+    bdiRate: Number(row.bdi_percent || 0),
+    bdiAmount: Number(row.bdi_amount || 0),
+    bdiConfig: row.bdi_config || null,
     total: Number(row.total || 0),
     status: row.status || 'DRAFT',
     validUntil: row.valid_until || '',
@@ -66,6 +74,10 @@ function toBudget(row) {
     createdAt: row.created_at ? new Date(row.created_at).toLocaleDateString('pt-BR') : '',
     items: (row.budget_items || []).map((item) => ({
       id: item.id,
+      inputId: item.catalog_input_id || item.input_id,
+      source: item.catalog_input_id ? 'shared' : 'company',
+      code: item.input_code || '',
+      inputType: item.input_type || 'MATERIAL',
       description: item.description,
       quantity: Number(item.quantity || 0),
       unit: item.unit || 'un',
@@ -95,6 +107,17 @@ export function AppProvider({ children }) {
   const [selectedProject, setSelectedProject] = useState(null);
   const [budgetDocuments, setBudgetDocuments] = useState([]);
   const [quotes, setQuotes] = useState(DEMO_QUOTES);
+  const [costInputs, setCostInputs] = useState([]);
+  const [costInputsError, setCostInputsError] = useState('');
+  async function refreshCostInputs() {
+    try { const rows = await fetchCostInputs(); setCostInputs(rows); setCostInputsError(''); return rows; }
+    catch (error) { setCostInputsError(error.message); throw error; }
+  }
+  async function createCostInput(draft) {
+    const item = await saveCompanyInput(draft, currentUser);
+    setCostInputs(rows => [...rows, item]);
+    return item;
+  }
   const [requests, setRequests] = useState(DEMO_REQUESTS);
   const [orders, setOrders] = useState(DEMO_ORDERS);
   const [receipts, setReceipts] = useState(DEMO_RECEIPTS);
@@ -150,13 +173,19 @@ export function AppProvider({ children }) {
   async function loadAppData(user) {
     if (!supabase || !user) return;
 
-    const [projectsResult, budgetsResult] = await Promise.all([
+    const [projectsResult, budgetsResult, quotesResult] = await Promise.all([
       supabase.from('projects').select('*').order('created_at', { ascending: false }),
       supabase.from('budgets').select('*,budget_items(*)').order('created_at', { ascending: false }),
+      supabase.from('quotations').select('*,quotation_items(*)').order('created_at', { ascending: false }),
     ]);
 
     if (projectsResult.error) throw projectsResult.error;
     if (budgetsResult.error) throw budgetsResult.error;
+    if (quotesResult.error) throw quotesResult.error;
+    setQuotes((quotesResult.data || []).map(toQuote));
+    if (['MASTER', 'ENGINEERING', 'PURCHASING'].includes(user.role)) {
+      try { await refreshCostInputs(); } catch { /* O editor mostra o erro e permite atualizar. */ }
+    } else { setCostInputs([]); setCostInputsError(''); }
 
     const nextProjects = (projectsResult.data || []).map(toProject);
     const nextBudgets = (budgetsResult.data || []).map(toBudget);
@@ -189,6 +218,8 @@ export function AppProvider({ children }) {
       setCurrentUser(null);
       setProjects([]);
       setBudgetDocuments([]);
+      setQuotes([]); setCostInputs([]); setCostInputsError('');
+      setRequests([]); setOrders([]); setReceipts([]); setExtraExpenses([]); setPendingRequests([]);
       setMembers([]);
       setCompanies([]);
       setSelectedProject(null);
@@ -309,6 +340,8 @@ export function AppProvider({ children }) {
       setCurrentUser(null);
       setProjects([]);
       setBudgetDocuments([]);
+      setQuotes([]); setCostInputs([]); setCostInputsError('');
+      setRequests([]); setOrders([]); setReceipts([]); setExtraExpenses([]); setPendingRequests([]);
       setMembers([]);
       setCompanies([]);
       setSelectedProject(null);
@@ -360,15 +393,13 @@ export function AppProvider({ children }) {
   async function addBudgetDocument(data) {
     if (!supabase || !currentUser?.companyId || !selectedProject?.id) throw new Error('Selecione uma obra antes de criar o orçamento.');
 
-    const items = data.items || [];
-    const total = Number(items.reduce((sum, item) => sum + Number(item.total || Number(item.quantity || 0) * Number(item.unitPrice || 0)), 0));
+    const calculated = calculateBudget(data.items || [], data.bdiConfig);
+    const { items, total } = calculated;
     const clientById = members.find((member) => member.id === data.clientUserId && member.role === USER_ROLES.CLIENT);
     const clientByEmail = members.find((member) => member.role === USER_ROLES.CLIENT && member.email.toLowerCase() === String(data.clientEmail || '').trim().toLowerCase());
     const client = clientById || clientByEmail || null;
 
-    if (!client) {
-      throw new Error('Vincule este orçamento a um Cliente cadastrado pelo Gestor.');
-    }
+    if (data.clientUserId && !client) throw new Error('Cliente não encontrado nesta empresa.');
 
     const number = `ORC-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
     const { data: budget, error: budgetError } = await supabase
@@ -381,12 +412,16 @@ export function AppProvider({ children }) {
         description: data.description?.trim() || null,
         status: 'DRAFT',
         total,
-        valid_until: data.validUntil || null,
+        subtotal_without_bdi: calculated.subtotal,
+        bdi_percent: calculated.bdiRate,
+        bdi_amount: calculated.bdiAmount,
+        bdi_config: calculated.bdiConfig,
+        valid_until: data.validUntil ? toDatabaseDate(data.validUntil) : null,
         notes: data.notes?.trim() || null,
-        client_user_id: client.id,
-        client_name: client.name,
+        client_user_id: client?.id || null,
+        client_name: client?.name || selectedProject.client || null,
         client_document: data.clientDocument?.trim() || null,
-        client_email: client.email,
+        client_email: client?.email || null,
         client_phone: data.clientPhone?.trim() || null,
         created_by: currentUser.id,
       })
@@ -397,6 +432,10 @@ export function AppProvider({ children }) {
 
     const itemRows = items.map((item) => ({
       budget_id: budget.id,
+      input_id: item.source === 'company' ? item.inputId : null,
+      catalog_input_id: item.source === 'shared' ? item.inputId : null,
+      input_code: item.code,
+      input_type: 'MATERIAL',
       description: item.description,
       quantity: Number(item.quantity || 0),
       unit: item.unit || 'un',
@@ -411,7 +450,7 @@ export function AppProvider({ children }) {
       }
     }
 
-    if (selectedProject.clientUserId !== client.id) {
+    if (client && selectedProject.clientUserId !== client.id) {
       const { error: projectLinkError } = await supabase
         .from('projects')
         .update({ client_user_id: client.id, client_name: client.name })
@@ -488,15 +527,27 @@ export function AppProvider({ children }) {
   }
 
   async function addQuote(data) {
-    const item = { id: `COT-${Date.now()}`, number: `COT-${String(Date.now()).slice(-6)}`, status: 'Em análise', items: [], ...data };
+    if (!supabase || !currentUser?.companyId) throw new Error('Empresa não identificada.');
+    const prepared = prepareQuote(data, selectedProject?.id);
+    const { data: row, error } = await supabase.rpc('save_material_quote', {
+      p_project_id: prepared.projectId, p_number: 'COT-' + Date.now(),
+      p_expires_at: prepared.validUntil, p_notes: encodeQuoteMeta(prepared),
+      p_items: prepared.items.map(i => ({description:i.description, quantity:i.quantity, unit:i.unit, unit_price:i.unitPrice})),
+    });
+    if (error) throw error;
+    const item = toQuote(row);
     setQuotes((current) => [item, ...current]);
     return item;
   }
-  async function removeQuote(id) { setQuotes((current) => current.filter((item) => item.id !== id)); }
-  async function addExpense(data) { const item = { id: `EXP-${Date.now()}`, ...data, amount: Number(data.amount || 0) }; setExtraExpenses((c) => [item, ...c]); return item; }
+  async function removeQuote(id) {
+    const { error } = await supabase.from('quotations').delete().eq('id', id);
+    if (error) throw error;
+    setQuotes((current) => current.filter((item) => item.id !== id));
+  }
+  async function addExpense(data) { const item = { id: `EXP-${Date.now()}`, ...data, projectId: selectedProject?.id, amount: Number(data.amount || 0) }; setExtraExpenses((c) => [item, ...c]); return item; }
   async function createCompany() { throw new Error('A empresa principal é criada no primeiro cadastro do Gestor.'); }
-  async function createOrder(data) { const item = { id: `PO-${Date.now()}`, number: `PED-${String(Date.now()).slice(-6)}`, status: 'Criado', ...data }; setOrders((c) => [item, ...c]); return item; }
-  async function createReceipt(data) { const item = { id: `REC-${Date.now()}`, receivedAt: new Date().toLocaleDateString('pt-BR'), ...data }; setReceipts((c) => [item, ...c]); return item; }
+  async function createOrder(data) { const item = { id: `PO-${Date.now()}`, number: `PED-${String(Date.now()).slice(-6)}`, status: 'Criado', ...data, projectId: selectedProject?.id }; setOrders((c) => [item, ...c]); return item; }
+  async function createReceipt(data) { const item = { id: `REC-${Date.now()}`, receivedAt: new Date().toLocaleDateString('pt-BR'), ...data, projectId: selectedProject?.id }; setReceipts((c) => [item, ...c]); return item; }
   async function createStockMovement(data) {
     const quantity = Number(data.quantity || 0);
     setStock((current) => current.map((item) => item.code === data.materialCode || item.id === data.materialId
@@ -542,6 +593,11 @@ export function AppProvider({ children }) {
     projects,
     selectedProject,
     selectProject,
+    chooseProject: setSelectedProject,
+    costInputs,
+    costInputsError,
+    refreshCostInputs,
+    createCostInput,
     createProject,
     dashboard,
     refreshCurrentProject,
@@ -578,7 +634,7 @@ export function AppProvider({ children }) {
   }), [
     navigation, currentUser, isAuthReady, authError, projects, selectedProject, dashboard, isRefreshing,
     budgetDocuments, quotes, requests, pendingRequests, isSyncing, isOffline, orders, receipts, stock,
-    extraExpenses, companies, members, accessibilitySettings,
+    extraExpenses, companies, members, accessibilitySettings, costInputs, costInputsError,
   ]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../../contexts/AppContext';
-import { getRoleTabs, SCREENS } from '../../navigation/routes';
+import { USER_ROLES } from '../../data/authData';
+import { getRoleTabs, SCREENS, TABS } from '../../navigation/routes';
 
 const Bar = styled.View`
   position: absolute;
@@ -42,9 +44,15 @@ const Label = styled.Text`
 export function BottomTabs() {
   const { activeTab, currentScreen, currentUser, openScreen, selectTab } = useApp();
   const items = getRoleTabs(currentUser?.role);
+  const insets = useSafeAreaInsets();
+  const requesterHome = currentUser?.role === USER_ROLES.REQUESTER
+    && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
 
   return (
-    <Bar accessibilityRole="tablist">
+    <Bar accessibilityRole="tablist" style={requesterHome ? {
+      height: 66 + Math.max(insets.bottom, 12), paddingBottom: Math.max(insets.bottom, 12),
+      borderTopLeftRadius: 18, borderTopRightRadius: 18, backgroundColor: '#FFFFFF',
+    } : undefined}>
       {items.map((item) => {
         const isMoreScreen = item.id === 'more' && [
           SCREENS.PROFILE,
@@ -79,7 +87,7 @@ export function BottomTabs() {
             <IconBox $active={active}>
               <Ionicons name={icon} size={21} color={active ? '#EA6A12' : '#686C78'} />
             </IconBox>
-            <Label $active={active}>{item.label}</Label>
+            <Label $active={active} style={requesterHome ? { fontSize: 11, color: active ? '#EA6A12' : '#64748B' } : undefined}>{item.label}</Label>
           </Item>
         );
       })}

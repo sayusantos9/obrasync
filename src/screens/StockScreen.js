@@ -6,7 +6,7 @@ import { ScreenHeader } from '../components/layout/ScreenHeader';
 import { Content, Screen, Scroll } from '../components/ui/primitives';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
-import { SCREENS } from '../navigation/routes';
+import { SCREENS, TABS } from '../navigation/routes';
 
 const WRITABLE_ROLES = new Set([USER_ROLES.MASTER, USER_ROLES.PURCHASING]);
 const INITIAL_FORM = {
@@ -21,7 +21,7 @@ const INITIAL_FORM = {
 
 export function StockScreen() {
   const theme = useTheme();
-  const { createStockMovement, currentUser, openScreen, selectedProject, stock } = useApp();
+  const { createStockMovement, currentUser, openScreen, selectTab, selectedProject, stock } = useApp();
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(INITIAL_FORM);
   const canWrite = WRITABLE_ROLES.has(currentUser?.role);
@@ -65,6 +65,13 @@ export function StockScreen() {
           </View>
 
           <View style={styles.actionRow}>
+            <ActionCard
+              background={theme.colors.primarySoft}
+              color={theme.colors.primary}
+              icon="list-outline"
+              label="Catálogo de insumos"
+              onPress={() => selectTab(TABS.MATERIALS)}
+            />
             <ActionCard
               background={theme.colors.accentSoft}
               color={theme.colors.accent}

@@ -9,6 +9,14 @@ import { SCREENS, TABS } from '../navigation/routes';
 
 const ACTIONS = [
   {
+    id: 'materials',
+    title: 'Insumos',
+    subtitle: 'Catálogo e preços de referência',
+    icon: 'cube-outline',
+    tab: TABS.MATERIALS,
+    color: 'blue',
+  },
+  {
     id: 'companies',
     title: 'Empresas',
     subtitle: 'Cadastros e dados empresariais',

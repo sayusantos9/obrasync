@@ -33,7 +33,7 @@ export function buildReports(data = {}, projectId) {
     },
     orders: {
       title:'Pedidos de compra',headers:['Número','Status','Fornecedor','Total (R$)'],
-      rows:orders.map(o=>[o.number||o.id,o.status||'',o.supplierName||'',money(o.total)]),
+      rows:orders.map(o=>[o.number||o.id,o.status||'',o.supplierName||o.supplier||'',money(o.total)]),
       total:orders.reduce((n,o)=>n+money(o.total),0),
     },
     receipts: {

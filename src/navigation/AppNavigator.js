@@ -5,13 +5,17 @@ import { PlanengenHeader } from '../components/layout/PlanengenHeader';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
 import { EngineeringHomeScreen, LoginScreen, MasterPanelScreen } from '../screens';
+import { RequesterHomeScreen } from '../screens/RequesterHomeScreen';
 import { SCREENS, TABS } from './routes';
 import { resolveScreenComponent, shouldShowBottomTabs } from './screenRegistry';
 
 export function AppNavigator() {
+  const { currentUser, currentScreen, activeTab, isAuthReady } = useApp();
+  const requesterHome = isAuthReady && currentUser?.role === USER_ROLES.REQUESTER
+    && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   return (
     <View style={{ flex: 1 }}>
-      <PlanengenHeader />
+      {!requesterHome && <PlanengenHeader />}
       <NavigatorContent />
     </View>
   );
@@ -43,7 +47,9 @@ function NavigatorContent() {
     ? MasterPanelScreen
     : isEngineeringHome
       ? EngineeringHomeScreen
-      : resolveScreenComponent(currentScreen, activeTab);
+      : currentUser.role === USER_ROLES.REQUESTER && currentScreen === SCREENS.TABS && activeTab === TABS.HOME
+        ? RequesterHomeScreen
+        : resolveScreenComponent(currentScreen, activeTab);
 
   const screenContent = <ScreenComponent type={currentScreen} />;
 
