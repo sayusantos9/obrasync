@@ -1,6 +1,7 @@
 import { ActivityIndicator, Text, View } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { BottomTabs } from '../components/layout/BottomTabs';
+import { PlanengenHeader } from '../components/layout/PlanengenHeader';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
 import { EngineeringHomeScreen, LoginScreen, MasterPanelScreen } from '../screens';
@@ -8,6 +9,15 @@ import { SCREENS, TABS } from './routes';
 import { resolveScreenComponent, shouldShowBottomTabs } from './screenRegistry';
 
 export function AppNavigator() {
+  return (
+    <View style={{ flex: 1 }}>
+      <PlanengenHeader />
+      <NavigatorContent />
+    </View>
+  );
+}
+
+function NavigatorContent() {
   const theme = useTheme();
   const { activeTab, currentScreen, currentUser, isAuthReady } = useApp();
 

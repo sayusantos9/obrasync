@@ -152,13 +152,6 @@ export function LoginScreen() {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}> 
-          <View style={styles.brandRow}>
-            <View style={styles.logo}><Ionicons name="business" size={26} color="#FFF" /></View>
-            <View>
-              <Text style={styles.brand}>Obra<Text style={{ color: theme.colors.accent }}>Sync</Text></Text>
-              <Text style={styles.kicker}>SUPABASE • ACESSO REAL</Text>
-            </View>
-          </View>
           <View style={styles.demoPill}><Ionicons name="shield-checkmark-outline" size={14} color="#FFF" /><Text style={styles.demoText}>Login, perfis e orçamentos conectados</Text></View>
           <Text style={styles.heroTitle}>{heroTitle}</Text>
           <Text style={styles.heroSubtitle}>{heroSubtitle}</Text>
@@ -270,10 +263,6 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   content: { flexGrow: 1, paddingBottom: 36 },
   hero: { paddingHorizontal: 24, paddingBottom: 50, paddingTop: 56 },
-  brandRow: { alignItems: 'center', flexDirection: 'row' },
-  logo: { alignItems: 'center', backgroundColor: 'rgba(255,255,255,.14)', borderRadius: 13, height: 50, justifyContent: 'center', marginRight: 12, width: 50 },
-  brand: { color: '#FFF', fontSize: 25, fontWeight: '900' },
-  kicker: { color: 'rgba(255,255,255,.58)', fontSize: 9, fontWeight: '900', letterSpacing: 1.1, marginTop: 2 },
   demoPill: { alignItems: 'center', alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,.12)', borderRadius: 16, flexDirection: 'row', marginTop: 22, paddingHorizontal: 11, paddingVertical: 7 },
   demoText: { color: '#FFF', fontSize: 10, fontWeight: '800', marginLeft: 6 },
   heroTitle: { color: '#FFF', fontSize: 28, fontWeight: '900', marginTop: 20 },
