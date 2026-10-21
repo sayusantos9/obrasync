@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider } from 'styled-components/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider, useApp } from './src/contexts/AppContext';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { createTheme } from './src/theme';
@@ -10,7 +11,7 @@ function AppShell() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <AppNavigator />
     </ThemeProvider>
   );
@@ -18,9 +19,11 @@ function AppShell() {
 
 export default function App() {
   return (
-    <AppProvider>
-      <AppShell />
-    </AppProvider>
+    <SafeAreaProvider>
+      <AppProvider>
+        <AppShell />
+      </AppProvider>
+    </SafeAreaProvider>
   );
 }
 // Participação: Jennyfer Karolyne — ObraSync
