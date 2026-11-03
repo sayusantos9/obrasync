@@ -1,298 +1,190 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, BackHandler, Image, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Path, Line } from 'react-native-svg';
 import { useTheme } from 'styled-components/native';
 import { useApp } from '../contexts/AppContext';
-import { ROLE_ACCESS, ROLE_LABELS, ROLE_OPTIONS, USER_ROLES } from '../data/authData';
+import { ROLE_LABELS, ROLE_OPTIONS, USER_ROLES } from '../data/authData';
+import { colors, styles } from './LoginScreen.styles';
 
-const ROLE_ICONS = {
-  [USER_ROLES.MASTER]: 'shield-checkmark-outline',
-  [USER_ROLES.ENGINEERING]: 'calculator-outline',
-  [USER_ROLES.PURCHASING]: 'cart-outline',
-  [USER_ROLES.REQUESTER]: 'construct-outline',
-  [USER_ROLES.CLIENT]: 'eye-outline',
+const LOGO = require('../assets/brand/planengen-light.png');
+const PROFILES = {
+  MASTER: { icon: 'shield-checkmark-outline', description: 'Gerencie sua empresa e os acessos da equipe.' },
+  ENGINEERING: { icon: 'calculator-outline', description: 'Planeje orçamentos e acompanhe os materiais.' },
+  PURCHASING: { icon: 'cart-outline', description: 'Organize compras, recebimentos e estoque.' },
+  REQUESTER: { icon: 'construct-outline', description: 'Solicite materiais e acompanhe sua obra.' },
+  CLIENT: { icon: 'eye-outline', description: 'Consulte as informações da sua obra.' },
 };
 
-function Field({ icon, label, value, onChangeText, secureTextEntry, keyboardType = 'default', placeholder }) {
-  const theme = useTheme();
-  return (
-    <View style={styles.fieldBlock}>
-      <Text style={[styles.label, { color: theme.colors.textMuted }]}>{label}</Text>
-      <View style={[styles.inputShell, { borderColor: theme.colors.border, backgroundColor: theme.colors.surface }]}>
-        <Ionicons name={icon} size={19} color={theme.colors.textMuted} />
-        <TextInput
-          autoCapitalize={keyboardType === 'email-address' ? 'none' : 'sentences'}
-          autoCorrect={false}
-          keyboardType={keyboardType}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={theme.colors.textMuted}
-          secureTextEntry={secureTextEntry}
-          style={[styles.input, { color: theme.colors.text }]}
-          value={value}
-        />
-      </View>
+function Blueprint() {
+  return <View pointerEvents="none" accessible={false} style={styles.blueprint}>
+    <Svg width="220" height="280" viewBox="0 0 220 280">
+      <Path d="M35 280V100L115 52V280M115 52L198 98V280M11 280V168L35 153M68 280V193L92 178V280" fill="none" stroke="#0084F4" strokeWidth="1.2" />
+      {[116, 144, 172, 200, 228].map(y => <Line key={y} x1="137" y1={y} x2="177" y2={y + 22} stroke="#EEF0F2" strokeOpacity=".17" />)}
+      <Path d="M0 262H220M12 28H210M18 22V34M204 22V34M60 60V13" fill="none" stroke="#0084F4" strokeOpacity=".35" strokeWidth=".7" />
+    </Svg>
+  </View>;
+}
+
+function Field({ label, icon, value, onChangeText, password, inputRef, isRegister, editable = true, ...props }) {
+  const [focused, setFocused] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const { fontScale } = useTheme();
+  return <View style={styles.field}>
+    <Text style={[styles.label, { fontSize: 12 * fontScale }]}>{label}</Text>
+    <View style={[styles.inputShell, focused && styles.inputFocused]}>
+      <Ionicons name={icon} size={20} color={focused ? colors.blue : colors.muted} />
+      <TextInput ref={inputRef} accessibilityLabel={label} value={value} onChangeText={onChangeText}
+        editable={editable} autoCapitalize="none" autoCorrect={false} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+        secureTextEntry={password && !visible} placeholderTextColor="#7A8392" style={[styles.input, { fontSize: 15 * fontScale }]}
+        {...(password ? { autoComplete: isRegister ? 'new-password' : 'current-password', textContentType: isRegister ? 'newPassword' : 'password' } : {})} {...props} />
+      {password && <TouchableOpacity accessibilityRole="button" accessibilityLabel={visible ? 'Ocultar senha' : 'Mostrar senha'} onPress={() => setVisible(v => !v)} style={styles.eye}>
+        <Ionicons name={visible ? 'eye-off-outline' : 'eye-outline'} size={21} color={colors.muted} />
+      </TouchableOpacity>}
     </View>
-  );
+  </View>;
 }
 
 export function LoginScreen() {
-  const theme = useTheme();
   const { login, registerCompany } = useApp();
-  const [mode, setMode] = useState(null);
-  const [step, setStep] = useState('action');
+  const { fontScale } = useTheme();
+  const { height } = useWindowDimensions();
+  const scrollRef = useRef(null), passwordRef = useRef(null), submittingRef = useRef(false);
+  const [isRegister, setIsRegister] = useState(false);
   const [role, setRole] = useState(null);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    companyName: '',
-    companyDocument: '',
-    companyPhone: '',
-  });
-
-  const isRegister = mode === 'register';
-  const setValue = (key) => (value) => setForm((current) => ({ ...current, [key]: value }));
-
-  function chooseAction(nextMode) {
-    setMode(nextMode);
-    setRole(null);
-    setError('');
-    setStep(nextMode === 'register' ? 'registerInfo' : 'role');
+  const [form, setForm] = useState({ name: '', email: '', password: '', companyName: '', companyDocument: '', companyPhone: '' });
+  const setValue = key => value => { setError(''); setForm(current => ({ ...current, [key]: value })); };
+  const type = style => [style, { fontSize: style.fontSize * fontScale }];
+  function changeMode(register) {
+    if (submittingRef.current) return;
+    Keyboard.dismiss(); setIsRegister(register); setError('');
+    setForm(current => ({ ...current, password: '' }));
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
   }
-
-  function chooseRole(nextRole) {
-    setRole(nextRole);
-    setStep('form');
-    setError('');
-  }
-
-  function goBack() {
-    setError('');
-    if (step === 'form' && mode === 'login') setStep('role');
-    else if (step === 'form' && mode === 'register') setStep('registerInfo');
-    else setStep('action');
-  }
-
+  useEffect(() => {
+    if (!isRegister) return undefined;
+    const listener = BackHandler.addEventListener('hardwareBackPress', () => { changeMode(false); return true; });
+    return () => listener.remove();
+  }, [isRegister]);
   async function submit() {
-    if (!form.email.trim()) {
-      setError('Informe um e-mail para continuar.');
-      return;
-    }
-    if (!form.password.trim() || form.password.length < 6) {
-      setError('Informe uma senha com pelo menos 6 caracteres.');
-      return;
-    }
-    if (isRegister && !form.name.trim()) {
-      setError('Informe seu nome.');
-      return;
-    }
-    if (isRegister && !form.companyName.trim()) {
-      setError('Informe o nome da empresa.');
-      return;
-    }
-
-    setError('');
-    setSubmitting(true);
+    if (submittingRef.current) return;
+    if (!isRegister && !role) { setError('Selecione seu perfil de acesso.'); setProfileOpen(true); return; }
+    if (!form.email.trim()) { setError('Informe seu e-mail.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) { setError('Informe um e-mail válido.'); return; }
+    if (!form.password.trim() || form.password.length < 6) { setError('Informe uma senha com pelo menos 6 caracteres.'); return; }
+    if (isRegister && !form.name.trim()) { setError('Informe o nome do Gestor.'); return; }
+    if (isRegister && !form.companyName.trim()) { setError('Informe o nome da empresa.'); return; }
+    Keyboard.dismiss(); setError(''); submittingRef.current = true; setSubmitting(true);
     try {
       if (isRegister) {
         const result = await registerCompany(form);
         if (result?.requiresEmailConfirmation) {
-          Alert.alert(
-            'Confirme seu e-mail',
-            'A conta do Gestor foi criada. Confirme o e-mail e depois volte para Entrar como Gestor/Master.',
-          );
-          setMode('login');
-          setRole(USER_ROLES.MASTER);
-          setStep('form');
+          Alert.alert('Confirme seu e-mail', 'Sua conta foi criada. Confirme o e-mail recebido e depois entre como Gestor/Master.');
+          setIsRegister(false); setRole(USER_ROLES.MASTER); setForm(current => ({ ...current, password: '' }));
+          scrollRef.current?.scrollTo({ y: 0, animated: false });
         }
-      } else {
-        await login({ ...form, role });
-      }
-    } catch (err) {
-      setError(err?.message || 'Não foi possível continuar.');
-    } finally {
-      setSubmitting(false);
-    }
+      } else { await login({ email: form.email, password: form.password, role }); }
+    } catch (err) { setError(err?.message || 'Não foi possível continuar. Tente novamente.'); }
+    finally { submittingRef.current = false; setSubmitting(false); }
   }
-
-  const heroTitle = step === 'action'
-    ? 'Bem-vindo ao ObraSync'
-    : step === 'role'
-      ? 'Entrar como'
-      : step === 'registerInfo'
-        ? 'Primeiro acesso'
-        : isRegister
-          ? 'Criar conta do Gestor'
-          : ROLE_LABELS[role];
-
-  const heroSubtitle = step === 'action'
-    ? 'Escolha se você quer entrar em uma conta existente ou cadastrar a empresa pela primeira vez.'
-    : step === 'role'
-      ? 'Selecione o seu perfil. O aplicativo abre as telas e permissões correspondentes.'
-      : step === 'registerInfo'
-        ? 'A primeira conta da empresa deve ser do Gestor/Master. Depois ele cadastra funcionários e clientes um por vez.'
-        : isRegister
-          ? 'O Gestor cria a empresa e depois cadastra Engenharia, Compras, Solicitantes e Clientes pelo painel administrativo.'
-          : ROLE_ACCESS[role];
-
-  return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={[styles.root, { backgroundColor: theme.colors.background }]}>
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}> 
-          <View style={styles.demoPill}><Ionicons name="shield-checkmark-outline" size={14} color="#FFF" /><Text style={styles.demoText}>Login, perfis e orçamentos conectados</Text></View>
-          <Text style={styles.heroTitle}>{heroTitle}</Text>
-          <Text style={styles.heroSubtitle}>{heroSubtitle}</Text>
-        </View>
-
-        <View style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}> 
-          {step !== 'action' && (
-            <TouchableOpacity onPress={goBack} style={styles.backRole}>
-              <Ionicons name="arrow-back" size={18} color={theme.colors.primary} />
-              <Text style={[styles.backRoleText, { color: theme.colors.primary }]}>Voltar</Text>
+  return <View style={styles.root}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.root}>
+      <ScrollView ref={scrollRef} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+        <LinearGradient colors={[colors.navy, '#10103C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <SafeAreaView edges={['top', 'left', 'right']}>
+            <View style={[styles.hero, (height < 740 || isRegister) && styles.heroCompact]}>
+              <Blueprint />
+              <View style={styles.brandRow}>
+                <Image source={LOGO} resizeMode="contain" style={styles.logo} accessible accessibilityLabel="Planengen — Consultoria e Construção" />
+                <View style={styles.appMark}><Text style={styles.appMarkText}>OBRASYNC</Text></View>
+              </View>
+              <View style={styles.heroCopy}>
+                <View style={styles.eyebrowRow}><View style={styles.blueDash} /><Text style={styles.eyebrow}>GESTÃO QUE CONECTA</Text></View>
+                <Text style={[type(styles.heroTitle), (height < 740 || isRegister) && { fontSize: 28 * fontScale }]}>
+                  Sua obra.{isRegister ? ' ' : '\n'}<Text style={styles.heroTitleLight}>Todos no mesmo plano.</Text>
+                </Text>
+                {!isRegister && <Text style={type(styles.heroSubtitle)}>Do planejamento à obra, sua equipe em sintonia.</Text>}
+              </View>
+            </View>
+          </SafeAreaView>
+        </LinearGradient>
+        <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.paper}>
+          <View style={styles.formContent}>
+            {isRegister && <TouchableOpacity disabled={submitting} accessibilityRole="button" onPress={() => changeMode(false)} style={styles.back}>
+              <Ionicons name="arrow-back" size={20} color={colors.navy} /><Text style={type(styles.backText)}>Voltar ao login</Text>
+            </TouchableOpacity>}
+            <View style={styles.headingRow}>
+              <View style={{ flex: 1 }}><Text accessibilityRole="header" style={type(styles.title)}>{isRegister ? 'Comece pela sua empresa' : 'Bem-vindo de volta'}</Text>
+                <Text style={type(styles.subtitle)}>{isRegister ? 'Crie a empresa e sua conta de Gestor.' : 'Acesse seu espaço de trabalho.'}</Text></View>
+              {!isRegister && <View style={styles.headingIcon}><Ionicons name="log-in-outline" size={26} color={colors.blue} /></View>}
+            </View>
+            {isRegister ? <View style={styles.info}>
+              <Ionicons name="shield-checkmark-outline" size={22} color={colors.blue} />
+              <Text style={type(styles.infoText)}>Este cadastro é para o primeiro Gestor. Depois, ele cadastra a equipe e os clientes pelo painel da empresa.</Text>
+            </View> : <View style={styles.field}>
+              <Text style={type(styles.label)}>Perfil de acesso</Text>
+              <TouchableOpacity disabled={submitting} accessibilityRole="button" accessibilityLabel={`Perfil de acesso: ${role ? ROLE_LABELS[role] : 'selecionar'}`}
+                accessibilityState={{ expanded: profileOpen, disabled: submitting }} onPress={() => { Keyboard.dismiss(); setProfileOpen(true); }} style={styles.profilePicker}>
+                <View style={styles.profileIcon}><Ionicons name={role ? PROFILES[role].icon : 'people-outline'} size={20} color={colors.blue} /></View>
+                <Text style={[type(styles.profileName), !role && { color: colors.muted }]}>{role ? ROLE_LABELS[role] : 'Selecione seu perfil'}</Text>
+                <Ionicons name="chevron-down" size={18} color={colors.muted} />
+              </TouchableOpacity>
+            </View>}
+            {isRegister && <Field label="Nome do Gestor" icon="person-outline" value={form.name} onChangeText={setValue('name')} editable={!submitting} placeholder="Seu nome completo" autoCapitalize="words" autoComplete="name" />}
+            <Field label="E-mail" icon="mail-outline" value={form.email} onChangeText={setValue('email')} editable={!submitting} keyboardType="email-address"
+              autoComplete="email" textContentType="emailAddress" placeholder="voce@empresa.com" returnKeyType="next" onSubmitEditing={() => passwordRef.current?.focus()} />
+            <Field label="Senha" icon="lock-closed-outline" inputRef={passwordRef} value={form.password} onChangeText={setValue('password')} editable={!submitting}
+              password isRegister={isRegister} placeholder={isRegister ? 'Mínimo de 6 caracteres' : 'Digite sua senha'} returnKeyType={isRegister ? 'next' : 'go'} onSubmitEditing={isRegister ? undefined : submit} />
+            {isRegister && <>
+              <View style={styles.divider} /><Text style={type(styles.groupTitle)}>Dados da empresa</Text>
+              <Field label="Nome da empresa" icon="business-outline" value={form.companyName} onChangeText={setValue('companyName')} editable={!submitting} placeholder="Razão social ou nome fantasia" autoCapitalize="words" />
+              <Field label="CNPJ (opcional)" icon="document-text-outline" value={form.companyDocument} onChangeText={setValue('companyDocument')} editable={!submitting} placeholder="00.000.000/0001-00" keyboardType="number-pad" />
+              <Field label="Telefone (opcional)" icon="call-outline" value={form.companyPhone} onChangeText={setValue('companyPhone')} editable={!submitting} placeholder="(00) 00000-0000" keyboardType="phone-pad" autoComplete="tel" />
+            </>}
+            {!!error && <View accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.error}>
+              <Ionicons name="alert-circle-outline" size={19} color="#A12630" /><Text style={type(styles.errorText)}>{error}</Text>
+            </View>}
+            <TouchableOpacity accessibilityRole="button" accessibilityState={{ disabled: submitting, busy: submitting }} disabled={submitting} onPress={submit} style={[styles.submit, submitting && { opacity: .65 }]}>
+              {submitting ? <ActivityIndicator color="#FFF" /> : <><Text style={type(styles.submitText)}>{isRegister ? 'Criar empresa e conta' : 'Entrar no ObraSync'}</Text><Ionicons name="arrow-forward" size={21} color="#FFF" /></>}
             </TouchableOpacity>
-          )}
-
-          {step === 'action' && (
-            <>
-              <Text style={[styles.cardTitle, { color: theme.colors.text }]}>O que você quer fazer?</Text>
-              <Text style={[styles.helper, { color: theme.colors.textMuted }]}>Escolha uma opção para continuar.</Text>
-              <TouchableOpacity onPress={() => chooseAction('login')} style={[styles.actionCard, { borderColor: theme.colors.primary, backgroundColor: theme.colors.primarySoft }]}>
-                <View style={[styles.actionIcon, { backgroundColor: theme.colors.primary }]}><Ionicons name="log-in-outline" size={25} color="#FFF" /></View>
-                <View style={{ flex: 1 }}><Text style={[styles.actionTitle, { color: theme.colors.primaryDark }]}>Entrar</Text><Text style={[styles.actionText, { color: theme.colors.textMuted }]}>Já tenho um usuário cadastrado.</Text></View>
-                <Ionicons name="chevron-forward" size={22} color={theme.colors.primary} />
+            {!isRegister && <TouchableOpacity accessibilityRole="button" style={styles.help} onPress={() => Alert.alert('Ajuda para acessar', 'Selecione o perfil cadastrado para você e use seu e-mail e senha. Se ainda não recebeu seu acesso ou esqueceu a senha, procure o Gestor da sua empresa.')}>
+              <Ionicons name="help-circle-outline" size={17} color={colors.muted} /><Text style={type(styles.helpText)}>Precisa de ajuda para entrar?</Text>
+            </TouchableOpacity>}
+            <View style={styles.divider} />
+            <View style={styles.registerRow}>
+              <View style={{ flex: 1 }}><Text style={type(styles.registerTitle)}>{isRegister ? 'Já tem uma conta?' : 'Primeiro acesso da empresa?'}</Text>
+                <Text style={type(styles.registerSub)}>{isRegister ? 'Entre com seu perfil cadastrado.' : 'Comece pelo cadastro do Gestor.'}</Text></View>
+              <TouchableOpacity disabled={submitting} accessibilityRole="button" accessibilityLabel={isRegister ? 'Voltar ao login' : 'Cadastrar empresa'} onPress={() => changeMode(!isRegister)} style={styles.registerButton}>
+                <Text style={type(styles.registerLink)}>{isRegister ? 'Entrar' : 'Cadastrar'}</Text><Ionicons name="arrow-up-outline" size={17} color={colors.navy} style={{ transform: [{ rotate: '45deg' }] }} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => chooseAction('register')} style={[styles.actionCard, { borderColor: theme.colors.accent, backgroundColor: theme.colors.accentSoft }]}>
-                <View style={[styles.actionIcon, { backgroundColor: theme.colors.accent }]}><Ionicons name="business-outline" size={25} color="#FFF" /></View>
-                <View style={{ flex: 1 }}><Text style={[styles.actionTitle, { color: theme.colors.text }]}>Cadastrar empresa</Text><Text style={[styles.actionText, { color: theme.colors.textMuted }]}>Primeiro acesso do Gestor/Master.</Text></View>
-                <Ionicons name="chevron-forward" size={22} color={theme.colors.accent} />
-              </TouchableOpacity>
-            </>
-          )}
-
-          {step === 'role' && (
-            <>
-              <Text style={[styles.cardTitle, { color: theme.colors.text }]}>Qual é o seu perfil?</Text>
-              <Text style={[styles.helper, { color: theme.colors.textMuted }]}>O perfil precisa ser o mesmo que foi cadastrado pelo Gestor.</Text>
-              <View style={styles.roleList}>
-                {ROLE_OPTIONS.map((item) => (
-                  <TouchableOpacity key={item} onPress={() => chooseRole(item)} style={[styles.roleCard, { borderColor: theme.colors.border, backgroundColor: theme.colors.background }]}>
-                    <View style={[styles.roleIcon, { backgroundColor: item === USER_ROLES.MASTER ? theme.colors.accentSoft : theme.colors.primarySoft }]}>
-                      <Ionicons name={ROLE_ICONS[item]} size={23} color={item === USER_ROLES.MASTER ? theme.colors.accent : theme.colors.primary} />
-                    </View>
-                    <View style={styles.roleInfo}>
-                      <Text style={[styles.roleTitle, { color: theme.colors.text }]}>{ROLE_LABELS[item]}</Text>
-                      <Text numberOfLines={2} style={[styles.roleDescription, { color: theme.colors.textMuted }]}>{ROLE_ACCESS[item]}</Text>
-                    </View>
-                    <Ionicons name="chevron-forward" size={21} color={theme.colors.textMuted} />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </>
-          )}
-
-          {step === 'registerInfo' && (
-            <>
-              <View style={[styles.infoBox, { backgroundColor: theme.colors.primarySoft }]}>
-                <Ionicons name="shield-checkmark-outline" size={23} color={theme.colors.primary} />
-                <Text style={[styles.infoText, { color: theme.colors.text }]}>O cadastro público é somente para o primeiro Gestor/Master da empresa. Depois, os outros acessos são criados no Painel Master.</Text>
-              </View>
-              <TouchableOpacity onPress={() => { setRole(USER_ROLES.MASTER); setStep('form'); }} style={[styles.actionCard, { borderColor: theme.colors.accent, backgroundColor: theme.colors.accentSoft }]}>
-                <View style={[styles.actionIcon, { backgroundColor: theme.colors.accent }]}><Ionicons name="shield-checkmark-outline" size={25} color="#FFF" /></View>
-                <View style={{ flex: 1 }}><Text style={[styles.actionTitle, { color: theme.colors.text }]}>Cadastrar Gestor/Master</Text><Text style={[styles.actionText, { color: theme.colors.textMuted }]}>Criar a empresa e a conta administrativa.</Text></View>
-                <Ionicons name="chevron-forward" size={22} color={theme.colors.accent} />
-              </TouchableOpacity>
-            </>
-          )}
-
-          {step === 'form' && (
-            <>
-              {!isRegister && (
-                <View style={[styles.selectedRole, { backgroundColor: theme.colors.primarySoft }]}>
-                  <Ionicons name={ROLE_ICONS[role]} size={21} color={theme.colors.primary} />
-                  <View style={{ flex: 1, marginLeft: 10 }}>
-                    <Text style={[styles.selectedRoleTitle, { color: theme.colors.primary }]}>{ROLE_LABELS[role]}</Text>
-                    <Text style={[styles.selectedRoleText, { color: theme.colors.textMuted }]}>{ROLE_ACCESS[role]}</Text>
-                  </View>
-                </View>
-              )}
-
-              {isRegister && <Field icon="person-outline" label="NOME DO GESTOR" value={form.name} onChangeText={setValue('name')} placeholder="Seu nome" />}
-              <Field icon="mail-outline" label="E-MAIL" value={form.email} onChangeText={setValue('email')} keyboardType="email-address" placeholder="usuario@empresa.com" />
-              <Field icon="lock-closed-outline" label="SENHA" value={form.password} onChangeText={setValue('password')} secureTextEntry placeholder="Mínimo 6 caracteres" />
-              {isRegister && (
-                <>
-                  <Field icon="business-outline" label="EMPRESA" value={form.companyName} onChangeText={setValue('companyName')} placeholder="Nome da empresa" />
-                  <Field icon="document-text-outline" label="CNPJ" value={form.companyDocument} onChangeText={setValue('companyDocument')} placeholder="00.000.000/0001-00" />
-                  <Field icon="call-outline" label="TELEFONE" value={form.companyPhone} onChangeText={setValue('companyPhone')} keyboardType="phone-pad" placeholder="(98) 99999-9999" />
-                </>
-              )}
-
-              {!!error && (
-                <View style={[styles.errorBox, { backgroundColor: theme.colors.dangerSoft }]}>
-                  <Ionicons name="alert-circle-outline" size={19} color={theme.colors.danger} />
-                  <Text style={[styles.errorText, { color: theme.colors.danger }]}>{error}</Text>
-                </View>
-              )}
-
-              <TouchableOpacity disabled={submitting} onPress={submit} style={[styles.primaryButton, { backgroundColor: isRegister ? theme.colors.accent : theme.colors.primary }, submitting && { opacity: 0.6 }]}>
-                <Text style={styles.primaryText}>{submitting ? 'Aguarde...' : isRegister ? 'Criar empresa e Gestor' : 'Entrar no ObraSync'}</Text>
-                <Ionicons name="arrow-forward" size={20} color="#FFF" />
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
+            </View>
+            <View style={styles.footer}><View style={styles.footerLine} /><Text style={styles.footerText}>PLANENGEN  /  OBRASYNC</Text><View style={styles.footerLine} /></View>
+          </View>
+        </SafeAreaView>
       </ScrollView>
     </KeyboardAvoidingView>
-  );
+    <Modal visible={profileOpen} transparent animationType="fade" onRequestClose={() => setProfileOpen(false)} statusBarTranslucent>
+      <View style={styles.modalOverlay}>
+        <TouchableOpacity style={styles.modalBackdrop} accessibilityRole="button" accessibilityLabel="Fechar seleção de perfil" onPress={() => setProfileOpen(false)} />
+        <SafeAreaView edges={['bottom', 'left', 'right']} accessibilityViewIsModal style={styles.sheet}>
+          <View style={styles.sheetHandle} />
+          <View style={styles.sheetHeading}><View style={{ flex: 1 }}><Text accessibilityRole="header" style={type(styles.title)}>Como você acessa?</Text><Text style={type(styles.subtitle)}>Escolha o perfil cadastrado para você.</Text></View>
+            <TouchableOpacity accessibilityRole="button" accessibilityLabel="Fechar seleção de perfil" onPress={() => setProfileOpen(false)} style={styles.close}><Ionicons name="close" size={24} color={colors.navy} /></TouchableOpacity></View>
+          <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.profileList}>
+            {ROLE_OPTIONS.map(item => <TouchableOpacity key={item} accessibilityRole="radio" accessibilityState={{ checked: role === item }}
+              onPress={() => { setRole(item); setError(''); setProfileOpen(false); }} style={[styles.profileOption, role === item && styles.profileSelected]}>
+              <View style={styles.profileIcon}><Ionicons name={PROFILES[item].icon} size={23} color={colors.blue} /></View>
+              <View style={{ flex: 1 }}><Text style={type(styles.optionTitle)}>{ROLE_LABELS[item]}</Text><Text style={type(styles.optionDescription)}>{PROFILES[item].description}</Text></View>
+              <Ionicons name={role === item ? 'checkmark-circle' : 'chevron-forward'} size={21} color={role === item ? colors.blue : '#97A2B2'} />
+            </TouchableOpacity>)}
+          </ScrollView>
+        </SafeAreaView>
+      </View>
+    </Modal>
+  </View>;
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1 },
-  content: { flexGrow: 1, paddingBottom: 36 },
-  hero: { paddingHorizontal: 24, paddingBottom: 50, paddingTop: 56 },
-  demoPill: { alignItems: 'center', alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,.12)', borderRadius: 16, flexDirection: 'row', marginTop: 22, paddingHorizontal: 11, paddingVertical: 7 },
-  demoText: { color: '#FFF', fontSize: 10, fontWeight: '800', marginLeft: 6 },
-  heroTitle: { color: '#FFF', fontSize: 28, fontWeight: '900', marginTop: 20 },
-  heroSubtitle: { color: 'rgba(255,255,255,.78)', fontSize: 13, lineHeight: 20, marginTop: 8, maxWidth: 340 },
-  card: { borderRadius: 25, borderWidth: 1, marginHorizontal: 18, marginTop: -24, padding: 18 },
-  cardTitle: { fontSize: 21, fontWeight: '900', marginTop: 10 },
-  helper: { fontSize: 12, lineHeight: 18, marginTop: 6 },
-  actionCard: { alignItems: 'center', borderRadius: 18, borderWidth: 1, flexDirection: 'row', marginTop: 14, padding: 14 },
-  actionIcon: { alignItems: 'center', borderRadius: 14, height: 48, justifyContent: 'center', marginRight: 12, width: 48 },
-  actionTitle: { fontSize: 15, fontWeight: '900' },
-  actionText: { fontSize: 11, lineHeight: 16, marginTop: 3 },
-  roleList: { marginTop: 12 },
-  roleCard: { alignItems: 'center', borderRadius: 17, borderWidth: 1, flexDirection: 'row', marginTop: 9, padding: 12 },
-  roleIcon: { alignItems: 'center', borderRadius: 13, height: 46, justifyContent: 'center', width: 46 },
-  roleInfo: { flex: 1, marginHorizontal: 11 },
-  roleTitle: { fontSize: 14, fontWeight: '900' },
-  roleDescription: { fontSize: 10, lineHeight: 15, marginTop: 3 },
-  backRole: { alignItems: 'center', alignSelf: 'flex-start', flexDirection: 'row', marginBottom: 6 },
-  backRoleText: { fontSize: 12, fontWeight: '900', marginLeft: 5 },
-  selectedRole: { alignItems: 'flex-start', borderRadius: 16, flexDirection: 'row', marginTop: 13, padding: 13 },
-  selectedRoleTitle: { fontSize: 14, fontWeight: '900' },
-  selectedRoleText: { fontSize: 10, lineHeight: 15, marginTop: 3 },
-  fieldBlock: { marginTop: 14 },
-  label: { fontSize: 10, fontWeight: '900', marginBottom: 7 },
-  inputShell: { alignItems: 'center', borderRadius: 14, borderWidth: 1, flexDirection: 'row', minHeight: 54, paddingHorizontal: 14 },
-  input: { flex: 1, fontSize: 14, marginLeft: 9, paddingVertical: 12 },
-  infoBox: { alignItems: 'flex-start', borderRadius: 14, flexDirection: 'row', marginTop: 12, padding: 13 },
-  infoText: { flex: 1, fontSize: 11, lineHeight: 17, marginLeft: 8 },
-  errorBox: { alignItems: 'flex-start', borderRadius: 12, flexDirection: 'row', marginTop: 14, padding: 12 },
-  errorText: { flex: 1, fontSize: 11, lineHeight: 17, marginLeft: 8 },
-  primaryButton: { alignItems: 'center', borderRadius: 15, flexDirection: 'row', justifyContent: 'center', marginTop: 18, minHeight: 56 },
-  primaryText: { color: '#FFF', fontSize: 14, fontWeight: '900', marginRight: 8 },
-});

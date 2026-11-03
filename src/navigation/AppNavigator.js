@@ -15,7 +15,7 @@ export function AppNavigator() {
     && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   return (
     <View style={{ flex: 1 }}>
-      {!requesterHome && <PlanengenHeader />}
+      {!requesterHome && !(isAuthReady && !currentUser) && <PlanengenHeader />}
       <NavigatorContent />
     </View>
   );
