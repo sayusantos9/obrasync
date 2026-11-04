@@ -10,6 +10,7 @@ import { ClientHomeScreen } from '../screens/ClientHomeScreen';
 import { RequesterHomeScreen } from '../screens/RequesterHomeScreen';
 import { SCREENS, TABS } from './routes';
 import { resolveScreenComponent, shouldShowBottomTabs } from './screenRegistry';
+import { PurchasingHomeScreen } from '../screens/PurchasingHomeScreen';
 
 export function AppNavigator() {
   const { currentUser, currentScreen, activeTab, isAuthReady } = useApp();
@@ -67,7 +68,9 @@ function NavigatorContent() {
         ? RequesterHomeScreen
         : currentUser.role === USER_ROLES.CLIENT && currentScreen === SCREENS.TABS && activeTab === TABS.HOME
           ? ClientHomeScreen
-          : resolveScreenComponent(currentScreen, activeTab);
+          : currentUser.role === USER_ROLES.PURCHASING && currentScreen === SCREENS.TABS && activeTab === TABS.HOME
+            ? PurchasingHomeScreen
+            : resolveScreenComponent(currentScreen, activeTab);
 
   const screenContent = <ScreenComponent type={currentScreen} />;
 

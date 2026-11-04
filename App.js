@@ -5,10 +5,12 @@ import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-c
 import { AppProvider, useApp } from './src/contexts/AppContext';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { createTheme } from './src/theme';
+import { USER_ROLES } from './src/data/authData';
 
 function AppShell() {
-  const { accessibilitySettings } = useApp();
-  const theme = useMemo(() => createTheme(accessibilitySettings), [accessibilitySettings]);
+  const { accessibilitySettings, currentUser } = useApp();
+  const purchasing = currentUser?.role === USER_ROLES.PURCHASING;
+  const theme = useMemo(() => createTheme(accessibilitySettings, purchasing), [accessibilitySettings, purchasing]);
 
   return (
     <ThemeProvider theme={theme}>
