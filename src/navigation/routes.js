@@ -51,7 +51,7 @@ export function getRoleTabs(role) {
       { id: 'companies', label: 'Empresas', icon: 'business', screen: SCREENS.COMPANIES },
       { id: 'members', label: 'Usuários', icon: 'people', screen: SCREENS.CREATE_MEMBER },
       { id: 'projects', label: 'Obras', icon: 'business', tab: TABS.PROJECTS },
-      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.PROFILE },
+      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.SETTINGS },
     ];
   }
 
@@ -61,7 +61,7 @@ export function getRoleTabs(role) {
       { id: 'stock', label: 'Estoque', icon: 'cube', screen: SCREENS.STOCK },
       { id: 'purchases', label: 'Compras', icon: 'cart', screen: SCREENS.PURCHASES },
       { id: 'projects', label: 'Obras', icon: 'business', tab: TABS.PROJECTS },
-      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.PROFILE },
+      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.SETTINGS },
     ];
   }
 
@@ -71,7 +71,7 @@ export function getRoleTabs(role) {
       { id: 'request', label: 'Solicitar', icon: 'cart', screen: SCREENS.REQUEST },
       { id: 'projects', label: 'Obras', icon: 'business', tab: TABS.PROJECTS },
       { id: 'materials', label: 'Materiais', icon: 'cube', tab: TABS.MATERIALS },
-      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.PROFILE },
+      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.SETTINGS },
     ];
   }
 
@@ -81,7 +81,7 @@ export function getRoleTabs(role) {
       { id: 'projects', label: 'Minha obra', icon: 'business', tab: TABS.PROJECTS },
       { id: 'budget', label: 'Orçamento', icon: 'calculator', tab: TABS.BUDGET },
       { id: 'reports', label: 'Documentos', icon: 'documents', screen: SCREENS.REPORTS },
-      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.PROFILE },
+      { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.SETTINGS },
     ];
   }
 

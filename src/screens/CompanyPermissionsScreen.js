@@ -38,8 +38,8 @@ export function CompanyPermissionsScreen() {
               <ActionButton
                 color={theme.colors.primary}
                 icon="business-outline"
-                label="Cadastrar empresa"
-                onPress={() => openScreen(SCREENS.CREATE_COMPANY)}
+                label="Consultar empresa"
+                onPress={() => openScreen(SCREENS.COMPANIES)}
               />
             </View>
           )}

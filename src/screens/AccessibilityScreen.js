@@ -1,75 +1,45 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Switch, Text, View } from 'react-native';
-import { useTheme } from 'styled-components/native';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
+import { PlanengenScreen, usePlanengenStyle } from '../components/layout/PlanengenScreen';
 import { useApp } from '../contexts/AppContext';
 
-const OPTIONS = [
-  { key: 'highContrast', icon: 'contrast-outline', title: 'Alto contraste', description: 'Aumenta o contraste de textos, bordas e ações.' },
-  { key: 'largeText', icon: 'text-outline', title: 'Texto ampliado', description: 'Aumenta a escala de textos nas telas compatíveis.' },
-  { key: 'screenReaderOptimized', icon: 'ear-outline', title: 'Otimização para leitor de tela', description: 'Usa anúncios acessíveis e rótulos descritivos quando VoiceOver ou TalkBack estiverem ativos no aparelho.' },
-  { key: 'visualAlerts', icon: 'eye-outline', title: 'Alertas visuais', description: 'Mostra confirmações e avisos em tela, útil para pessoas surdas.' },
-  { key: 'vibrationAlerts', icon: 'phone-portrait-outline', title: 'Alertas por vibração', description: 'Usa vibração junto das confirmações importantes.' },
-  { key: 'reduceMotion', icon: 'remove-circle-outline', title: 'Reduzir movimento', description: 'Evita animações não essenciais e transições intensas.' },
+const GROUPS = [
+  { title: 'Leitura e aparência', options: [
+    { key: 'highContrast', icon: 'contrast-outline', title: 'Alto contraste', description: 'Reforça o contraste de textos e bordas nas telas compatíveis.' },
+    { key: 'largeText', icon: 'text-outline', title: 'Texto ampliado', description: 'Aumenta o tamanho dos textos nas telas compatíveis.' },
+  ] },
+  { title: 'Interação e avisos', options: [
+    { key: 'screenReaderOptimized', icon: 'ear-outline', title: 'Anúncios para leitor de tela', description: 'Habilita anúncios nas ações que usam os avisos acessíveis do app.' },
+    { key: 'visualAlerts', icon: 'eye-outline', title: 'Alertas visuais', description: 'Mostra confirmações nas ações compatíveis. Avisos essenciais continuam sendo exibidos.' },
+    { key: 'vibrationAlerts', icon: 'phone-portrait-outline', title: 'Alertas por vibração', description: 'Acrescenta vibração aos avisos acessíveis, quando disponível no aparelho.' },
+    { key: 'reduceMotion', icon: 'remove-circle-outline', title: 'Reduzir movimento', description: 'Reduz animações e rolagem animada nas telas compatíveis.' },
+  ] },
 ];
-
 export function AccessibilityScreen() {
-  const theme = useTheme();
   const { accessibilitySettings, updateAccessibility } = useApp();
-
-  return (
-    <Screen>
-      <ScreenHeader title="Acessibilidade" />
-      <Scroll>
-        <Content>
-          <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}> 
-            <Ionicons name="accessibility" size={30} color="#FFFFFF" />
-            <View style={styles.heroText}>
-              <Text style={styles.heroTitle}>ObraSync para mais pessoas</Text>
-              <Text style={styles.heroDescription}>Recursos para baixa visão, cegueira, surdez e sensibilidade a movimento.</Text>
-            </View>
-          </View>
-
-          {OPTIONS.map((option) => (
-            <View key={option.key} accessible accessibilityLabel={`${option.title}. ${option.description}`} style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}> 
-              <View style={[styles.icon, { backgroundColor: theme.colors.primarySoft }]}> 
-                <Ionicons name={option.icon} size={22} color={theme.colors.primary} />
-              </View>
-              <View style={styles.info}>
-                <Text style={[styles.title, { color: theme.colors.text, fontSize: 15 * theme.fontScale }]}>{option.title}</Text>
-                <Text style={[styles.description, { color: theme.colors.textMuted, fontSize: 12 * theme.fontScale }]}>{option.description}</Text>
-              </View>
-              <Switch
-                accessibilityLabel={`Ativar ${option.title}`}
-                value={Boolean(accessibilitySettings[option.key])}
-                onValueChange={(value) => updateAccessibility({ [option.key]: value })}
-                trackColor={{ false: '#D8DEE8', true: theme.colors.accent }}
-                thumbColor="#FFFFFF"
-              />
-            </View>
-          ))}
-
-          <View style={[styles.note, { backgroundColor: theme.colors.accentSoft }]}> 
-            <Ionicons name="information-circle-outline" size={21} color={theme.colors.accent} />
-            <Text style={[styles.noteText, { color: theme.colors.text }]}>O app usa componentes nativos compatíveis com VoiceOver no iPhone e TalkBack no Android. Mantenha o leitor de tela do sistema ativado para navegação por gestos e áudio.</Text>
-          </View>
-        </Content>
-      </Scroll>
-    </Screen>
-  );
+  const { colors, text } = usePlanengenStyle();
+  return <PlanengenScreen title="Acessibilidade">
+    <Text style={text(styles.heading, colors.navy)}>Mais conforto para você.</Text>
+    <Text style={text(styles.intro, colors.muted)}>Personalize a leitura e a interação. Os ajustes são salvos neste aparelho.</Text>
+    {GROUPS.map(group => <View key={group.title}>
+      <Text accessibilityRole="header" style={text(styles.section, colors.navy)}>{group.title}</Text>
+      {group.options.map(option => {
+        const enabled = Boolean(accessibilitySettings[option.key]);
+        return <View key={option.key} style={[styles.card, { borderColor: colors.border }]}>
+          <View style={styles.top}><View style={styles.icon}><Ionicons name={option.icon} size={23} color={colors.blue}/></View><Text style={text(styles.optionTitle, colors.navy)}>{option.title}</Text></View>
+          <Text style={text(styles.description, colors.muted)}>{option.description}</Text>
+          <View style={styles.control}><Text importantForAccessibility="no" style={text(styles.state, colors.blue)}>{enabled ? 'Ativado' : 'Desativado'}</Text><Switch accessibilityLabel={option.title} accessibilityHint={option.description} value={enabled} onValueChange={value => updateAccessibility({ [option.key]: value })} trackColor={{ false: '#9CA6B5', true: colors.blue }} thumbColor="#FFFFFF"/></View>
+        </View>;
+      })}
+    </View>)}
+    <View style={styles.note}><Ionicons name="information-circle-outline" size={22} color={colors.blue}/><View style={{ flex: 1 }}><Text style={text(styles.noteTitle, colors.navy)}>VoiceOver e TalkBack</Text><Text style={text(styles.description, colors.muted)}>Ative o leitor de tela nos ajustes do iPhone ou Android. Esta opção do app complementa o recurso do sistema; ela não o ativa.</Text></View></View>
+  </PlanengenScreen>;
 }
-
 const styles = StyleSheet.create({
-  hero: { alignItems: 'center', borderRadius: 22, flexDirection: 'row', marginTop: 18, padding: 18 },
-  heroText: { flex: 1, marginLeft: 13 },
-  heroTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '900' },
-  heroDescription: { color: 'rgba(255,255,255,.78)', fontSize: 12, lineHeight: 18, marginTop: 4 },
-  card: { alignItems: 'center', borderRadius: 18, borderWidth: 1, flexDirection: 'row', marginTop: 12, padding: 14 },
-  icon: { alignItems: 'center', borderRadius: 13, height: 44, justifyContent: 'center', width: 44 },
-  info: { flex: 1, marginHorizontal: 12 },
-  title: { fontWeight: '900' },
-  description: { lineHeight: 18, marginTop: 3 },
-  note: { alignItems: 'flex-start', borderRadius: 16, flexDirection: 'row', marginTop: 20, padding: 14 },
-  noteText: { flex: 1, fontSize: 12, lineHeight: 18, marginLeft: 9 },
+  heading: { fontSize: 25, fontWeight: '700', letterSpacing: -0.6 }, intro: { fontSize: 14, marginTop: 9 },
+  section: { fontSize: 16, fontWeight: '700', marginTop: 28, marginBottom: 12 }, card: { borderWidth: 1, borderRadius: 18, backgroundColor: '#FFFFFF', padding: 18, marginBottom: 12 },
+  top: { flexDirection: 'row', alignItems: 'center', gap: 12 }, icon: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 12, backgroundColor: '#E7F2FE' },
+  optionTitle: { fontSize: 16, fontWeight: '600', flex: 1 }, description: { fontSize: 13, marginTop: 10 },
+  control: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 16 }, state: { fontSize: 12, fontWeight: '600', flex: 1 },
+  note: { flexDirection: 'row', gap: 10, marginTop: 12 }, noteTitle: { fontSize: 14, fontWeight: '600' },
 });

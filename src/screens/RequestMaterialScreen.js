@@ -31,8 +31,8 @@ export function RequestMaterialScreen() {
       const savedRequest = await submitMaterialRequest(formValues);
       reset(DEFAULT_REQUEST_FORM);
       Alert.alert(
-        'Solicitação registrada',
-        `${savedRequest.id}\n${savedRequest.status}`,
+        'Solicitação registrada localmente',
+        `${savedRequest.id}\n${savedRequest.status}\nRegistro de demonstração. Não enviado ao servidor.`,
         [{ text: 'Concluir', onPress: goBack }],
       );
     } catch {

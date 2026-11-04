@@ -1,4 +1,5 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { canAccessRoute, requiresProject } from '../utils/permissions';
 import { useTheme } from 'styled-components/native';
 import { BottomTabs } from '../components/layout/BottomTabs';
 import { PlanengenHeader } from '../components/layout/PlanengenHeader';
@@ -13,9 +14,12 @@ export function AppNavigator() {
   const { currentUser, currentScreen, activeTab, isAuthReady } = useApp();
   const requesterHome = isAuthReady && currentUser?.role === USER_ROLES.REQUESTER
     && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
+  const masterHome = isAuthReady && currentUser?.role === USER_ROLES.MASTER
+    && (currentScreen === SCREENS.MASTER_PANEL || (currentScreen === SCREENS.TABS && activeTab === TABS.HOME));
+  const projectsScreen = currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS;
   return (
     <View style={{ flex: 1 }}>
-      {!requesterHome && !(isAuthReady && !currentUser) && <PlanengenHeader />}
+      {!requesterHome && !masterHome && !projectsScreen && ![SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
       <NavigatorContent />
     </View>
   );
@@ -23,7 +27,7 @@ export function AppNavigator() {
 
 function NavigatorContent() {
   const theme = useTheme();
-  const { activeTab, currentScreen, currentUser, isAuthReady } = useApp();
+  const { activeTab, currentScreen, currentUser, isAuthReady, selectedProject, selectTab } = useApp();
 
   if (!isAuthReady) {
     return (
@@ -35,6 +39,15 @@ function NavigatorContent() {
   }
 
   if (!currentUser) return <LoginScreen />;
+  const allowed = canAccessRoute(currentUser.role, currentScreen, activeTab);
+  const missingProject = requiresProject(currentScreen, activeTab) && !selectedProject?.id;
+  if (!allowed || missingProject) return (
+    <View style={{ flex: 1, padding: 24, justifyContent: 'center', backgroundColor: theme.colors.background }}>
+      <Text accessibilityRole="header" style={{ color: theme.colors.text, fontSize: 22 }}>{!allowed ? 'Acesso restrito' : 'Selecione uma obra'}</Text>
+      <Text style={{ color: theme.colors.textMuted, marginVertical: 16 }}>{!allowed ? 'Esta operação não está disponível para seu perfil.' : 'Escolha uma obra antes de abrir este módulo.'}</Text>
+      <TouchableOpacity accessibilityRole="button" onPress={() => selectTab(!allowed ? TABS.HOME : TABS.PROJECTS)} style={{ padding: 16, backgroundColor: theme.colors.primary, borderRadius: 12 }}><Text style={{ color: '#FFFFFF' }}>{!allowed ? 'Ir para o início' : 'Escolher obra'}</Text></TouchableOpacity>
+    </View>
+  );
 
   const isMasterHome = currentUser.role === USER_ROLES.MASTER
     && currentScreen === SCREENS.TABS

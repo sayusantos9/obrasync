@@ -47,9 +47,12 @@ export function BottomTabs() {
   const insets = useSafeAreaInsets();
   const requesterHome = currentUser?.role === USER_ROLES.REQUESTER
     && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
+  const masterHome = (currentUser?.role === USER_ROLES.MASTER
+    && ([SCREENS.MASTER_PANEL, SCREENS.CREATE_MEMBER].includes(currentScreen) || (currentScreen === SCREENS.TABS && activeTab === TABS.HOME)))
+    || (currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS) || [SCREENS.SETTINGS, SCREENS.COMPANIES].includes(currentScreen);
 
   return (
-    <Bar accessibilityRole="tablist" style={requesterHome ? {
+    <Bar accessibilityRole="tablist" style={requesterHome || masterHome ? {
       height: 66 + Math.max(insets.bottom, 12), paddingBottom: Math.max(insets.bottom, 12),
       borderTopLeftRadius: 18, borderTopRightRadius: 18, backgroundColor: '#FFFFFF',
     } : undefined}>
@@ -84,10 +87,10 @@ export function BottomTabs() {
             accessibilityLabel={item.label}
             onPress={() => (item.tab ? selectTab(item.tab) : openScreen(item.screen))}
           >
-            <IconBox $active={active}>
-              <Ionicons name={icon} size={21} color={active ? '#EA6A12' : '#686C78'} />
+            <IconBox $active={active} style={masterHome && active ? { backgroundColor: '#E7F2FE' } : undefined}>
+              <Ionicons name={icon} size={21} color={active ? (masterHome ? '#0066BE' : '#EA6A12') : '#686C78'} />
             </IconBox>
-            <Label $active={active} style={requesterHome ? { fontSize: 11, color: active ? '#EA6A12' : '#64748B' } : undefined}>{item.label}</Label>
+            <Label $active={active} style={masterHome ? { fontSize: 11, color: active ? '#0066BE' : '#575D6B' } : requesterHome ? { fontSize: 11, color: active ? '#EA6A12' : '#64748B' } : undefined}>{item.label}</Label>
           </Item>
         );
       })}

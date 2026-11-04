@@ -1,5 +1,7 @@
+import { assertPermission } from '../utils/permissions';
+import { applyStockMovement } from '../utils/stockMovement';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AccessibilityInfo, Alert, Vibration } from 'react-native';
 import { USER_ROLES } from '../data/authData';
 import { useAppNavigation } from '../hooks/useAppNavigation';
@@ -9,6 +11,7 @@ import { fetchCostInputs, saveCompanyInput } from '../services/costInputService'
 import { calculateBudget } from '../utils/bdi';
 import { prepareQuote, encodeQuoteMeta, toQuote } from '../utils/quotes';
 import { toDatabaseDate } from '../utils/dates';
+import { parseProjectBudget, reconcileSelectedProject } from '../utils/projects';
 
 const AppContext = createContext(null);
 
@@ -114,6 +117,7 @@ export function AppProvider({ children }) {
     catch (error) { setCostInputsError(error.message); throw error; }
   }
   async function createCostInput(draft) {
+    assertPermission(currentUser?.role, 'writeCatalog');
     const item = await saveCompanyInput(draft, currentUser);
     setCostInputs(rows => [...rows, item]);
     return item;
@@ -130,6 +134,23 @@ export function AppProvider({ children }) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [accessibilitySettings, setAccessibilitySettings] = useState(DEFAULT_ACCESSIBILITY);
+  const accessibilityRef = useRef(DEFAULT_ACCESSIBILITY);
+  const accessibilityChanged = useRef(false);
+  const accessibilityWrites = useRef(Promise.resolve());
+  const syncingRef = useRef(false);
+
+  useEffect(() => {
+    let mounted = true;
+    AsyncStorage.getItem('@obrasync:accessibility').then(raw => {
+      if (!mounted || accessibilityChanged.current || !raw) return;
+      const saved = JSON.parse(raw);
+      const next = { ...DEFAULT_ACCESSIBILITY };
+      for (const key of Object.keys(next)) if (typeof saved?.[key] === 'boolean') next[key] = saved[key];
+      accessibilityRef.current = next;
+      setAccessibilitySettings(next);
+    }).catch(() => { /* Preferências inválidas não impedem a abertura do app. */ });
+    return () => { mounted = false; };
+  }, []);
 
   async function fetchProfile(authUser) {
     if (!authUser || !supabase) return null;
@@ -191,10 +212,7 @@ export function AppProvider({ children }) {
     const nextBudgets = (budgetsResult.data || []).map(toBudget);
     setProjects(nextProjects);
     setBudgetDocuments(nextBudgets);
-    setSelectedProject((current) => {
-      if (current && nextProjects.some((project) => project.id === current.id)) return current;
-      return nextProjects[0] || null;
-    });
+    setSelectedProject((current) => reconcileSelectedProject(current, nextProjects));
 
     if (user.role === USER_ROLES.MASTER || user.role === USER_ROLES.ENGINEERING) {
       const [membersResult, companyResult] = await Promise.all([
@@ -367,7 +385,12 @@ export function AppProvider({ children }) {
 
   async function createProject(data) {
     if (!supabase || !currentUser?.companyId) throw new Error('Empresa não identificada.');
-    const client = members.find((member) => member.role === USER_ROLES.CLIENT && member.id === data.clientUserId);
+    if (currentUser.role !== USER_ROLES.MASTER) throw new Error('Somente o Gestor pode cadastrar obras.');
+    if (!data.name?.trim()) throw new Error('Informe o nome da obra.');
+    const budget = parseProjectBudget(data.budget);
+    if (!Number.isFinite(budget)) throw new Error('Informe um orçamento válido, maior ou igual a zero.');
+    const client = members.find((member) => member.role === USER_ROLES.CLIENT && member.active !== false && member.id === data.clientUserId);
+    if (data.clientUserId && !client) throw new Error('O cliente selecionado não está mais disponível. Atualize a lista.');
     const { data: created, error } = await supabase
       .from('projects')
       .insert({
@@ -376,7 +399,7 @@ export function AppProvider({ children }) {
         client_name: client?.name || data.client || '',
         client_user_id: client?.id || null,
         location: data.location?.trim() || null,
-        budget: Number(data.budget || 0),
+        budget,
         status: 'PLANNED',
         progress: 0,
         created_by: currentUser.id,
@@ -391,6 +414,7 @@ export function AppProvider({ children }) {
   }
 
   async function addBudgetDocument(data) {
+    assertPermission(currentUser?.role, 'writeBudget');
     if (!supabase || !currentUser?.companyId || !selectedProject?.id) throw new Error('Selecione uma obra antes de criar o orçamento.');
 
     const calculated = calculateBudget(data.items || [], data.bdiConfig);
@@ -478,6 +502,7 @@ export function AppProvider({ children }) {
   }
 
   async function removeBudgetDocument(id) {
+    assertPermission(currentUser?.role, 'writeBudget');
     if (!supabase) return;
     const { error } = await supabase.from('budgets').delete().eq('id', id);
     if (error) throw error;
@@ -506,27 +531,41 @@ export function AppProvider({ children }) {
   }
 
   async function submitMaterialRequest(data) {
-    const item = { id: `REQ-${Date.now()}`, status: isOffline ? 'Aguardando sincronização' : 'Pendente', ...data };
+    assertPermission(currentUser?.role, 'requestMaterial');
+    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.');
+    const item = { projectId: selectedProject.id, id: `REQ-${Date.now()}`, status: isOffline ? 'Aguardando sincronização' : 'Pendente', ...data };
     if (isOffline) setPendingRequests((current) => [item, ...current]);
     else setRequests((current) => [item, ...current]);
     return item;
   }
 
   async function syncPendingRequests() {
+    if (syncingRef.current) return;
+    if (isOffline) {
+      Alert.alert('Simulação offline ativa', 'Desative a simulação offline antes de mover as pendências locais.');
+      return;
+    }
     if (!pendingRequests.length) {
       Alert.alert('Tudo certo', 'Não há pendências.');
       return;
     }
+    syncingRef.current = true;
     setIsSyncing(true);
-    setRequests((current) => [...pendingRequests.map((item) => ({ ...item, status: 'Pendente' })), ...current]);
-    setPendingRequests([]);
-    setTimeout(() => {
+    const batch = pendingRequests;
+    const ids = new Set(batch.map(item => item.id));
+    try {
+      setRequests((current) => [...batch.map((item) => ({ ...item, status: 'Pendente' })), ...current.filter(item => !ids.has(item.id))]);
+      setPendingRequests(current => current.filter(item => !ids.has(item.id)));
+      await new Promise(resolve => setTimeout(resolve, 350));
+      Alert.alert('Simulação concluída', 'As pendências foram movidas para a lista local. Nenhum dado foi enviado ao servidor.');
+    } finally {
+      syncingRef.current = false;
       setIsSyncing(false);
-      Alert.alert('Sincronização', 'Pendências sincronizadas.');
-    }, 350);
+    }
   }
 
   async function addQuote(data) {
+    assertPermission(currentUser?.role, 'writeQuote');
     if (!supabase || !currentUser?.companyId) throw new Error('Empresa não identificada.');
     const prepared = prepareQuote(data, selectedProject?.id);
     const { data: row, error } = await supabase.rpc('save_material_quote', {
@@ -540,31 +579,43 @@ export function AppProvider({ children }) {
     return item;
   }
   async function removeQuote(id) {
+    assertPermission(currentUser?.role, 'writeQuote');
     const { error } = await supabase.from('quotations').delete().eq('id', id);
     if (error) throw error;
     setQuotes((current) => current.filter((item) => item.id !== id));
   }
-  async function addExpense(data) { const item = { id: `EXP-${Date.now()}`, ...data, projectId: selectedProject?.id, amount: Number(data.amount || 0) }; setExtraExpenses((c) => [item, ...c]); return item; }
+  async function addExpense(data) {
+    assertPermission(currentUser?.role, 'writeExpense');
+    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.'); const item = { id: `EXP-${Date.now()}`, ...data, projectId: selectedProject?.id, amount: Number(data.amount || 0) }; setExtraExpenses((c) => [item, ...c]); return item; }
   async function createCompany() { throw new Error('A empresa principal é criada no primeiro cadastro do Gestor.'); }
-  async function createOrder(data) { const item = { id: `PO-${Date.now()}`, number: `PED-${String(Date.now()).slice(-6)}`, status: 'Criado', ...data, projectId: selectedProject?.id }; setOrders((c) => [item, ...c]); return item; }
-  async function createReceipt(data) { const item = { id: `REC-${Date.now()}`, receivedAt: new Date().toLocaleDateString('pt-BR'), ...data, projectId: selectedProject?.id }; setReceipts((c) => [item, ...c]); return item; }
+  async function createOrder(data) {
+    assertPermission(currentUser?.role, 'managePurchase');
+    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.'); const item = { id: `PO-${Date.now()}`, number: `PED-${String(Date.now()).slice(-6)}`, status: 'Criado', ...data, projectId: selectedProject?.id }; setOrders((c) => [item, ...c]); return item; }
+  async function createReceipt(data) {
+    assertPermission(currentUser?.role, 'managePurchase');
+    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.'); const item = { id: `REC-${Date.now()}`, receivedAt: new Date().toLocaleDateString('pt-BR'), ...data, projectId: selectedProject?.id }; setReceipts((c) => [item, ...c]); return item; }
   async function createStockMovement(data) {
-    const quantity = Number(data.quantity || 0);
-    setStock((current) => current.map((item) => item.code === data.materialCode || item.id === data.materialId
-      ? { ...item, quantity: Math.max(0, Number(item.quantity || 0) + (data.type === 'OUT' ? -quantity : quantity)) }
-      : item));
-    return { id: `MOV-${Date.now()}`, ...data, quantity };
-  }
-  async function createLabel(data) {
+    assertPermission(currentUser?.role, 'manageStock');
+    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.');
+    const next = applyStockMovement(stock, data);
+    setStock(next);
+    return { id: `MOV-${Date.now()}`, ...data, projectId: selectedProject.id, quantity: Number(String(data.quantity).replace(',', '.')) };
+  }  async function createLabel(data) {
+    assertPermission(currentUser?.role, 'manageStock');
+    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.');
     const id = `LBL-${String(Date.now()).slice(-8)}`;
     const payload = `obrasync://label/${encodeURIComponent(id)}?material=${encodeURIComponent(data.materialCode || '')}&obra=${encodeURIComponent(selectedProject?.name || '')}&lote=${encodeURIComponent(data.lot || '')}&local=${encodeURIComponent(data.location || '')}`;
     return { label: { id, lot: data.lot || '-', ...data }, qr: { payload } };
   }
 
   async function updateAccessibility(patch) {
-    const next = { ...accessibilitySettings, ...patch };
+    accessibilityChanged.current = true;
+    const next = { ...accessibilityRef.current };
+    for (const key of Object.keys(DEFAULT_ACCESSIBILITY)) if (typeof patch[key] === 'boolean') next[key] = patch[key];
+    accessibilityRef.current = next;
     setAccessibilitySettings(next);
-    try { await AsyncStorage.setItem('@obrasync:accessibility', JSON.stringify(next)); } catch {}
+    accessibilityWrites.current = accessibilityWrites.current.catch(() => {}).then(() => AsyncStorage.setItem('@obrasync:accessibility', JSON.stringify(next)));
+    try { await accessibilityWrites.current; } catch { Alert.alert('Preferências não salvas', 'O ajuste foi aplicado nesta sessão, mas não pôde ser salvo neste aparelho.'); }
   }
 
   function notifyAccessible(title, message) {
