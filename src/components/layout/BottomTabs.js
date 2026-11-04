@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
+import { useTheme } from 'styled-components/native';
 import { useApp } from '../../contexts/AppContext';
 import { getRoleTabs, SCREENS } from '../../navigation/routes';
 
@@ -14,6 +15,8 @@ const Bar = styled.View`
   background-color: ${({ theme }) => theme.colors.surface};
   border-top-width: 1px;
   border-top-color: ${({ theme }) => theme.colors.border};
+  border-top-left-radius: ${({ theme }) => theme.purchasing ? 20 : 0}px;
+  border-top-right-radius: ${({ theme }) => theme.purchasing ? 20 : 0}px;
 `;
 
 const Item = styled.TouchableOpacity`
@@ -35,11 +38,12 @@ const IconBox = styled.View`
 const Label = styled.Text`
   margin-top: 3px;
   color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.textMuted)};
-  font-size: 9px;
+  font-size: ${({ theme }) => theme.purchasing ? 11 : 9}px;
   font-weight: ${({ $active }) => ($active ? 900 : 600)};
 `;
 
 export function BottomTabs() {
+  const theme = useTheme();
   const { activeTab, currentScreen, currentUser, openScreen, selectTab } = useApp();
   const items = getRoleTabs(currentUser?.role);
 
@@ -77,7 +81,7 @@ export function BottomTabs() {
             onPress={() => (item.tab ? selectTab(item.tab) : openScreen(item.screen))}
           >
             <IconBox $active={active}>
-              <Ionicons name={icon} size={21} color={active ? '#EA6A12' : '#686C78'} />
+              <Ionicons name={icon} size={theme.purchasing ? 24 : 21} color={active ? theme.colors.accent : theme.colors.textMuted} />
             </IconBox>
             <Label $active={active}>{item.label}</Label>
           </Item>

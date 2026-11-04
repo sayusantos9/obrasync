@@ -7,6 +7,7 @@ import { USER_ROLES } from '../data/authData';
 import { EngineeringHomeScreen, LoginScreen, MasterPanelScreen } from '../screens';
 import { SCREENS, TABS } from './routes';
 import { resolveScreenComponent, shouldShowBottomTabs } from './screenRegistry';
+import { PurchasingHomeScreen } from '../screens/PurchasingHomeScreen';
 
 export function AppNavigator() {
   return (
@@ -43,7 +44,9 @@ function NavigatorContent() {
     ? MasterPanelScreen
     : isEngineeringHome
       ? EngineeringHomeScreen
-      : resolveScreenComponent(currentScreen, activeTab);
+      : currentUser.role === USER_ROLES.PURCHASING && currentScreen === SCREENS.TABS && activeTab === TABS.HOME
+        ? PurchasingHomeScreen
+        : resolveScreenComponent(currentScreen, activeTab);
 
   const screenContent = <ScreenComponent type={currentScreen} />;
 

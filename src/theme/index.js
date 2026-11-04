@@ -29,23 +29,30 @@ export const baseTheme = {
   },
 };
 
-export function createTheme(accessibility = {}) {
+export function createTheme(accessibility = {}, purchasing = false) {
   const highContrast = Boolean(accessibility.highContrast);
+  const colors = purchasing ? {
+    ...baseTheme.colors,
+    primary: '#030024', primaryDark: '#030024', primarySoft: '#EFF6FC',
+    accent: '#086BB2', accentSoft: '#E8F3FD', background: '#EEEFF1',
+    text: '#080526', textMuted: '#60616B', border: '#DFE1E6',
+  } : baseTheme.colors;
   return {
     ...baseTheme,
+    purchasing,
     fontScale: accessibility.largeText ? 1.16 : 1,
     colors: highContrast
       ? {
-          ...baseTheme.colors,
+          ...colors,
           primary: '#001B44',
           primaryDark: '#00122F',
-          accent: '#D95700',
+          accent: purchasing ? '#005C9E' : '#D95700',
           background: '#FFFFFF',
           text: '#000000',
           textMuted: '#343434',
           border: '#707070',
         }
-      : baseTheme.colors,
+      : colors,
   };
 }
 
