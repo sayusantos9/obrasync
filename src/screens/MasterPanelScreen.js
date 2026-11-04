@@ -1,3 +1,5 @@
+import {HomeIndicators} from '../components/home/HomeIndicators';
+import {HomeHighlights} from '../components/home/HomeHighlights';
 import { Ionicons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
@@ -34,7 +36,7 @@ export function MasterPanelScreen() {
   const activeMembers = members.filter(member => member.active !== false).length;
   const activeProjects = projects.filter(project => !TERMINAL_PROJECT_STATUSES.has(String(project.status || '').toUpperCase())).length;
   const counts = { companies: `${activeCompanies} ${activeCompanies === 1 ? 'ativa' : 'ativas'}`, members: `${activeMembers} ${activeMembers === 1 ? 'ativo' : 'ativos'}`, projects: `${activeProjects} ${activeProjects === 1 ? 'ativa' : 'ativas'}` };
-  const metrics = [{ value: activeCompanies, label: 'Empresas', detail: 'ativas' }, { value: activeMembers, label: 'Usuários', detail: 'ativos' }, { value: projects.length, label: 'Obras', detail: 'no total' }];
+  const metrics = [{ value: activeCompanies, icon:'business-outline', label: 'Empresas', detail: 'ativas' }, { value: activeMembers, icon:'people-outline', label: 'Usuários', detail: 'ativos' }, { value: projects.length, icon:'construct-outline', label: 'Obras', detail: 'no total' }];
   function navigate(action) { if (action.tab) selectTab(action.tab); else openScreen(action.route); }
 
   return (
@@ -55,16 +57,9 @@ export function MasterPanelScreen() {
           <Text style={text(styles.introText, '#DCE4F0')}>Tudo pronto para gerir sua operação.</Text>
           <View style={styles.company}><Ionicons name="business-outline" color="#8DCBFF" size={16} /><Text style={[text(styles.companyText, '#FFFFFF'), { flex: 1 }]}>{currentUser?.companyName || 'Sua empresa'}</Text></View>
         </View>
-        <View style={[styles.body, { backgroundColor: contrast ? '#FFFFFF' : '#EEF0F2' }]}>
-          <View style={[styles.metrics, compact && styles.metricsStack, { borderColor: colors.border }]}>
-            {metrics.map((metric, index) => (
-              <View key={metric.label} accessible accessibilityLabel={`${metric.value} ${metric.label} ${metric.detail}`}
-                style={[styles.metric, compact && styles.metricCompact, index > 0 && (compact ? styles.metricTopBorder : styles.metricLeftBorder), { borderColor: colors.border }]}>
-                <Text style={text(styles.metricValue, NAVY)}>{metric.value}</Text>
-                <View><Text style={text(styles.metricLabel)}>{metric.label}</Text><Text style={text(styles.metricDetail, colors.muted)}>{metric.detail}</Text></View>
-              </View>
-            ))}
-          </View>
+        <View style={[styles.body, { backgroundColor: contrast ? '#FFFFFF' : '#EAF0F8' }]}>
+          <HomeIndicators metrics={metrics}/>
+          <HomeHighlights/>
           <View style={styles.section}><Text accessibilityRole="header" style={text(styles.sectionTitle, NAVY)}>Central de gestão</Text><Text style={text(styles.sectionDescription, colors.muted)}>Pessoas, obras e materiais em um só lugar.</Text></View>
           <TouchableOpacity accessibilityRole="button" accessibilityLabel="Insumos. Catálogo e preços de referência" onPress={() => selectTab(TABS.MATERIALS)} style={[styles.catalog, { borderColor: colors.border }]}>
             <View style={styles.catalogTop}><View style={styles.catalogIcon}><Ionicons name="cube-outline" color="#FFFFFF" size={25}/></View><Text style={[text(styles.catalogTag, colors.blue), { flex: 1 }]}>CATÁLOGO DE MATERIAIS</Text><Ionicons name="arrow-forward" color={colors.blue} size={22}/></View>

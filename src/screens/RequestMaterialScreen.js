@@ -1,13 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { CalendarField } from '../components/forms/CalendarField';
 import { FormField } from '../components/forms/FormField';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
+import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
-import { theme } from '../theme';
-import { requestMaterialStyles as styles } from './RequestMaterialScreen.styles';
+import { makeRequestMaterialStyles } from './RequestMaterialScreen.styles';
 import { parseDecimal } from '../utils/bdi';
 import { useRef } from 'react';
 import { operationId } from '../services/requestQueue';
@@ -21,8 +19,13 @@ const DEFAULT_REQUEST_FORM = {
 };
 
 export function RequestMaterialScreen() {
-  const { goBack, isOffline, submitMaterialRequest } = useApp();
+  const { goBack, isOffline, selectedProject, submitMaterialRequest } = useApp();
   const requestId=useRef(operationId());
+  const savingRef=useRef(false);
+  const theme=useInventoryTheme();
+  const styles=useInventoryStyles(makeRequestMaterialStyles(theme));
+  const {width,fontScale}=useWindowDimensions();
+  const compact=width<360 || fontScale*(theme.fontScale||1)>1.2;
   const {
     control,
     handleSubmit,
@@ -31,43 +34,44 @@ export function RequestMaterialScreen() {
   } = useForm({ defaultValues: DEFAULT_REQUEST_FORM });
 
   async function handleSaveRequest(formValues) {
+    if(savingRef.current)return;
+    if(!selectedProject?.id)return Alert.alert('Selecione uma obra','Escolha uma obra antes de solicitar insumos.');
+    savingRef.current=true;
     try {
-      const savedRequest = await submitMaterialRequest({...formValues,clientRequestId:requestId.current,quantity:parseDecimal(formValues.quantity)});
+      const savedRequest = await submitMaterialRequest({...formValues,material:formValues.material.trim(),unit:formValues.unit.trim(),justification:formValues.justification.trim(),clientRequestId:requestId.current,quantity:parseDecimal(formValues.quantity)});
       requestId.current=operationId();
       reset(DEFAULT_REQUEST_FORM);
       Alert.alert(
-        savedRequest.status==='QUEUED'?'Solicitação na fila do aparelho':'Solicitação salva no Supabase',
-        savedRequest.status==='QUEUED'?`Abra Mais → Solicitações pendentes para enviar. ${savedRequest.message || ''}`:`${savedRequest.id}\nAguardando atendimento`,
+        savedRequest.status==='QUEUED'?'Solicitação na fila do aparelho':'Solicitação enviada',
+        savedRequest.status==='QUEUED'?`Use a sincronização na tela inicial ou abra Mais → Solicitações pendentes para enviar. ${savedRequest.message || ''}`:`${savedRequest.id}\nAguardando atendimento`,
         [{ text: 'Concluir', onPress: goBack }],
       );
     } catch (error) {
       Alert.alert('Erro', error.message || 'Não foi possível registrar a solicitação.');
-    }
+    } finally { savingRef.current=false; }
   }
 
   return (
-    <Screen>
-      <ScreenHeader title="Solicitar material" />
-      <Scroll>
-        <Content>
+    <InventoryScreen title="Solicitar insumos" bottomTabs={false}>
           <Text style={styles.introText}>
-            Informe a necessidade da obra. Campos obrigatórios são validados antes do envio.
+            Do planejamento à execução: informe o que falta para sua equipe continuar.
           </Text>
 
+          <View style={styles.projectCard}><Ionicons name="construct-outline" size={23} color={theme.colors.accent}/><View style={{flex:1}}><Text style={styles.projectLabel}>OBRA DA SOLICITAÇÃO</Text><Text style={styles.projectName}>{selectedProject?.name || 'Nenhuma obra selecionada'}</Text></View></View>
           <FormField
             control={control}
             name="material"
-            label="MATERIAL"
+            label="INSUMO"
             placeholder="Ex.: Cimento CP II 50 kg"
-            rules={{ required: 'Informe o material.' }}
+            rules={{ validate:v=>Boolean(v?.trim()) || 'Informe o insumo.' }}
           />
 
-          <View style={styles.row}>
+          <View style={[styles.row,compact&&{flexDirection:'column'}]}>
             <FormField
               control={control}
               name="quantity"
               label="QUANTIDADE"
-              keyboardType="numeric"
+              keyboardType="decimal-pad"
               placeholder="120"
               rules={{
                 required: 'Obrigatório.',
@@ -80,7 +84,7 @@ export function RequestMaterialScreen() {
               name="unit"
               label="UNIDADE"
               placeholder="saco"
-              rules={{ required: 'Obrigatório.' }}
+              rules={{ validate:v=>Boolean(v?.trim()) || 'Informe a unidade.' }}
               containerStyle={styles.halfField}
             />
           </View>
@@ -97,22 +101,17 @@ export function RequestMaterialScreen() {
             control={control}
             name="justification"
             label="JUSTIFICATIVA"
-            placeholder="Explique onde o material será utilizado"
+            placeholder="Explique onde o insumo será utilizado"
             rules={{
               required: 'Informe a justificativa.',
-              minLength: { value: 8, message: 'Use pelo menos 8 caracteres.' },
+              validate:v=>v?.trim().length>=8 || 'Use pelo menos 8 caracteres.',
             }}
             multiline
           />
 
-          <TouchableOpacity style={styles.attachmentButton}>
-            <Ionicons name="camera-outline" size={22} color={theme.colors.primary} />
-            <Text style={styles.attachmentText}>Adicionar foto ou documento</Text>
-          </TouchableOpacity>
-
-          {isOffline && (
+{isOffline && (
             <View style={styles.offlineNotice}>
-              <Ionicons name="cloud-offline" size={20} color="#9B4B11" />
+              <Ionicons name="cloud-offline" size={20} color={theme.colors.accent} />
               <Text style={styles.offlineText}>
                 Sem conexão: a solicitação ficará salva no aparelho para sincronização posterior.
               </Text>
@@ -120,16 +119,14 @@ export function RequestMaterialScreen() {
           )}
 
           <TouchableOpacity
-            disabled={isSubmitting}
+            accessibilityRole="button" accessibilityLabel="Enviar solicitação" disabled={isSubmitting || !selectedProject?.id}
             onPress={handleSubmit(handleSaveRequest)}
-            style={[styles.submitButton, isSubmitting && styles.disabledButton]}
+            style={[styles.submitButton, (isSubmitting || !selectedProject?.id) && styles.disabledButton]}
           >
             <Text style={styles.submitText}>
               {isSubmitting ? 'Salvando...' : 'Enviar solicitação'}
             </Text>
           </TouchableOpacity>
-        </Content>
-      </Scroll>
-    </Screen>
+        </InventoryScreen>
   );
 }

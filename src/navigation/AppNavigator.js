@@ -23,7 +23,7 @@ export function AppNavigator() {
   const projectsScreen = currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS;
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: '#010028' }}>
-      {!clientHome && !requesterHome && !masterHome && !engineeringHome && !projectsScreen && !(currentScreen === SCREENS.TABS && (activeTab === TABS.MATERIALS || activeTab === TABS.BUDGET || activeTab === TABS.COSTS)) && ![SCREENS.ADD_EXPENSE, SCREENS.CREATE_BUDGET, SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
+      {!clientHome && !requesterHome && !masterHome && !engineeringHome && !projectsScreen && !(currentScreen === SCREENS.TABS && (activeTab === TABS.MATERIALS || activeTab === TABS.BUDGET || activeTab === TABS.COSTS)) && ![SCREENS.REQUEST, SCREENS.ADD_EXPENSE, SCREENS.CREATE_BUDGET, SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
       <NavigatorContent />
     </KeyboardAvoidingView>
   );

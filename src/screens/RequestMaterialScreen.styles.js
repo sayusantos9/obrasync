@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../theme';
 
-export const requestMaterialStyles = StyleSheet.create({
+export const makeRequestMaterialStyles = theme => StyleSheet.create({
+  projectCard:{flexDirection:'row',gap:12,alignItems:'center',backgroundColor:'#FFFFFF',borderWidth:1,borderColor:theme.colors.border,borderRadius:16,padding:16,marginTop:18},projectLabel:{fontSize:10,color:theme.colors.textMuted,fontWeight:'700',letterSpacing:.5},projectName:{fontSize:16,color:theme.colors.primary,fontWeight:'700',marginTop:5},
   introText: {
     color: theme.colors.textMuted,
     fontSize: 15,
@@ -31,21 +31,21 @@ export const requestMaterialStyles = StyleSheet.create({
   },
   offlineNotice: {
     alignItems: 'center',
-    backgroundColor: '#FFF0E2',
+    backgroundColor: theme.colors.primarySoft,
     borderRadius: 12,
     flexDirection: 'row',
     marginTop: 16,
     padding: 12,
   },
-  offlineText: { color: '#9B4B11', flex: 1, fontSize: 12, marginLeft: 8 },
+  offlineText: { color: theme.colors.text, flex: 1, fontSize: 12, marginLeft: 8 },
   submitButton: {
     alignItems: 'center',
     backgroundColor: theme.colors.primary,
     borderRadius: 16,
-    height: 56,
+    minHeight: 56,
     justifyContent: 'center',
     marginVertical: 24,
   },
   disabledButton: { opacity: 0.55 },
-  submitText: { color: '#FFFFFF', fontSize: 16, fontWeight: '900' },
+  submitText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
 });

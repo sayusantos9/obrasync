@@ -1,3 +1,5 @@
+import {HomeIndicators} from '../components/home/HomeIndicators';
+import {HomeHighlights} from '../components/home/HomeHighlights';
 import { Ionicons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
@@ -33,8 +35,8 @@ export function EngineeringHomeScreen() {
   const text = (style, color = colors.text) => [style, { color, fontSize: style.fontSize * scale }];
   const counts = {};
   const metrics = selectedProject ? [
-    {value:formatCompactCurrency(Number(dashboard?.budget || 0)),label:'Orçamento',detail:'da obra selecionada'},
-    {value:(Number(dashboard?.deviation || 0)>=0?'+':'')+Number(dashboard?.deviation || 0)+'%',label:'Desvio',detail:'da obra selecionada'},
+    {value:formatCompactCurrency(Number(dashboard?.budget || 0)),icon:'calculator-outline',label:'Orçamento',detail:'da obra selecionada'},
+    {value:(Number(dashboard?.deviation || 0)>=0?'+':'')+Number(dashboard?.deviation || 0)+'%',icon:'trending-up-outline',label:'Desvio',detail:'da obra selecionada'},
   ] : [];
   function navigate(action) { if (action.tab) selectTab(action.tab); else openScreen(action.route); }
 
@@ -56,21 +58,14 @@ export function EngineeringHomeScreen() {
           <Text style={text(styles.introText, '#DCE4F0')}>Planeje os insumos. Acompanhe cada valor.</Text>
           <View style={styles.company}><Ionicons name="business-outline" color="#8DCBFF" size={16} /><Text style={[text(styles.companyText, '#FFFFFF'), { flex: 1 }]}>{currentUser?.companyName || 'Sua empresa'}</Text></View>
         </View>
-        <View style={[styles.body, { backgroundColor: contrast ? '#FFFFFF' : '#EEF0F2' }]}>
+        <View style={[styles.body, { backgroundColor: contrast ? '#FFFFFF' : '#EAF0F8' }]}>
           <TouchableOpacity accessibilityRole="button" accessibilityLabel="Selecionar obra" onPress={()=>selectTab(TABS.PROJECTS)} style={[styles.catalog,{borderColor:colors.border}]}>
             <View style={styles.catalogTop}><Ionicons name="construct-outline" size={23} color={colors.blue}/><Text style={[text(styles.catalogTag,colors.blue),{flex:1}]}>OBRA SELECIONADA</Text><Ionicons name="chevron-forward" size={20} color={colors.blue}/></View>
             <Text style={text(styles.catalogTitle,NAVY)}>{selectedProject?.name || 'Escolha sua obra'}</Text>
             <Text style={text(styles.catalogDescription,colors.muted)}>{selectedProject?.location || (selectedProject ? 'Toque para consultar ou trocar de obra.' : 'Selecione uma obra para consultar valores e criar orçamentos.')}</Text>
           </TouchableOpacity>
-          <View style={[styles.metrics, metrics.length === 0 && {display:"none"}, compact && styles.metricsStack, { borderColor: colors.border }]}>
-            {metrics.map((metric, index) => (
-              <View key={metric.label} accessible accessibilityLabel={`${metric.value} ${metric.label} ${metric.detail}`}
-                style={[styles.metric, compact && styles.metricCompact, index > 0 && (compact ? styles.metricTopBorder : styles.metricLeftBorder), { borderColor: colors.border }]}>
-                <Text style={text(styles.metricValue, NAVY)}>{metric.value}</Text>
-                <View><Text style={text(styles.metricLabel)}>{metric.label}</Text><Text style={text(styles.metricDetail, colors.muted)}>{metric.detail}</Text></View>
-              </View>
-            ))}
-          </View>
+          <HomeIndicators metrics={metrics}/>
+          <HomeHighlights/>
           <View style={styles.section}><Text accessibilityRole="header" style={text(styles.sectionTitle, NAVY)}>Sua área de trabalho</Text><Text style={text(styles.sectionDescription, colors.muted)}>Orçamentos, cotações e custos em um só lugar.</Text></View>
           <TouchableOpacity accessibilityRole="button" accessibilityLabel="Insumos. Catálogo e preços de referência" onPress={() => selectTab(TABS.MATERIALS)} style={[styles.catalog, { borderColor: colors.border }]}>
             <View style={styles.catalogTop}><View style={styles.catalogIcon}><Ionicons name="cube-outline" color="#FFFFFF" size={25}/></View><Text style={[text(styles.catalogTag, colors.blue), { flex: 1 }]}>CATÁLOGO DE MATERIAIS</Text><Ionicons name="arrow-forward" color={colors.blue} size={22}/></View>
