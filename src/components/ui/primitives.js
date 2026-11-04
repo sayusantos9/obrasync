@@ -1,7 +1,8 @@
+import { KeyboardScrollView } from '../layout/KeyboardScrollView';
 import styled from 'styled-components/native';
 
 export const Screen = styled.SafeAreaView`flex: 1; background-color: ${({ theme }) => theme.colors.background};`;
-export const Scroll = styled.ScrollView.attrs({ showsVerticalScrollIndicator: false, contentContainerStyle: { paddingBottom: 118 } })``;
+export const Scroll = styled(KeyboardScrollView).attrs({ showsVerticalScrollIndicator: false, contentContainerStyle: { paddingBottom: 118 } })``;
 export const Content = styled.View`padding: 0 20px;`;
 export const Row = styled.View`flex-direction: row; align-items: center;`;
 export const SectionHeader = styled.View`flex-direction: row; align-items: center; justify-content: space-between; margin: 26px 0 14px;`;

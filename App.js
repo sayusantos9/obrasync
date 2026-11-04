@@ -1,13 +1,14 @@
+import { useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider } from 'styled-components/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 import { AppProvider, useApp } from './src/contexts/AppContext';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { createTheme } from './src/theme';
 
 function AppShell() {
   const { accessibilitySettings } = useApp();
-  const theme = createTheme(accessibilitySettings);
+  const theme = useMemo(() => createTheme(accessibilitySettings), [accessibilitySettings]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -19,7 +20,7 @@ function AppShell() {
 
 export default function App() {
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <AppProvider>
         <AppShell />
       </AppProvider>

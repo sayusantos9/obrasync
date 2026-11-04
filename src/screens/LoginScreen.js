@@ -1,6 +1,7 @@
+import { KeyboardScrollView } from '../components/layout/KeyboardScrollView';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, BackHandler, Image, Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, Alert, BackHandler, Image, Keyboard, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Line } from 'react-native-svg';
@@ -50,7 +51,8 @@ function Field({ label, icon, value, onChangeText, password, inputRef, isRegiste
 export function LoginScreen() {
   const { login, registerCompany } = useApp();
   const { fontScale } = useTheme();
-  const { height } = useWindowDimensions();
+  const dimensions = useWindowDimensions();
+  const height = useRef(dimensions.height).current;
   const scrollRef = useRef(null), passwordRef = useRef(null), submittingRef = useRef(false);
   const [isRegister, setIsRegister] = useState(false);
   const [role, setRole] = useState(null);
@@ -93,8 +95,8 @@ export function LoginScreen() {
     finally { submittingRef.current = false; setSubmitting(false); }
   }
   return <View style={styles.root}>
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.root}>
-      <ScrollView ref={scrollRef} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+    <View style={styles.root}>
+      <KeyboardScrollView ref={scrollRef} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
         <LinearGradient colors={[colors.navy, '#10103C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
           <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={[styles.hero, (height < 740 || isRegister) && styles.heroCompact]}>
@@ -166,8 +168,8 @@ export function LoginScreen() {
             <View style={styles.footer}><View style={styles.footerLine} /><Text style={styles.footerText}>PLANENGEN  /  OBRASYNC</Text><View style={styles.footerLine} /></View>
           </View>
         </SafeAreaView>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardScrollView>
+    </View>
     <Modal visible={profileOpen} transparent animationType="fade" onRequestClose={() => setProfileOpen(false)} statusBarTranslucent>
       <View style={styles.modalOverlay}>
         <TouchableOpacity style={styles.modalBackdrop} accessibilityRole="button" accessibilityLabel="Fechar seleção de perfil" onPress={() => setProfileOpen(false)} />

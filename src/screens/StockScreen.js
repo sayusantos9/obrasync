@@ -59,7 +59,7 @@ export function StockScreen() {
 
   return (
     <InventoryScreen title="Estoque da obra">
-          <View style={[styles.summary, { backgroundColor: theme.colors.primary }]}> 
+          <View style={[styles.summary, { backgroundColor: theme.colors.primary }]}>
             <Text style={styles.eyebrow}>{selectedProject.name.toUpperCase()}</Text>
             <Text style={styles.big}>{stock.length} insumos no estoque</Text>
             <Text style={styles.summaryText}>Saldos por insumo e unidade, registrados no Supabase</Text>
@@ -106,7 +106,7 @@ export function StockScreen() {
           )}
 
           {showForm && (
-            <View style={[styles.form, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}> 
+            <View style={[styles.form, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
               <View style={styles.choiceRow}>
                 <DirectionButton active={form.direction === 'IN'} color={theme.colors.success} background={theme.colors.successSoft} label="Entrada" onPress={() => setValue('direction')('IN')} theme={theme} />
                 <DirectionButton active={form.direction === 'OUT'} color={theme.colors.danger} background={theme.colors.dangerSoft} label="Saída" onPress={() => setValue('direction')('OUT')} theme={theme} />
@@ -136,7 +136,7 @@ export function StockScreen() {
               key={item.id}
               style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}
             >
-              <View style={[styles.icon, { backgroundColor: theme.colors.primarySoft }]}> 
+              <View style={[styles.icon, { backgroundColor: theme.colors.primarySoft }]}>
                 <Ionicons name="cube-outline" size={22} color={theme.colors.primary} />
               </View>
               <View style={styles.info}>
@@ -154,7 +154,7 @@ export function StockScreen() {
 function ActionCard({ background, color, icon, label, onPress }) {
   const styles=useInventoryStyles(baseStyles);
   return (
-    <TouchableOpacity accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={[styles.action, { backgroundColor: background }]}> 
+    <TouchableOpacity accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={[styles.action, { backgroundColor: background }]}>
       <Ionicons name={icon} size={24} color={color} />
       <Text style={[styles.actionText, { color }]}>{label}</Text>
     </TouchableOpacity>

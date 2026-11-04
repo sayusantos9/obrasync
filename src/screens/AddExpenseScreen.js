@@ -1,12 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { ChoiceChips } from '../components/forms/ChoiceChips';
 import { FormField } from '../components/forms/FormField';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
+import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
-import { theme } from '../theme';
 import { parseCurrencyInput } from '../utils/currency';
 import {
   EXPENSE_CATEGORIES,
@@ -14,7 +12,7 @@ import {
   validateExpenseAmount,
   validateExpenseDate,
 } from '../utils/expenses';
-import { addExpenseStyles as styles } from './AddExpenseScreen.styles';
+import { makeAddExpenseStyles } from './AddExpenseScreen.styles';
 
 function getDefaultExpenseForm() {
   return {
@@ -28,6 +26,10 @@ function getDefaultExpenseForm() {
 }
 
 export function AddExpenseScreen() {
+  const theme=useInventoryTheme();
+  const styles=useInventoryStyles(makeAddExpenseStyles(theme));
+  const {width,fontScale}=useWindowDimensions();
+  const compact=width<360 || fontScale*(theme.fontScale||1)>1.2;
   const { selectedProject, isOffline, addExpense, goBack } = useApp();
   const {
     control,
@@ -45,7 +47,7 @@ export function AddExpenseScreen() {
 
       Alert.alert(
         'Despesa adicionada',
-        `${savedExpense.name} foi registrada em ${selectedProject.name}.`,
+        `${savedExpense.name} foi registrada em ${selectedProject?.name}.`,
         [{ text: 'Concluir', onPress: goBack }],
       );
     } catch {
@@ -54,12 +56,9 @@ export function AddExpenseScreen() {
   }
 
   return (
-    <Screen>
-      <ScreenHeader title="Adicionar despesa" />
-      <Scroll>
-        <Content>
+    <InventoryScreen title="Adicionar despesa" bottomTabs={false}>
           <Text style={styles.introText}>
-            Registre uma despesa diretamente no contexto da obra selecionada.
+            Registre os custos adicionais da obra. Evite repetir despesas já incluídas nas compras.
           </Text>
 
           <View style={styles.projectCard}>
@@ -88,7 +87,7 @@ export function AddExpenseScreen() {
             options={EXPENSE_CATEGORIES}
           />
 
-          <View style={styles.row}>
+          <View style={[styles.row,compact&&{flexDirection:'column'}]}>
             <FormField
               control={control}
               name="amount"
@@ -125,25 +124,23 @@ export function AddExpenseScreen() {
 
           {isOffline && (
             <View style={styles.offlineNotice}>
-              <Ionicons name="cloud-offline" size={20} color="#9B4B11" />
+              <Ionicons name="cloud-offline" size={20} color={theme.colors.accent} />
               <Text style={styles.offlineText}>
-                Despesas exigem conexão com o Supabase para serem salvas.
+                Conecte-se à internet para salvar a despesa.
               </Text>
             </View>
           )}
 
           <TouchableOpacity
-            disabled={isSubmitting}
+            accessibilityRole="button" disabled={isSubmitting || isOffline}
             onPress={handleSubmit(handleSaveExpense)}
-            style={[styles.submitButton, isSubmitting && styles.disabledButton]}
+            style={[styles.submitButton, (isSubmitting || isOffline) && styles.disabledButton]}
           >
-            <Ionicons name="add-circle" size={22} color={theme.colors.primaryDark} />
+            <Ionicons name="add-circle" size={22} color="#FFFFFF" />
             <Text style={styles.submitText}>
               {isSubmitting ? 'Salvando...' : 'Adicionar despesa'}
             </Text>
           </TouchableOpacity>
-        </Content>
-      </Scroll>
-    </Screen>
+        </InventoryScreen>
   );
 }

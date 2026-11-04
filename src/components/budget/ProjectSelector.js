@@ -3,9 +3,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useApp } from '../../contexts/AppContext';
 import { USER_ROLES } from '../../data/authData';
 import { TABS } from '../../navigation/routes';
-import { theme } from '../../theme';
+import { useInventoryTheme, useInventoryStyles } from '../layout/InventoryScreen';
 
 export function ProjectSelector({label='SELECIONE A OBRA'}) {
+  const theme = useInventoryTheme();
+  const styles = useInventoryStyles(makeStyles(theme));
   const {projects=[],selectedProject,chooseProject,selectTab,currentUser,refreshCurrentProject}=useApp();
   const canCreate=[USER_ROLES.MASTER].includes(currentUser?.role);
   const visible=projects.filter(p=>!['CANCELED','CANCELLED','ARCHIVED'].includes(String(p.status).toUpperCase()));
@@ -24,4 +26,4 @@ export function ProjectSelector({label='SELECIONE A OBRA'}) {
     </>}
   </View>;
 }
-const styles=StyleSheet.create({box:{backgroundColor:'#FFF',borderWidth:1,borderColor:theme.colors.border,borderRadius:16,padding:14,marginTop:16},label:{fontSize:12,fontWeight:'900',color:theme.colors.primaryDark,marginBottom:8},empty:{color:theme.colors.textMuted,fontSize:12,lineHeight:19},hint:{color:theme.colors.textMuted,fontSize:11,marginBottom:5},option:{padding:10,borderRadius:12,alignItems:'center',flexDirection:'row',gap:10,marginTop:6,borderWidth:1,borderColor:theme.colors.border},active:{backgroundColor:theme.colors.primarySoft,borderColor:theme.colors.primary},item:{flex:1},name:{color:theme.colors.text,fontWeight:'900',fontSize:13},status:{color:theme.colors.textMuted,fontSize:10,marginTop:2},action:{alignItems:'center',flexDirection:'row',gap:7,marginTop:12},link:{fontWeight:'800',color:theme.colors.primary,fontSize:12}});
+const makeStyles = (theme) => StyleSheet.create({box:{backgroundColor:'#FFF',borderWidth:1,borderColor:theme.colors.border,borderRadius:16,padding:14,marginTop:16},label:{fontSize:12,fontWeight:'700',color:theme.colors.primaryDark,marginBottom:8},empty:{color:theme.colors.textMuted,fontSize:12,lineHeight:19},hint:{color:theme.colors.textMuted,fontSize:11,marginBottom:5},option:{padding:10,borderRadius:12,alignItems:'center',flexDirection:'row',gap:10,marginTop:6,borderWidth:1,borderColor:theme.colors.border},active:{backgroundColor:theme.colors.primarySoft,borderColor:theme.colors.primary},item:{flex:1},name:{color:theme.colors.text,fontWeight:'700',fontSize:13},status:{color:theme.colors.textMuted,fontSize:10,marginTop:2},action:{alignItems:'center',flexDirection:'row',gap:7,marginTop:12},link:{fontWeight:'800',color:theme.colors.primary,fontSize:12}});

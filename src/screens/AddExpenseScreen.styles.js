@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../theme';
 
-export const addExpenseStyles = StyleSheet.create({
+export const makeAddExpenseStyles = theme => StyleSheet.create({
   introText: {
     color: theme.colors.textMuted,
     fontSize: 14,
@@ -27,7 +26,7 @@ export const addExpenseStyles = StyleSheet.create({
   },
   projectInfo: { flex: 1, marginLeft: 11 },
   projectLabel: { color: theme.colors.textMuted, fontSize: 11, fontWeight: '800' },
-  projectName: { color: theme.colors.text, fontSize: 14, fontWeight: '900', marginTop: 2 },
+  projectName: { color: theme.colors.text, fontSize: 14, fontWeight: '700', marginTop: 2 },
   sectionLabel: {
     color: theme.colors.textMuted,
     fontSize: 12,
@@ -39,27 +38,28 @@ export const addExpenseStyles = StyleSheet.create({
   halfField: { flex: 1 },
   offlineNotice: {
     alignItems: 'center',
-    backgroundColor: '#FFF0E2',
+    backgroundColor: theme.colors.primarySoft,
     borderRadius: 12,
     flexDirection: 'row',
     marginTop: 16,
     padding: 12,
   },
-  offlineText: { color: '#9B4B11', flex: 1, fontSize: 12, marginLeft: 8 },
+  offlineText: { color: theme.colors.text, flex: 1, fontSize: 12, marginLeft: 8 },
   submitButton: {
     alignItems: 'center',
     backgroundColor: theme.colors.accent,
     borderRadius: 16,
     flexDirection: 'row',
-    height: 56,
+    minHeight: 56,
     justifyContent: 'center',
     marginVertical: 24,
   },
   disabledButton: { opacity: 0.55 },
   submitText: {
-    color: theme.colors.primaryDark,
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '900',
+    fontWeight: '700',
     marginLeft: 8,
+    flexShrink: 1,
   },
 });

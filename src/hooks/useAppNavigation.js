@@ -1,3 +1,4 @@
+import { Keyboard } from 'react-native';
 import { useRef, useState } from 'react';
 import { SCREENS, TABS } from '../navigation/routes';
 
@@ -9,6 +10,8 @@ export function useAppNavigation() {
   const screenHistoryRef = useRef([]);
 
   function selectTab(tabId) {
+    Keyboard.dismiss();
+    Keyboard.dismiss();
     screenHistoryRef.current = [];
     setActiveTab(tabId);
     setCurrentScreen(SCREENS.TABS);
@@ -25,10 +28,12 @@ export function useAppNavigation() {
   }
 
   function goBack() {
+    Keyboard.dismiss();
     setCurrentScreen(screenHistoryRef.current.pop() ?? SCREENS.TABS);
   }
 
   function resetNavigation() {
+    Keyboard.dismiss();
     screenHistoryRef.current = [];
     setActiveTab(TABS.HOME);
     setCurrentScreen(SCREENS.TABS);

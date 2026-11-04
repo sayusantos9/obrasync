@@ -1,99 +1,44 @@
+import {useEffect, useState} from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import styled from 'styled-components/native';
+import { Keyboard, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from 'styled-components/native';
 import { useApp } from '../../contexts/AppContext';
-import { USER_ROLES } from '../../data/authData';
-import { getRoleTabs, SCREENS, TABS } from '../../navigation/routes';
-
-const Bar = styled.View`
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 82px;
-  padding: 8px 5px 16px;
-  flex-direction: row;
-  background-color: ${({ theme }) => theme.colors.surface};
-  border-top-width: 1px;
-  border-top-color: ${({ theme }) => theme.colors.border};
-`;
-
-const Item = styled.TouchableOpacity`
-  flex: 1;
-  min-width: 52px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const IconBox = styled.View`
-  width: 42px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ $active, theme }) => ($active ? theme.colors.accentSoft : 'transparent')};
-  border-radius: 12px;
-`;
-
-const Label = styled.Text`
-  margin-top: 3px;
-  color: ${({ $active, theme }) => ($active ? theme.colors.primary : theme.colors.textMuted)};
-  font-size: 9px;
-  font-weight: ${({ $active }) => ($active ? 900 : 600)};
-`;
+import { getRoleTabs, SCREENS } from '../../navigation/routes';
+import { usePlanengenStyle } from './PlanengenScreen';
 
 export function BottomTabs() {
   const { activeTab, currentScreen, currentUser, openScreen, selectTab } = useApp();
   const items = getRoleTabs(currentUser?.role);
   const insets = useSafeAreaInsets();
-  const requesterHome = currentUser?.role === USER_ROLES.REQUESTER
-    && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
-  const masterHome = (currentUser?.role === USER_ROLES.MASTER
-    && ([SCREENS.MASTER_PANEL, SCREENS.CREATE_MEMBER].includes(currentScreen) || (currentScreen === SCREENS.TABS && activeTab === TABS.HOME)))
-    || (currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS) || [SCREENS.SETTINGS, SCREENS.COMPANIES].includes(currentScreen);
-
-  return (
-    <Bar accessibilityRole="tablist" style={requesterHome || masterHome ? {
-      height: 66 + Math.max(insets.bottom, 12), paddingBottom: Math.max(insets.bottom, 12),
-      borderTopLeftRadius: 18, borderTopRightRadius: 18, backgroundColor: '#FFFFFF',
-    } : undefined}>
-      {items.map((item) => {
-        const isMoreScreen = item.id === 'more' && [
-          SCREENS.PROFILE,
-          SCREENS.REPORTS,
-          SCREENS.SETTINGS,
-          SCREENS.COMPANY_PERMISSIONS,
-        ].includes(currentScreen);
-        const isStockFlow = item.id === 'stock' && [
-          SCREENS.STOCK,
-          SCREENS.LABEL,
-          SCREENS.SCANNER,
-          SCREENS.TRANSFERS,
-        ].includes(currentScreen);
-        const isPurchaseFlow = item.id === 'purchases' && [
-          SCREENS.PURCHASES,
-          SCREENS.RECEIPT,
-        ].includes(currentScreen);
-        const active = item.tab
-          ? (currentScreen === SCREENS.TABS || (item.id === 'home' && currentScreen === SCREENS.MASTER_PANEL))
-            && activeTab === item.tab
-          : currentScreen === item.screen || isMoreScreen || isStockFlow || isPurchaseFlow;
-        const icon = active ? item.icon : `${item.icon}-outline`;
-
-        return (
-          <Item
-            key={item.id}
-            accessibilityRole="tab"
-            accessibilityState={{ selected: active }}
-            accessibilityLabel={item.label}
-            onPress={() => (item.tab ? selectTab(item.tab) : openScreen(item.screen))}
-          >
-            <IconBox $active={active} style={masterHome && active ? { backgroundColor: '#E7F2FE' } : undefined}>
-              <Ionicons name={icon} size={21} color={active ? (masterHome ? '#0066BE' : '#EA6A12') : '#686C78'} />
-            </IconBox>
-            <Label $active={active} style={masterHome ? { fontSize: 11, color: active ? '#0066BE' : '#575D6B' } : requesterHome ? { fontSize: 11, color: active ? '#EA6A12' : '#64748B' } : undefined}>{item.label}</Label>
-          </Item>
-        );
-      })}
-    </Bar>
-  );
+  const theme = useTheme();
+  const {width} = useWindowDimensions();
+  const { colors } = usePlanengenStyle();
+  const [keyboardVisible,setKeyboardVisible]=useState(()=>Keyboard.isVisible());
+  useEffect(()=>{const show=Keyboard.addListener('keyboardDidShow',()=>setKeyboardVisible(true));const hide=Keyboard.addListener('keyboardDidHide',()=>setKeyboardVisible(false));return ()=>{show.remove();hide.remove();};},[]);
+  const directScreen = items.some(item => item.screen === currentScreen);
+  if(keyboardVisible)return null;
+  return <View accessibilityRole="tablist" style={[styles.bar, { paddingBottom: Math.max(insets.bottom, 12), borderColor: colors.border }]}>
+    {items.map(item => {
+      const isMoreScreen = !directScreen && item.id === 'more' && [SCREENS.PROFILE, SCREENS.REPORTS, SCREENS.SETTINGS, SCREENS.COMPANY_PERMISSIONS].includes(currentScreen);
+      const isStockFlow = item.id === 'stock' && [SCREENS.STOCK, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.TRANSFERS].includes(currentScreen);
+      const isPurchaseFlow = item.id === 'purchases' && [SCREENS.PURCHASES, SCREENS.RECEIPT].includes(currentScreen);
+      const active = item.tab
+        ? (currentScreen === SCREENS.TABS && activeTab === item.tab) || (item.id === 'home' && currentScreen === SCREENS.MASTER_PANEL)
+        : currentScreen === item.screen || isMoreScreen || isStockFlow || isPurchaseFlow;
+      return <TouchableOpacity key={item.id} accessibilityRole="tab" accessibilityState={{ selected: active }} accessibilityLabel={item.label}
+        onPress={() => item.tab ? selectTab(item.tab) : openScreen(item.screen)} style={styles.item}>
+        <View style={[styles.icon, { backgroundColor: active ? '#E7F2FE' : 'transparent' }]}>
+          <Ionicons name={active ? item.icon : `${item.icon}-outline`} size={22} color={active ? colors.blue : colors.muted}/>
+        </View>
+        <Text style={[styles.label, { fontSize: (width < 360 ? 10 : 11) * (theme.fontScale || 1), color: active ? colors.blue : colors.muted, fontWeight: active ? '700' : '500' }]}>{item.label}</Text>
+      </TouchableOpacity>;
+    })}
+  </View>;
 }
+const styles = StyleSheet.create({
+  bar: { position: 'absolute', right: 0, bottom: 0, left: 0, paddingTop: 8, paddingHorizontal: 5, flexDirection: 'row', alignItems: 'stretch', backgroundColor: '#FFFFFF', borderTopWidth: 1, borderTopLeftRadius: 18, borderTopRightRadius: 18 },
+  item: { flex: 1, minWidth: 0, minHeight: 58, paddingHorizontal: 2, alignItems: 'center', justifyContent: 'center' },
+  icon: { width: 42, height: 30, alignItems: 'center', justifyContent: 'center', borderRadius: 12 },
+  label: { width: '100%', marginTop: 4, textAlign: 'center', flexShrink: 1 },
+});

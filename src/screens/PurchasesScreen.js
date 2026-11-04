@@ -68,7 +68,7 @@ export function PurchasesScreen() {
       <ScreenHeader title="Compras" />
       <Scroll>
         <Content>
-          <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}> 
+          <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}>
             <Text style={styles.eyebrow}>{selectedProject.name.toUpperCase()}</Text>
             <Text style={styles.big}>{orders.length} pedidos</Text>
             <Text style={styles.heroText}>Pedidos de compra e entregas previstas</Text>
@@ -87,7 +87,7 @@ export function PurchasesScreen() {
           )}
 
           {showForm && (
-            <View style={[styles.form, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}> 
+            <View style={[styles.form, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
               <Input label="FORNECEDOR" value={form.supplier} onChangeText={setValue('supplier')} theme={theme} />
               <Input label="PREVISÃO (AAAA-MM-DD)" value={form.expectedAt} onChangeText={setValue('expectedAt')} theme={theme} />
               <Input label="BUSCAR INSUMO POR NOME OU CÓDIGO" value={query} onChangeText={setQuery} theme={theme}/>
@@ -118,7 +118,7 @@ export function PurchasesScreen() {
               key={order.id}
               style={[styles.card, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}
             >
-              <View style={[styles.icon, { backgroundColor: theme.colors.accentSoft }]}> 
+              <View style={[styles.icon, { backgroundColor: theme.colors.accentSoft }]}>
                 <Ionicons name="cart-outline" size={22} color={theme.colors.accent} />
               </View>
               <View style={styles.info}>

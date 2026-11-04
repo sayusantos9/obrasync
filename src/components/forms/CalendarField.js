@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useController } from 'react-hook-form';
-import { theme } from '../../theme';
+import { useInventoryTheme, useInventoryStyles } from '../layout/InventoryScreen';
 
 const WEEK_DAYS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 const MONTHS = [
@@ -54,6 +54,8 @@ function getCalendarDays(referenceDate) {
 }
 
 export function CalendarField({ control, name, rules, label, placeholder = 'Selecione a data' }) {
+  const theme = useInventoryTheme();
+  const styles = useInventoryStyles(makeStyles(theme));
   const {
     field: { value, onChange },
     fieldState: { error },
@@ -147,7 +149,7 @@ export function CalendarField({ control, name, rules, label, placeholder = 'Sele
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (theme) => StyleSheet.create({
   label: {
     color: theme.colors.textMuted,
     fontSize: 12,
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 42,
   },
-  monthTitle: { color: theme.colors.text, fontSize: 17, fontWeight: '900' },
+  monthTitle: { color: theme.colors.text, fontSize: 17, fontWeight: '700' },
   weekRow: { flexDirection: 'row', marginBottom: 6 },
   weekDay: {
     color: theme.colors.textMuted,

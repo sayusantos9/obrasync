@@ -1,38 +1,51 @@
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from 'styled-components/native';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
+import { StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
-import { USER_ROLES } from '../data/authData';
-import { SCREENS } from '../navigation/routes';
-import { formatCompactCurrency, formatCurrency } from '../utils/currency';
-
-const writable = new Set([USER_ROLES.MASTER, USER_ROLES.ENGINEERING]);
+import { SCREENS, TABS } from '../navigation/routes';
+import { canPerform } from '../utils/permissions';
+import { formatCurrency } from '../utils/currency';
 
 export function CostsScreen() {
-  const theme = useTheme();
-  const { currentUser, dashboard, extraExpenses, openScreen, selectedProject } = useApp();
-  const budget = Number(dashboard?.budget || selectedProject?.budget || 0);
-  const realized = Number(dashboard?.realized || 0);
-  const balance = budget - realized;
-  const usage = budget > 0 ? Math.min(100, realized / budget * 100) : 0;
-  const over = balance < 0;
-  const canWrite = writable.has(currentUser?.role);
-
-  return (
-    <Screen><Scroll>
-      <View style={[styles.header,{backgroundColor:theme.colors.primary}]}><Text style={styles.title}>Custos da obra</Text><Text style={styles.subtitle}>{selectedProject.name}</Text></View>
-      <Content>
-        {canWrite && <TouchableOpacity accessibilityRole="button" style={styles.button} onPress={()=>openScreen(SCREENS.COMPARISON)}><Text style={{color:theme.colors.primary,fontWeight:'700'}}>Comparar orçamento e compras</Text></TouchableOpacity>}
-        <View style={[styles.totalCard,{backgroundColor:theme.colors.surface,borderColor:theme.colors.border}]}><Text style={[styles.label,{color:theme.colors.textMuted}]}>TOTAL REALIZADO</Text><Text style={[styles.total,{color:theme.colors.text}]}>{formatCompactCurrency(realized)}</Text><View style={[styles.track,{backgroundColor:theme.colors.primarySoft}]}><View style={[styles.fill,{backgroundColor:over?theme.colors.danger:theme.colors.accent,width:`${usage}%`}]} /></View><View style={styles.footer}><Text style={[styles.small,{color:theme.colors.textMuted}]}>{usage.toFixed(1).replace('.',',')}% do orçamento</Text><Text style={[styles.small,{color:theme.colors.textMuted}]}>Previsto {formatCompactCurrency(budget)}</Text></View></View>
-        <View style={styles.summaryRow}><Summary title={over?'Acima do orçamento':'Disponível'} value={formatCompactCurrency(Math.abs(balance))} icon={over?'warning-outline':'wallet-outline'} color={over?theme.colors.danger:theme.colors.success} bg={over?theme.colors.dangerSoft:theme.colors.successSoft}/><Summary title="Desvio" value={`${Number(dashboard?.deviation||0)>0?'+':''}${Number(dashboard?.deviation||0).toFixed(1).replace('.',',')}%`} icon="trending-up-outline" color={Number(dashboard?.deviation||0)>0?theme.colors.danger:theme.colors.success} bg={theme.colors.primarySoft}/></View>
-        <View style={styles.sectionRow}><Text style={[styles.section,{color:theme.colors.text}]}>Últimas despesas</Text><Text style={[styles.count,{color:theme.colors.primary}]}>{extraExpenses.length} registros</Text></View>
-        {!extraExpenses.length&&<Text style={[styles.empty,{color:theme.colors.textMuted}]}>Nenhuma despesa cadastrada nesta obra.</Text>}
-        {extraExpenses.slice(0,20).map((expense)=><View key={expense.id} style={[styles.expense,{backgroundColor:theme.colors.surface,borderColor:theme.colors.border}]}><View style={[styles.icon,{backgroundColor:theme.colors.dangerSoft}]}><Ionicons name="receipt-outline" size={21} color={theme.colors.danger}/></View><View style={styles.info}><Text style={[styles.name,{color:theme.colors.text}]}>{expense.name}</Text><Text style={[styles.meta,{color:theme.colors.textMuted}]}>{expense.expense_date||expense.expenseDate||'-'} • {expense.category}</Text></View><Text style={[styles.amount,{color:theme.colors.danger}]}>{formatCurrency(Number(expense.amount||0))}</Text></View>)}
-        {canWrite&&<TouchableOpacity accessibilityRole="button" style={[styles.button,{backgroundColor:theme.colors.accent}]} onPress={()=>openScreen(SCREENS.ADD_EXPENSE)}><Ionicons name="add-circle" size={21} color="#FFF"/><Text style={styles.buttonText}>Adicionar despesa</Text></TouchableOpacity>}
-      </Content>
-    </Scroll></Screen>
-  );
+ const theme=useInventoryTheme();
+ const styles=useInventoryStyles(makeStyles(theme));
+ const {width,fontScale}=useWindowDimensions();
+ const compact=width<360 || fontScale*(theme.fontScale||1)>1.2;
+ const {currentUser,dashboard,extraExpenses=[],openScreen,selectedProject,selectTab}=useApp();
+ const expenses=extraExpenses.filter(e=>e.projectId===selectedProject?.id);
+ const budget=Number(dashboard?.budget ?? selectedProject?.budget ?? 0);
+ const realized=Number(dashboard?.realized || 0);
+ const balance=budget-realized;
+ const usage=budget>0?Math.max(0,realized/budget*100):null;
+ const over=balance<0;
+ const canWrite=canPerform(currentUser?.role,'writeExpense');
+ const sorted=[...expenses].sort((a,b)=>String(b.expense_date||b.expenseDate||'').localeCompare(String(a.expense_date||a.expenseDate||'')));
+ const expenseTotal=expenses.reduce((n,e)=>n+Number(e.amount||0),0);
+ function date(value){if(!value)return 'Data não informada';const v=String(value).slice(0,10);return /^\d{4}-\d{2}-\d{2}$/.test(v)?v.split('-').reverse().join('/'):v;}
+ function link(title,description,icon,route){return <TouchableOpacity key={route} accessibilityRole="button" accessibilityLabel={title} onPress={()=>openScreen(route)} style={styles.action}><View style={styles.icon}><Ionicons name={icon} size={23} color={theme.colors.accent}/></View><View style={styles.flex}><Text style={styles.actionTitle}>{title}</Text><Text style={styles.description}>{description}</Text></View><Ionicons name="chevron-forward" size={18} color={theme.colors.textMuted}/></TouchableOpacity>;}
+ return <InventoryScreen title="Custos da obra">
+  {!selectedProject ? <View style={styles.card}><Text style={styles.heading}>Escolha uma obra</Text><Text style={styles.description}>Selecione uma obra para acompanhar os custos.</Text><TouchableOpacity accessibilityRole="button" onPress={()=>selectTab(TABS.PROJECTS)} style={styles.button}><Text style={styles.buttonText}>Selecionar obra</Text></TouchableOpacity></View> : <>
+   <TouchableOpacity accessibilityRole="button" accessibilityLabel="Consultar ou trocar obra" onPress={()=>selectTab(TABS.PROJECTS)} style={styles.project}><Ionicons name="construct-outline" size={23} color={theme.colors.accent}/><View style={styles.flex}><Text style={styles.label}>OBRA SELECIONADA</Text><Text style={styles.actionTitle}>{selectedProject.name}</Text></View><Ionicons name="chevron-forward" size={18} color={theme.colors.accent}/></TouchableOpacity>
+   <View style={styles.hero}><Text style={styles.heroLabel}>TOTAL REALIZADO</Text><Text style={styles.total}>{formatCurrency(realized)}</Text><Text style={styles.heroDescription}>Compras confirmadas e despesas adicionais da obra.</Text>
+    <View accessibilityRole="progressbar" accessibilityLabel="Consumo do orçamento" accessibilityValue={usage===null?{text:'Sem orçamento de referência'}:{min:0,max:100,now:Math.min(100,usage),text:usage.toFixed(1)+'% do orçamento'}} style={styles.track}><View style={[styles.fill,{width:(usage===null?0:Math.min(100,usage))+'%',backgroundColor:over?'#FFB7B7':'#8DCBFF'}]}/></View>
+    <Text style={styles.heroDescription}>{usage===null?'Sem orçamento de referência':usage.toFixed(1).replace('.',',')+'% do orçamento utilizado'}</Text>
+   </View>
+   <View style={[styles.summaryRow,compact&&styles.stack]}><View style={[styles.card,styles.flex]}><Text style={styles.label}>ORÇAMENTO PREVISTO</Text><Text style={styles.value}>{formatCurrency(budget)}</Text></View><View style={[styles.card,styles.flex]}><Text style={styles.label}>{over?'ACIMA DO ORÇAMENTO':'SALDO DO ORÇAMENTO'}</Text><Text style={[styles.value,over&&{color:theme.colors.danger}]}>{formatCurrency(Math.abs(balance))}</Text></View></View>
+   <Text style={styles.heading}>Controle financeiro</Text><Text style={styles.description}>Consulte as diferenças e planeje as próximas aquisições.</Text>
+   <View style={styles.modules}>
+    {canPerform(currentUser?.role,'writeBudget')&&link('Comparar orçamento e compras','Preços, quantidades e impacto no custo.','git-compare-outline',SCREENS.COMPARISON)}
+    {canPerform(currentUser?.role,'writeQuote')&&link('Pesquisa de preços','Consulte e registre preços de fornecedores.','search-outline',SCREENS.MARKET_PRICES)}
+    {link('Relatórios da obra','Consulte e exporte os registros.','bar-chart-outline',SCREENS.REPORTS)}
+   </View>
+   <View style={styles.sectionRow}><Text style={[styles.heading,styles.flex]}>Despesas adicionais</Text><Text style={styles.count}>{expenses.length} registro(s)</Text></View>
+   <Text style={styles.description}>Total: {formatCurrency(expenseTotal)}. Evite repetir valores já registrados nas compras.</Text>
+   {canWrite&&<TouchableOpacity accessibilityRole="button" onPress={()=>openScreen(SCREENS.ADD_EXPENSE)} style={styles.button}><Ionicons name="add-circle-outline" size={22} color="#FFFFFF"/><Text style={styles.buttonText}>Adicionar despesa</Text></TouchableOpacity>}
+   {!sorted.length&&<View style={styles.empty}><Ionicons name="receipt-outline" size={30} color={theme.colors.accent}/><Text style={styles.actionTitle}>Nenhuma despesa adicional</Text><Text style={styles.description}>Os lançamentos desta obra aparecerão aqui.</Text></View>}
+   {sorted.map(expense=><View key={expense.id} style={styles.expense}><View style={styles.expenseTop}><View style={styles.icon}><Ionicons name="receipt-outline" size={22} color={theme.colors.accent}/></View><View style={styles.flex}><Text style={styles.actionTitle}>{expense.name}</Text><Text style={styles.description}>{date(expense.expense_date||expense.expenseDate)}{expense.category?' · '+expense.category:''}</Text></View></View><Text style={styles.amount}>{formatCurrency(Number(expense.amount||0))}</Text></View>)}
+   <Text style={styles.footer}>PLANENGEN · OBRASYNC</Text>
+  </>}
+ </InventoryScreen>;
 }
-function Summary({title,value,icon,color,bg}){const theme=useTheme();return <View style={[styles.summary,{backgroundColor:theme.colors.surface,borderColor:theme.colors.border}]}><View style={[styles.icon,{backgroundColor:bg}]}><Ionicons name={icon} size={21} color={color}/></View><Text style={[styles.summaryTitle,{color:theme.colors.textMuted}]}>{title}</Text><Text style={[styles.summaryValue,{color}]}>{value}</Text></View>}
-const styles=StyleSheet.create({header:{paddingBottom:36,paddingHorizontal:20,paddingTop:58},title:{color:'#FFF',fontSize:28,fontWeight:'900'},subtitle:{color:'rgba(255,255,255,.72)',fontSize:12,marginTop:4},totalCard:{borderRadius:20,borderWidth:1,marginTop:-18,padding:18},label:{fontSize:10,fontWeight:'900'},total:{fontSize:28,fontWeight:'900',marginTop:7},track:{borderRadius:4,height:7,marginTop:14,overflow:'hidden'},fill:{borderRadius:4,height:7},footer:{flexDirection:'row',justifyContent:'space-between',marginTop:8},small:{fontSize:10},summaryRow:{flexDirection:'row',gap:10,marginTop:12},summary:{borderRadius:18,borderWidth:1,flex:1,padding:14},icon:{alignItems:'center',borderRadius:12,height:42,justifyContent:'center',width:42},summaryTitle:{fontSize:10,fontWeight:'800',marginTop:10},summaryValue:{fontSize:17,fontWeight:'900',marginTop:4},sectionRow:{alignItems:'center',flexDirection:'row',justifyContent:'space-between',marginTop:24},section:{fontSize:19,fontWeight:'900'},count:{fontSize:11,fontWeight:'900'},empty:{fontSize:13,marginTop:14},expense:{alignItems:'center',borderRadius:17,borderWidth:1,flexDirection:'row',marginTop:10,padding:13},info:{flex:1,marginLeft:10},name:{fontSize:13,fontWeight:'900'},meta:{fontSize:10,marginTop:4},amount:{fontSize:12,fontWeight:'900'},button:{alignItems:'center',borderRadius:15,flexDirection:'row',justifyContent:'center',marginBottom:20,marginTop:18,minHeight:54},buttonText:{color:'#FFF',fontSize:14,fontWeight:'900',marginLeft:7}});
+const makeStyles=theme=>StyleSheet.create({
+ flex:{flex:1},project:{flexDirection:'row',alignItems:'center',gap:12,padding:16,backgroundColor:'#FFFFFF',borderWidth:1,borderColor:theme.colors.border,borderRadius:16,marginBottom:16},label:{fontSize:10,fontWeight:'700',letterSpacing:.5,color:theme.colors.textMuted},hero:{padding:22,backgroundColor:theme.colors.primary,borderRadius:20},heroLabel:{fontSize:10,fontWeight:'700',letterSpacing:1,color:'#8DCBFF'},total:{fontSize:32,fontWeight:'700',letterSpacing:-.8,color:'#FFFFFF',marginTop:12},heroDescription:{fontSize:12,color:'#DCE4F0',marginTop:10},track:{height:6,backgroundColor:'#333258',borderRadius:4,overflow:'hidden',marginTop:24},fill:{height:'100%',borderRadius:4},summaryRow:{flexDirection:'row',gap:12,marginTop:14},stack:{flexDirection:'column'},card:{padding:16,backgroundColor:'#FFFFFF',borderWidth:1,borderColor:theme.colors.border,borderRadius:16},value:{fontSize:19,fontWeight:'700',color:theme.colors.primary,marginTop:10},heading:{fontSize:21,fontWeight:'700',color:theme.colors.primary,letterSpacing:-.4,marginTop:24},description:{fontSize:12,color:theme.colors.textMuted,marginTop:6},modules:{backgroundColor:'#FFFFFF',borderRadius:18,borderWidth:1,borderColor:theme.colors.border,overflow:'hidden',marginTop:16},action:{flexDirection:'row',alignItems:'center',gap:12,padding:16,borderBottomWidth:1,borderColor:theme.colors.border},icon:{width:42,height:42,borderRadius:12,backgroundColor:theme.colors.primarySoft,alignItems:'center',justifyContent:'center'},actionTitle:{fontSize:15,fontWeight:'600',color:theme.colors.primary},sectionRow:{flexDirection:'row',alignItems:'baseline',gap:10},count:{fontSize:11,color:theme.colors.accent,fontWeight:'600'},button:{flexDirection:'row',alignItems:'center',justifyContent:'center',gap:8,padding:16,minHeight:54,backgroundColor:theme.colors.accent,borderRadius:14,marginTop:18,marginBottom:8},buttonText:{fontSize:14,fontWeight:'700',color:'#FFFFFF',flexShrink:1,textAlign:'center'},expense:{backgroundColor:'#FFFFFF',borderRadius:16,borderWidth:1,borderColor:theme.colors.border,padding:16,marginTop:10},expenseTop:{flexDirection:'row',alignItems:'center',gap:12},amount:{fontSize:20,fontWeight:'700',color:theme.colors.primary,marginTop:14,textAlign:'right'},empty:{alignItems:'center',gap:8,padding:24,borderWidth:1,borderColor:theme.colors.border,borderRadius:18,backgroundColor:'#FFFFFF',marginTop:14},footer:{fontSize:9,fontWeight:'600',letterSpacing:1.5,color:theme.colors.textMuted,textAlign:'center',marginTop:28}
+});

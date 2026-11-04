@@ -30,10 +30,12 @@
       "adaptiveIcon": {
         "backgroundColor": "#F8F9FD",
         "foregroundImage": "./src/assets/app/android-icon-foreground.png"
-      }
+      },
+      "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
       "favicon": "./src/assets/app/favicon.png"
-    }
+    },
+    "backgroundColor": "#010028"
   }
 }

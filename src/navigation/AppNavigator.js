@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
 import { canAccessRoute, requiresProject } from '../utils/permissions';
 import { useTheme } from 'styled-components/native';
 import { BottomTabs } from '../components/layout/BottomTabs';
@@ -16,12 +16,13 @@ export function AppNavigator() {
     && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   const masterHome = isAuthReady && currentUser?.role === USER_ROLES.MASTER
     && (currentScreen === SCREENS.MASTER_PANEL || (currentScreen === SCREENS.TABS && activeTab === TABS.HOME));
+  const engineeringHome = isAuthReady && currentUser?.role === USER_ROLES.ENGINEERING && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   const projectsScreen = currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS;
   return (
-    <View style={{ flex: 1 }}>
-      {!requesterHome && !masterHome && !projectsScreen && !(currentScreen === SCREENS.TABS && activeTab === TABS.MATERIALS) && ![SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: '#010028' }}>
+      {!requesterHome && !masterHome && !engineeringHome && !projectsScreen && !(currentScreen === SCREENS.TABS && (activeTab === TABS.MATERIALS || activeTab === TABS.BUDGET || activeTab === TABS.COSTS)) && ![SCREENS.ADD_EXPENSE, SCREENS.CREATE_BUDGET, SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
       <NavigatorContent />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -66,12 +67,10 @@ function NavigatorContent() {
 
   const screenContent = <ScreenComponent type={currentScreen} />;
 
-  if (!shouldShowBottomTabs(currentScreen, currentUser.role)) return screenContent;
-
-  return (
-    <View style={{ flex: 1 }}>
+return (
+    <View style={{ flex: 1, backgroundColor: '#010028' }}>
       {screenContent}
-      <BottomTabs />
+      {shouldShowBottomTabs(currentScreen, currentUser.role) && <BottomTabs />}
     </View>
   );
 }

@@ -1,415 +1,147 @@
 import { Ionicons } from '@expo/vector-icons';
-import Svg, { Circle } from 'react-native-svg';
 import { useRef, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SearchBar } from '../components/common/SearchBar';
-import { AppHeader } from '../components/layout/AppHeader';
-import { Content, LinkText, Screen, SectionHeader, SectionTitle } from '../components/ui/primitives';
+import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from 'styled-components/native';
+import { formatCompactCurrency } from '../utils/currency';
 import { useApp } from '../contexts/AppContext';
-import { USER_ROLES } from '../data/authData';
-import { createHomeAlerts, createHomeMetrics, getHomeQuickActions } from '../data/homeData';
 import { SCREENS, TABS } from '../navigation/routes';
 
-const COLORS = {
-  navy: '#0B2A5B',
-  orange: '#EA6A12',
-  blue: '#1E63D8',
-  green: '#2E9E6B',
-  text: '#0F1E3A',
-  muted: '#64748B',
-  border: '#E2E8F0',
-  background: '#F6F9FE',
-};
-
-const ACTION_COLORS = {
-  budget: { color: '#EA6A12', background: '#FFF3EB' },
-  quotes: { color: '#1E63D8', background: '#EEF3FF' },
-  materials: { color: '#2E9E6B', background: '#E9F8EF' },
-  costs: { color: '#EA6A12', background: '#FFF3EB' },
-  projects: { color: '#0B2A5B', background: '#EEF3FF' },
-  reports: { color: '#6254C7', background: '#F0EEFF' },
-};
-
-function SectionHeading({ title, color = COLORS.orange, link, onLinkPress }) {
-  return (
-    <SectionHeader style={styles.sectionHeader}>
-      <View style={styles.sectionHeading}>
-        <View style={[styles.sectionMark, { backgroundColor: color }]} />
-        <SectionTitle style={styles.sectionTitle}>{title}</SectionTitle>
-      </View>
-      {link ? <LinkText style={styles.sectionLink} onPress={onLinkPress}>{link} ›</LinkText> : null}
-    </SectionHeader>
-  );
-}
-
-function ProjectStatusCard({ project, onPress }) {
-  const progress = Math.max(0, Math.min(100, Number(project?.progress || 0)));
-  const status = project
-    ? String(project.status || 'PLANNED').replaceAll('_', ' ').toUpperCase()
-    : 'SEM OBRA';
-
-  return (
-    <View style={styles.projectCard}>
-      <View style={styles.projectAccent} />
-      <View style={styles.statusBadge}>
-        <View style={styles.statusDot} />
-        <Text style={styles.statusText}>{status}</Text>
-      </View>
-
-      <View style={styles.projectSummary}>
-        <View style={styles.projectCopy}>
-          <View style={styles.eyebrowRow}>
-            <Ionicons name="location-outline" size={14} color={COLORS.orange} />
-            <Text style={styles.eyebrow}>STATUS EXECUTIVO</Text>
-          </View>
-          <Text style={styles.projectTitle}>Sua obra em dia</Text>
-          <Text style={styles.projectLocation} numberOfLines={2}>
-            {project?.name || 'Nenhuma obra selecionada'}
-            {project?.location ? ` • ${project.location}` : ''}
-          </Text>
-        </View>
-        <View style={styles.progressCircle}>
-          <Svg width={78} height={78} viewBox="0 0 78 78" style={StyleSheet.absoluteFill}>
-            <Circle cx="39" cy="39" r="34" fill="none" stroke={COLORS.border} strokeWidth="5" />
-            <Circle
-              cx="39"
-              cy="39"
-              r="34"
-              fill="none"
-              rotation="-90"
-              origin="39, 39"
-              stroke={COLORS.orange}
-              strokeDasharray={`${2 * Math.PI * 34} ${2 * Math.PI * 34}`}
-              strokeDashoffset={2 * Math.PI * 34 * (1 - progress / 100)}
-              strokeLinecap="round"
-              strokeWidth="5"
-            />
-          </Svg>
-          {progress === 0 ? <View style={styles.progressDot} /> : null}
-          <Text style={styles.progressValue}>{progress}%</Text>
-          <Text style={styles.progressLabel}>PROGRESSO</Text>
-        </View>
-      </View>
-
-      <View style={styles.progressInfo}>
-        <Text style={styles.progressHint}>do cronograma concluído</Text>
-        <Text style={styles.progressStage}>PROGRESSO DA OBRA</Text>
-      </View>
-      <View style={styles.progressTrack}>
-        <View style={[styles.progressFill, { width: `${progress}%` }]} />
-      </View>
-      <TouchableOpacity accessibilityRole="button" style={styles.detailsButton} onPress={onPress}>
-        <Text style={styles.detailsButtonText}>Ver detalhes</Text>
-        <Ionicons name="arrow-forward" size={17} color="#FFFFFF" />
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-function QuickActionCard({ action, onPress }) {
-  const colors = ACTION_COLORS[action.id] || ACTION_COLORS.budget;
-
-  return (
-    <TouchableOpacity
-      accessibilityRole="button"
-      accessibilityLabel={action.label}
-      style={styles.actionCard}
-      onPress={onPress}
-    >
-      <View style={styles.actionTop}>
-        <View style={[styles.actionIcon, { backgroundColor: colors.background, borderColor: `${colors.color}44` }]}>
-          <Ionicons name={action.icon} size={21} color={colors.color} />
-        </View>
-        <View style={styles.actionArrow}>
-          <Ionicons name="chevron-forward" size={16} color={COLORS.muted} />
-        </View>
-      </View>
-      <View style={styles.actionCopy}>
-        <Text style={styles.actionTitle} numberOfLines={1}>{action.label}</Text>
-        <Text style={styles.actionSubtitle}>{action.id === 'budget' ? 'Novo cálculo' : action.id === 'quotes' ? 'Fornecedores' : action.id === 'materials' ? 'Estoque & Insumos' : action.id === 'costs' ? 'Controle financeiro' : action.id === 'projects' ? 'Diário & Vistorias' : 'Dashboards & PDF'}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-function MetricCard({ metric }) {
-  return (
-    <View style={styles.metricCard}>
-      <View style={[styles.metricIcon, { backgroundColor: metric.backgroundColor }]}>
-        <Ionicons name={metric.icon} size={17} color={metric.iconColor || metric.color} />
-      </View>
-      <Text style={styles.metricLabel}>{metric.label.toUpperCase()}</Text>
-      <Text style={[styles.metricValue, { color: metric.color }]} numberOfLines={1}>{metric.value}</Text>
-    </View>
-  );
-}
-
-function AttentionCard({ icon, title, description, color, backgroundColor, onPress, statusColor }) {
-  return (
-    <TouchableOpacity accessibilityRole="button" style={styles.attentionCard} onPress={onPress}>
-      <View style={[styles.attentionIcon, { backgroundColor }]}>
-        <Ionicons name={icon} size={21} color={color} />
-      </View>
-      <View style={styles.attentionCopy}>
-        <View style={styles.attentionTitleRow}>
-          <Text style={styles.attentionTitle}>{title}</Text>
-          <View style={[styles.attentionDot, { backgroundColor: statusColor }]} />
-        </View>
-        <Text style={styles.attentionDescription}>{description}</Text>
-      </View>
-      <Ionicons name="chevron-forward" size={19} color="#94A3B8" />
-    </TouchableOpacity>
-  );
-}
+const ACTIONS = [
+ {id:'budget',title:'Criar orçamento',subtitle:'Quantidades e preços dos insumos',icon:'calculator-outline',route:SCREENS.CREATE_BUDGET},
+ {id:'budgets',title:'Meus orçamentos',subtitle:'Consulte os documentos da obra',icon:'document-text-outline',tab:TABS.BUDGET},
+ {id:'quotes',title:'Cotações',subtitle:'Consulte e organize as cotações',icon:'documents-outline',route:SCREENS.QUOTES},
+ {id:'costs',title:'Custos',subtitle:'Acompanhe e compare os valores',icon:'wallet-outline',tab:TABS.COSTS},
+ {id:'projects',title:'Obras',subtitle:'Dados e andamento das obras',icon:'construct-outline',tab:TABS.PROJECTS},
+ {id:'reports',title:'Relatórios',subtitle:'Documentos em PDF e Excel',icon:'bar-chart-outline',route:SCREENS.REPORTS},
+ {id:'settings',title:'Configurações',subtitle:'Acessibilidade, ajuda e conexão',icon:'settings-outline',route:SCREENS.SETTINGS},
+];
+const LOGO = require('../assets/brand/planengen-light.png');
+const NAVY = '#010028';
 
 export function EngineeringHomeScreen() {
-  const {
-    dashboard,
-    isOffline,
-    isSyncing,
-    isRefreshing,
-    openScreen,
-    pendingRequests,
-    selectedProject,
-    selectProject,
-    selectTab,
-    syncPendingRequests,
-  } = useApp();
+  const theme = useTheme();
+  const insets = useSafeAreaInsets();
+  const { width, fontScale: deviceFontScale } = useWindowDimensions();
   const scrollRef = useRef(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const actions = getHomeQuickActions(USER_ROLES.ENGINEERING);
-  const metrics = createHomeMetrics(dashboard || {});
-  const alerts = createHomeAlerts(dashboard || {});
-  const pendingAlert = alerts[0];
-  const pendingCount = Number(dashboard?.pendingRequests || 0);
-
-  function navigate(action) {
-    if (action.destinationType === 'tab') selectTab(action.destination);
-    else openScreen(action.destination);
-  }
-
-  function openProjectDetails() {
-    if (selectedProject) selectProject(selectedProject);
-    selectTab(TABS.PROJECTS);
-  }
-
-  function handleScroll(event) {
-    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-    const nearBottom = contentOffset.y + layoutMeasurement.height >= contentSize.height - 24;
-    setShowScrollTop(nearBottom);
-  }
-
-  function scrollToTop() {
-    scrollRef.current?.scrollTo({ y: 0, animated: true });
-    setShowScrollTop(false);
-  }
+  const { dashboard, selectedProject, logout, openScreen, selectTab, currentUser, accessibilitySettings, isRefreshing, refreshCurrentProject, isOffline, isSyncing, pendingRequests = [], syncPendingRequests } = useApp();
+  const contrast = accessibilitySettings?.highContrast;
+  const scale = theme.fontScale || 1;
+  const compact = width < 360 || deviceFontScale * scale > 1.2;
+  const colors = { text: contrast ? '#000000' : '#202020', muted: contrast ? '#343434' : '#575D6B', border: contrast ? '#707070' : '#DFE3EA', blue: contrast ? '#003F85' : '#0066BE' };
+  const text = (style, color = colors.text) => [style, { color, fontSize: style.fontSize * scale }];
+  const counts = {};
+  const metrics = selectedProject ? [
+    {value:formatCompactCurrency(Number(dashboard?.budget || 0)),label:'Orçamento',detail:'da obra selecionada'},
+    {value:(Number(dashboard?.deviation || 0)>=0?'+':'')+Number(dashboard?.deviation || 0)+'%',label:'Desvio',detail:'da obra selecionada'},
+  ] : [];
+  function navigate(action) { if (action.tab) selectTab(action.tab); else openScreen(action.route); }
 
   return (
-    <Screen style={styles.screen}>
-      <ScrollView
-        ref={scrollRef}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-      >
-        <AppHeader showOperationalLabel />
-        <Content style={styles.content}>
-          <SearchBar placeholder="O que você precisa?" />
-
-          <ProjectStatusCard project={selectedProject} onPress={openProjectDetails} />
-
-          <SectionHeading title="Ações rápidas" />
-          <View style={styles.actionsGrid}>
-            {actions.map((action) => (
-              <QuickActionCard key={action.id} action={action} onPress={() => navigate(action)} />
+    <SafeAreaView edges={['top', 'left', 'right']} style={styles.screen}>
+      <View style={styles.brandHeader}>
+        <Image source={LOGO} resizeMode="contain" accessibilityLabel="Planengen" style={styles.logo} />
+        <TouchableOpacity accessibilityRole="button" accessibilityLabel="Sair da conta" onPress={logout} style={styles.logout}>
+          <Ionicons name="log-out-outline" size={21} color="#FFFFFF" /><Text style={text(styles.logoutText, '#FFFFFF')}>Sair</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView refreshControl={<RefreshControl refreshing={Boolean(isRefreshing)} onRefresh={refreshCurrentProject} tintColor="#FFFFFF" colors={[colors.blue]}/>} ref={scrollRef} showsVerticalScrollIndicator={false} scrollEventThrottle={16}
+        onScroll={({ nativeEvent }) => setShowScrollTop(nativeEvent.contentOffset.y > 200)}
+        contentContainerStyle={{ paddingBottom: 104 + insets.bottom }}>
+        <View style={styles.intro}>
+          <View pointerEvents="none" accessible={false} style={styles.architecture}><View style={styles.building}/><View style={styles.buildingSmall}/></View>
+          <Text style={text(styles.eyebrow, '#8DCBFF')}>OBRASYNC / ORÇAMENTISTA</Text>
+          <Text accessibilityRole="header" style={text(styles.greeting, '#FFFFFF')}>Olá, {currentUser?.name?.trim().split(/\s+/)[0] || 'orçamentista'}.</Text>
+          <Text style={text(styles.introText, '#DCE4F0')}>Planeje os insumos. Acompanhe cada valor.</Text>
+          <View style={styles.company}><Ionicons name="business-outline" color="#8DCBFF" size={16} /><Text style={[text(styles.companyText, '#FFFFFF'), { flex: 1 }]}>{currentUser?.companyName || 'Sua empresa'}</Text></View>
+        </View>
+        <View style={[styles.body, { backgroundColor: contrast ? '#FFFFFF' : '#EEF0F2' }]}>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Selecionar obra" onPress={()=>selectTab(TABS.PROJECTS)} style={[styles.catalog,{borderColor:colors.border}]}>
+            <View style={styles.catalogTop}><Ionicons name="construct-outline" size={23} color={colors.blue}/><Text style={[text(styles.catalogTag,colors.blue),{flex:1}]}>OBRA SELECIONADA</Text><Ionicons name="chevron-forward" size={20} color={colors.blue}/></View>
+            <Text style={text(styles.catalogTitle,NAVY)}>{selectedProject?.name || 'Escolha sua obra'}</Text>
+            <Text style={text(styles.catalogDescription,colors.muted)}>{selectedProject?.location || (selectedProject ? 'Toque para consultar ou trocar de obra.' : 'Selecione uma obra para consultar valores e criar orçamentos.')}</Text>
+          </TouchableOpacity>
+          <View style={[styles.metrics, metrics.length === 0 && {display:"none"}, compact && styles.metricsStack, { borderColor: colors.border }]}>
+            {metrics.map((metric, index) => (
+              <View key={metric.label} accessible accessibilityLabel={`${metric.value} ${metric.label} ${metric.detail}`}
+                style={[styles.metric, compact && styles.metricCompact, index > 0 && (compact ? styles.metricTopBorder : styles.metricLeftBorder), { borderColor: colors.border }]}>
+                <Text style={text(styles.metricValue, NAVY)}>{metric.value}</Text>
+                <View><Text style={text(styles.metricLabel)}>{metric.label}</Text><Text style={text(styles.metricDetail, colors.muted)}>{metric.detail}</Text></View>
+              </View>
             ))}
           </View>
-
-          <SectionHeading title="Resumo da obra" color={COLORS.blue} link="Ver mais" onLinkPress={() => selectTab(TABS.PROJECTS)} />
-          {isRefreshing ? <ActivityIndicator style={styles.loading} color={COLORS.blue} /> : null}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.metricsContent}
-          >
-            {metrics.map((metric) => <MetricCard key={metric.id} metric={metric} />)}
-          </ScrollView>
-
-          <SectionHeading title="Atenção hoje" link="Ver todas" onLinkPress={() => openScreen(SCREENS.ALERTS)} />
-          {pendingAlert ? (
-            <AttentionCard
-              icon="time-outline"
-              title={pendingAlert.title}
-              description={`${pendingCount} registro(s) aguardando análise.`}
-              color={COLORS.orange}
-              backgroundColor="#FFF3EB"
-              statusColor={pendingCount ? COLORS.orange : '#CBD5E1'}
-              onPress={() => openScreen(SCREENS.ALERTS)}
-            />
-          ) : null}
-          <AttentionCard
-            icon={isOffline ? 'cloud-offline-outline' : 'cloud-done-outline'}
-            title={isOffline ? 'Modo offline' : isSyncing ? 'Sincronizando...' : 'Sincronizado'}
-            description={pendingRequests.length ? `${pendingRequests.length} registro(s) pendente(s)` : 'Dados atualizados recentemente'}
-            color={isOffline ? '#B5473E' : COLORS.blue}
-            backgroundColor={isOffline ? '#FBE9E7' : '#EEF3FF'}
-            statusColor={isOffline ? COLORS.orange : COLORS.green}
-            onPress={syncPendingRequests}
-          />
-        </Content>
+          <View style={styles.section}><Text accessibilityRole="header" style={text(styles.sectionTitle, NAVY)}>Sua área de trabalho</Text><Text style={text(styles.sectionDescription, colors.muted)}>Orçamentos, cotações e custos em um só lugar.</Text></View>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Insumos. Catálogo e preços de referência" onPress={() => selectTab(TABS.MATERIALS)} style={[styles.catalog, { borderColor: colors.border }]}>
+            <View style={styles.catalogTop}><View style={styles.catalogIcon}><Ionicons name="cube-outline" color="#FFFFFF" size={25}/></View><Text style={[text(styles.catalogTag, colors.blue), { flex: 1 }]}>CATÁLOGO DE MATERIAIS</Text><Ionicons name="arrow-forward" color={colors.blue} size={22}/></View>
+            <Text style={text(styles.catalogTitle, NAVY)}>Insumos para sua obra</Text><Text style={text(styles.catalogDescription, colors.muted)}>Consulte materiais, unidades e preços de referência.</Text><Text style={text(styles.catalogLink, colors.blue)}>Explorar catálogo</Text>
+          </TouchableOpacity>
+          <View style={[styles.modules, { borderColor: colors.border }]}>
+            {ACTIONS.map((action, index) => (
+              <TouchableOpacity key={action.id} accessibilityRole="button" accessibilityLabel={`${action.title}. ${action.subtitle}${counts[action.id] ? '. ' + counts[action.id] : ''}`}
+                onPress={() => navigate(action)} style={[styles.action, index > 0 && styles.actionBorder, { borderColor: colors.border }]}>
+                <View style={styles.actionIcon}><Ionicons name={action.icon} size={22} color={colors.blue}/></View>
+                <View style={styles.actionContent}><Text style={text(styles.actionTitle, NAVY)}>{action.title}</Text><Text style={text(styles.actionSubtitle, colors.muted)}>{action.subtitle}</Text>{!!counts[action.id] && <Text style={text(styles.actionCount, colors.blue)}>{counts[action.id]}</Text>}</View>
+                <Ionicons name="chevron-forward" size={18} color={colors.muted}/>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={styles.section}><Text accessibilityRole="header" style={text(styles.sectionTitle,NAVY)}>Atenção hoje</Text></View>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Ver todos os alertas" onPress={()=>openScreen(SCREENS.ALERTS)} style={[styles.catalog,{borderColor:colors.border}]}>
+            <View style={styles.catalogTop}><Ionicons name="notifications-outline" size={22} color={colors.blue}/><Text style={[text(styles.actionTitle,NAVY),{flex:1}]}>Solicitações pendentes</Text><Ionicons name="chevron-forward" size={18} color={colors.blue}/></View>
+            <Text style={text(styles.actionSubtitle,colors.muted)}>{Number(dashboard?.pendingRequests || 0)} registro(s) aguardando análise. Ver alertas.</Text>
+          </TouchableOpacity>
+          <TouchableOpacity accessibilityRole="button" disabled={isSyncing} accessibilityState={{disabled:Boolean(isSyncing)}} onPress={syncPendingRequests} style={[styles.catalog,{borderColor:colors.border}]}>
+            <View style={styles.catalogTop}>{isSyncing ? <ActivityIndicator color={colors.blue}/> : <Ionicons name={isOffline?'cloud-offline-outline':'cloud-done-outline'} size={22} color={colors.blue}/> }<Text style={[text(styles.actionTitle,NAVY),{flex:1}]}>{isOffline?'Sem conexão':isSyncing?'Sincronizando...':'Conexão disponível'}</Text></View>
+            <Text style={text(styles.actionSubtitle,colors.muted)}>{pendingRequests.length ? pendingRequests.length+' registro(s) aguardando envio.' : 'Nenhum envio pendente neste dispositivo.'}</Text>
+          </TouchableOpacity>
+          <View style={styles.footer}><View style={styles.footerLine}/><Text style={text(styles.footerText, colors.muted)}>PLANENGEN · OBRASYNC</Text><View style={styles.footerLine}/></View>
+        </View>
       </ScrollView>
-
-      {showScrollTop ? (
-        <TouchableOpacity
-          accessibilityRole="button"
-          accessibilityLabel="Voltar ao início da página"
-          style={styles.scrollTopButton}
-          onPress={scrollToTop}
-        >
-          <Ionicons name="chevron-up" size={25} color="#FFFFFF" />
-        </TouchableOpacity>
-      ) : null}
-    </Screen>
+      {showScrollTop && <TouchableOpacity accessibilityRole="button" accessibilityLabel="Voltar ao topo"
+        onPress={() => { setShowScrollTop(false); scrollRef.current?.scrollTo({ y: 0, animated: !accessibilitySettings?.reduceMotion }); }} style={[styles.scrollTop, { bottom: 92 + insets.bottom }]}>
+        <Ionicons name="arrow-up" size={23} color="#FFFFFF"/>
+      </TouchableOpacity>}
+    </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
-  screen: { backgroundColor: COLORS.background },
-  scrollContent: { paddingBottom: 118 },
-  content: { paddingBottom: 18 },
-  projectCard: {
-    backgroundColor: '#FFFFFF',
-    borderColor: COLORS.border,
-    borderRadius: 20,
-    borderWidth: 1,
-    elevation: 2,
-    marginTop: 20,
-    overflow: 'hidden',
-    padding: 18,
-    shadowColor: COLORS.navy,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-  },
-  projectAccent: { backgroundColor: COLORS.orange, height: 5, left: 0, position: 'absolute', right: 0, top: 0 },
-  statusBadge: {
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    backgroundColor: '#DCFCE7',
-    borderColor: '#86EFAC',
-    borderRadius: 6,
-    borderWidth: 1,
-    flexDirection: 'row',
-    marginTop: 3,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  statusDot: { backgroundColor: '#16A34A', borderRadius: 4, height: 7, marginRight: 7, width: 7 },
-  statusText: { color: '#15803D', fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
-  projectSummary: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 },
-  projectCopy: { flex: 1, paddingRight: 8 },
-  eyebrowRow: { alignItems: 'center', flexDirection: 'row', marginBottom: 3 },
-  eyebrow: { color: COLORS.orange, fontSize: 10, fontWeight: '900', letterSpacing: 0.7, marginLeft: 4 },
-  projectTitle: { color: COLORS.navy, fontSize: 21, fontWeight: '900' },
-  projectLocation: { color: COLORS.muted, fontSize: 11, fontWeight: '600', marginTop: 3 },
-  progressCircle: {
-    alignItems: 'center',
-    height: 78,
-    justifyContent: 'center',
-    width: 78,
-  },
-  progressDot: { backgroundColor: COLORS.orange, borderRadius: 4, height: 8, left: 0, position: 'absolute', top: 35, width: 8 },
-  progressValue: { color: COLORS.navy, fontSize: 19, fontWeight: '900' },
-  progressLabel: { color: COLORS.orange, fontSize: 7, fontWeight: '900', marginTop: 2 },
-  progressInfo: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6, marginTop: 14 },
-  progressHint: { color: COLORS.muted, fontSize: 9 },
-  progressStage: { color: COLORS.navy, fontSize: 8, fontWeight: '800', letterSpacing: 0.4 },
-  progressTrack: { backgroundColor: COLORS.border, borderRadius: 6, height: 6, overflow: 'hidden' },
-  progressFill: { backgroundColor: COLORS.orange, borderRadius: 6, height: '100%' },
-  detailsButton: {
-    alignItems: 'center',
-    backgroundColor: COLORS.orange,
-    borderRadius: 12,
-    flexDirection: 'row',
-    height: 44,
-    justifyContent: 'center',
-    marginTop: 15,
-  },
-  detailsButtonText: { color: '#FFFFFF', fontSize: 14, fontWeight: '900', marginRight: 8 },
-  sectionHeader: { marginBottom: 12, marginTop: 24 },
-  sectionHeading: { alignItems: 'center', flexDirection: 'row' },
-  sectionMark: { borderRadius: 3, height: 17, marginRight: 8, width: 5 },
-  sectionTitle: { color: COLORS.navy, fontSize: 18, fontWeight: '900' },
-  sectionLink: { color: COLORS.orange, fontSize: 11, fontWeight: '800' },
-  actionsGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
-  actionCard: {
-    backgroundColor: '#FFFFFF',
-    borderColor: COLORS.border,
-    borderRadius: 18,
-    borderWidth: 1,
-    height: 122,
-    justifyContent: 'space-between',
-    marginBottom: 11,
-    padding: 13,
-    width: '48.5%',
-  },
-  actionTop: { alignItems: 'flex-start', flexDirection: 'row', justifyContent: 'space-between' },
-  actionIcon: { alignItems: 'center', borderRadius: 11, borderWidth: 1, height: 37, justifyContent: 'center', width: 37 },
-  actionArrow: { alignItems: 'center', backgroundColor: '#F8FAFC', borderColor: COLORS.border, borderRadius: 8, borderWidth: 1, height: 24, justifyContent: 'center', width: 24 },
-  actionCopy: { marginTop: 8 },
-  actionTitle: { color: COLORS.navy, fontSize: 12, fontWeight: '900' },
-  actionSubtitle: { color: COLORS.muted, fontSize: 9, marginTop: 4 },
-  metricsContent: { paddingBottom: 2, paddingRight: 20, paddingTop: 1 },
-  metricCard: {
-    backgroundColor: '#FFFFFF',
-    borderColor: COLORS.border,
-    borderRadius: 17,
-    borderWidth: 1,
-    height: 116,
-    justifyContent: 'space-between',
-    marginRight: 10,
-    overflow: 'hidden',
-    padding: 13,
-    width: 145,
-  },
-  metricIcon: { alignItems: 'center', borderRadius: 9, height: 32, justifyContent: 'center', width: 32 },
-  metricLabel: { color: COLORS.muted, fontSize: 9, fontWeight: '800', letterSpacing: 0.6, marginTop: 7 },
-  metricValue: { fontSize: 15, fontWeight: '900', marginTop: 2 },
-  loading: { marginBottom: 8, marginTop: -4 },
-  attentionCard: {
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderColor: COLORS.border,
-    borderRadius: 17,
-    borderWidth: 1,
-    flexDirection: 'row',
-    marginBottom: 9,
-    minHeight: 73,
-    padding: 12,
-  },
-  attentionIcon: { alignItems: 'center', borderRadius: 12, height: 43, justifyContent: 'center', width: 43 },
-  attentionCopy: { flex: 1, marginLeft: 11 },
-  attentionTitleRow: { alignItems: 'center', flexDirection: 'row' },
-  attentionTitle: { color: COLORS.navy, flexShrink: 1, fontSize: 13, fontWeight: '900' },
-  attentionDot: { borderRadius: 4, height: 7, marginLeft: 6, width: 7 },
-  attentionDescription: { color: COLORS.muted, fontSize: 10, marginTop: 3 },
-  scrollTopButton: {
-    alignItems: 'center',
-    backgroundColor: COLORS.orange,
-    borderColor: '#FFFFFF',
-    borderRadius: 24,
-    borderWidth: 2,
-    bottom: 98,
-    elevation: 5,
-    height: 48,
-    justifyContent: 'center',
-    position: 'absolute',
-    right: 18,
-    shadowColor: COLORS.orange,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    width: 48,
-  },
+  screen: { flex: 1, backgroundColor: NAVY },
+  brandHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 22, paddingVertical: 12, gap: 16 },
+  logo: { width: 132, height: 38, flexShrink: 1 },
+  logout: { minHeight: 44, minWidth: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7 },
+  logoutText: { fontSize: 13, fontWeight: '600' },
+  intro: { paddingHorizontal: 24, paddingTop: 18, paddingBottom: 26, overflow: 'hidden' },
+  eyebrow: { fontSize: 10, fontWeight: '700', letterSpacing: 2 },
+  greeting: { fontSize: 30, fontWeight: '700', letterSpacing: -0.9, marginTop: 12 },
+  introText: { fontSize: 14, marginTop: 6 },
+  company: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 20 },
+  companyText: { fontSize: 12, fontWeight: '500' },
+  architecture: { position: 'absolute', right: -30, top: 14, width: 150, height: 220, opacity: 0.18, transform: [{ rotate: '18deg' }] },
+  building: { position: 'absolute', right: 12, width: 85, height: 220, borderWidth: 1, borderColor: '#0084F4' },
+  buildingSmall: { position: 'absolute', right: 80, top: 60, width: 60, height: 170, borderWidth: 1, borderColor: '#8DCBFF' },
+  body: { paddingHorizontal: 20, paddingTop: 20, borderTopLeftRadius: 26, borderTopRightRadius: 26, minHeight: 500 },
+  metrics: { backgroundColor: '#FFFFFF', borderWidth: 1, borderRadius: 18, flexDirection: 'row', paddingVertical: 18 },
+  metricsStack: { flexDirection: 'column', paddingVertical: 0 },
+  metric: { flex: 1, paddingHorizontal: 12, paddingVertical: 3, gap: 4 },
+  metricCompact: { flexDirection: 'row', alignItems: 'center', gap: 16, paddingVertical: 12 },
+  metricLeftBorder: { borderLeftWidth: 1 }, metricTopBorder: { borderTopWidth: 1 },
+  metricValue: { fontSize: 23, fontWeight: '700', letterSpacing: -1 },
+  metricLabel: { fontSize: 12, fontWeight: '600' }, metricDetail: { fontSize: 11, marginTop: 3 },
+  section: { marginTop: 26, marginBottom: 16 },
+  sectionTitle: { fontSize: 21, fontWeight: '700', letterSpacing: -0.5 }, sectionDescription: { fontSize: 13, marginTop: 5 },
+  catalog: { backgroundColor: '#FFFFFF', padding: 20, borderWidth: 1, borderRadius: 18, marginBottom: 16 },
+  catalogTop: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 18 },
+  catalogIcon: { backgroundColor: NAVY, width: 46, height: 46, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  catalogTag: { fontSize: 10, fontWeight: '700', letterSpacing: 1.1 },
+  catalogTitle: { fontSize: 20, fontWeight: '700', letterSpacing: -0.5 },
+  catalogDescription: { fontSize: 13, marginTop: 7 }, catalogLink: { fontSize: 13, fontWeight: '700', marginTop: 18 },
+  modules: { backgroundColor: '#FFFFFF', borderWidth: 1, borderRadius: 18, overflow: 'hidden' },
+  action: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 18, gap: 12 },
+  actionBorder: { borderTopWidth: 1 },
+  actionIcon: { width: 42, height: 42, backgroundColor: '#EFF6FD', borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  actionContent: { flex: 1, gap: 4 }, actionTitle: { fontSize: 15, fontWeight: '600' }, actionSubtitle: { fontSize: 12 }, actionCount: { fontSize: 11, fontWeight: '600', marginTop: 2 },
+  footer: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 28 },
+  footerLine: { height: 1, flex: 1, backgroundColor: '#CCD2DC' }, footerText: { fontSize: 9, letterSpacing: 1.5, fontWeight: '600', flexShrink: 1 },
+  scrollTop: { position: 'absolute', right: 20, width: 48, height: 48, borderRadius: 24, backgroundColor: NAVY, alignItems: 'center', justifyContent: 'center', elevation: 4, shadowColor: NAVY, shadowOpacity: 0.18, shadowRadius: 8, shadowOffset: { width: 0, height: 4 } },
 });

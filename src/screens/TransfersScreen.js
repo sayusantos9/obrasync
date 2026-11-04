@@ -100,7 +100,7 @@ export function TransfersScreen() {
           <Text style={{color:theme.colors.text,marginTop:12}}>Para consumo, descreva o local/motivo no destino. Para transferir, selecione outra obra abaixo.</Text>
           <TouchableOpacity accessibilityRole="radio" accessibilityState={{checked:!destinationProjectId}} onPress={()=>setDestinationProjectId('')} style={{padding:12}}><Text style={{color:theme.colors.primary}}>{!destinationProjectId?'✓ ':''}Consumo nesta obra</Text></TouchableOpacity>
           {currentUser?.role!=='REQUESTER' && projects.filter(p=>p.id!==selectedProject?.id).map(p=><TouchableOpacity key={p.id} accessibilityRole="radio" accessibilityState={{checked:destinationProjectId===p.id}} onPress={()=>setDestinationProjectId(p.id)} style={{padding:12}}><Text style={{color:theme.colors.primary}}>{destinationProjectId===p.id?'✓ ':''}Transferir para {p.name}</Text></TouchableOpacity>)}
-          <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}> 
+          <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}>
           <View style={[styles.heroIcon, { backgroundColor: theme.colors.accent }]}>
               <Ionicons name="swap-horizontal" size={26} color="#FFFFFF" />
             </View>
@@ -128,9 +128,9 @@ export function TransfersScreen() {
             />
 
             {material && (
-              <View style={[styles.materialFound, { backgroundColor: theme.colors.successSoft }]}> 
+              <View style={[styles.materialFound, { backgroundColor: theme.colors.successSoft }]}>
                 <Ionicons name="checkmark-circle" size={18} color={theme.colors.success} />
-                <Text style={[styles.materialFoundText, { color: theme.colors.success }]}> 
+                <Text style={[styles.materialFoundText, { color: theme.colors.success }]}>
                   {material.name} • saldo {material.quantity} {material.unit}
                 </Text>
               </View>

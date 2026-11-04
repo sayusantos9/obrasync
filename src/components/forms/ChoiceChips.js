@@ -1,8 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useController } from 'react-hook-form';
-import { theme } from '../../theme';
+import {useTheme} from 'styled-components/native';
+import {useInventoryStyles} from '../layout/InventoryScreen';
 
 export function ChoiceChips({ control, name, options, rules }) {
+  const theme=useTheme();
+  const styles=useInventoryStyles(makeStyles(theme));
   const {
     field: { value, onChange },
   } = useController({ control, name, rules });
@@ -14,7 +17,7 @@ export function ChoiceChips({ control, name, options, rules }) {
 
         return (
           <TouchableOpacity
-            key={option}
+            key={option} accessibilityRole="button" accessibilityState={{selected:isSelected}}
             onPress={() => onChange(option)}
             style={[styles.chip, isSelected && styles.selectedChip]}
           >
@@ -28,7 +31,7 @@ export function ChoiceChips({ control, name, options, rules }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = theme => StyleSheet.create({
   container: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     backgroundColor: theme.colors.surface,
