@@ -6,6 +6,7 @@ import { PlanengenHeader } from '../components/layout/PlanengenHeader';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
 import { EngineeringHomeScreen, LoginScreen, MasterPanelScreen } from '../screens';
+import { ClientHomeScreen } from '../screens/ClientHomeScreen';
 import { RequesterHomeScreen } from '../screens/RequesterHomeScreen';
 import { SCREENS, TABS } from './routes';
 import { resolveScreenComponent, shouldShowBottomTabs } from './screenRegistry';
@@ -16,11 +17,12 @@ export function AppNavigator() {
     && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   const masterHome = isAuthReady && currentUser?.role === USER_ROLES.MASTER
     && (currentScreen === SCREENS.MASTER_PANEL || (currentScreen === SCREENS.TABS && activeTab === TABS.HOME));
+  const clientHome = isAuthReady && currentUser?.role === USER_ROLES.CLIENT && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   const engineeringHome = isAuthReady && currentUser?.role === USER_ROLES.ENGINEERING && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   const projectsScreen = currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS;
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: '#010028' }}>
-      {!requesterHome && !masterHome && !engineeringHome && !projectsScreen && !(currentScreen === SCREENS.TABS && (activeTab === TABS.MATERIALS || activeTab === TABS.BUDGET || activeTab === TABS.COSTS)) && ![SCREENS.ADD_EXPENSE, SCREENS.CREATE_BUDGET, SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
+      {!clientHome && !requesterHome && !masterHome && !engineeringHome && !projectsScreen && !(currentScreen === SCREENS.TABS && (activeTab === TABS.MATERIALS || activeTab === TABS.BUDGET || activeTab === TABS.COSTS)) && ![SCREENS.ADD_EXPENSE, SCREENS.CREATE_BUDGET, SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
       <NavigatorContent />
     </KeyboardAvoidingView>
   );
@@ -63,7 +65,9 @@ function NavigatorContent() {
       ? EngineeringHomeScreen
       : currentUser.role === USER_ROLES.REQUESTER && currentScreen === SCREENS.TABS && activeTab === TABS.HOME
         ? RequesterHomeScreen
-        : resolveScreenComponent(currentScreen, activeTab);
+        : currentUser.role === USER_ROLES.CLIENT && currentScreen === SCREENS.TABS && activeTab === TABS.HOME
+          ? ClientHomeScreen
+          : resolveScreenComponent(currentScreen, activeTab);
 
   const screenContent = <ScreenComponent type={currentScreen} />;
 
