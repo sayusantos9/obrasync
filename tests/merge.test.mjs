@@ -18,7 +18,7 @@ test('BDI aplicado uma vez; totais, tipos e valores inválidos são verificados'
   assert.equal(doc.total,29.64);
   assert.equal(getBudgetTotals(doc).total,29.64);
   assert.equal(getBudgetLines(doc)[0].totalWithBdi,29.64);
-  assert.throws(()=>calculateBudget([{...material,inputType:'MAO_DE_OBRA'}],bdi), /materiais/);
+  assert.throws(()=>calculateBudget([{...material,inputType:'MAO_DE_OBRA'}],bdi), /insumo/);
   assert.throws(()=>calculateBudget([{...material,quantity:0}],bdi), /inválido/);
   assert.throws(()=>calculateBdi({...bdi,cp:100}), /menor/);
 });

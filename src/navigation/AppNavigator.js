@@ -19,7 +19,7 @@ export function AppNavigator() {
   const projectsScreen = currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS;
   return (
     <View style={{ flex: 1 }}>
-      {!requesterHome && !masterHome && !projectsScreen && ![SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
+      {!requesterHome && !masterHome && !projectsScreen && !(currentScreen === SCREENS.TABS && activeTab === TABS.MATERIALS) && ![SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
       <NavigatorContent />
     </View>
   );

@@ -24,12 +24,12 @@ export function buildReports(data = {}, projectId) {
     },
     expenses: {
       title:'Despesas',headers:['Data','Descrição','Categoria','Valor (R$)'],
-      rows:expenses.map(e=>[e.expenseDate||e.date||'',e.description||'',e.category||'',money(e.amount)]),
+      rows:expenses.map(e=>[e.expense_date||e.expenseDate||e.date||'',e.description||'',e.category||'',money(e.amount)]),
       total:expenses.reduce((n,e)=>n+money(e.amount),0),
     },
     requests: {
       title:'Solicitações',headers:['Número','Material / Descrição','Status','Prioridade'],
-      rows:requests.map(r=>[r.number||r.id,r.materialName||r.description||'',r.status||'',r.priority||'']),
+      rows:requests.map(r=>[r.number||r.id,r.material||r.materialName||r.description||'',r.status||'',r.priority||'']),
     },
     orders: {
       title:'Pedidos de compra',headers:['Número','Status','Fornecedor','Total (R$)'],

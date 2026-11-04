@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { CameraView } from 'expo-camera';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { scannerStyles as styles } from './scannerStyles';
-import { theme } from '../../theme';
+import {useInventoryTheme} from '../layout/InventoryScreen';
 import { BARCODE_TYPES } from '../../utils/scanner';
 
 export function ScannerCameraPanel({
@@ -12,6 +12,7 @@ export function ScannerCameraPanel({
   onBarcodeScanned,
   onToggleFlash,
 }) {
+  const theme=useInventoryTheme();
   if (!hasPermission) {
     return (
       <View style={styles.cameraArea}>

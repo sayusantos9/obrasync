@@ -1,0 +1,6779 @@
+{
+  "source": "Orcamento_Turiacu_2026_novo.pdf",
+  "sha256": "003de9b60a76cd4a7945c99a989daeeab337b490e1aecc57876cdd97ede3dde6",
+  "rows": [
+    {
+      "page": 10,
+      "code": "00040864",
+      "bank": "SINAPI",
+      "description": "SEGURO - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "18,28"
+    },
+    {
+      "page": 10,
+      "code": "00040861",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "86,09"
+    },
+    {
+      "page": 10,
+      "code": "00043472",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA ELETRICISTA - MENSALISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "170,96"
+    },
+    {
+      "page": 10,
+      "code": "00040918",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (MENSALISTA)",
+      "category": "Mão de Obra",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "3.644,10"
+    },
+    {
+      "page": 10,
+      "code": "00040862",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "368,41"
+    },
+    {
+      "page": 10,
+      "code": "00040863",
+      "bank": "SINAPI",
+      "description": "EXAMES - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "227,20"
+    },
+    {
+      "page": 10,
+      "code": "00043496",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA ELETRICISTA - MENSALISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "207,44"
+    },
+    {
+      "page": 10,
+      "code": "00040864",
+      "bank": "SINAPI",
+      "description": "SEGURO - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "18,28"
+    },
+    {
+      "page": 10,
+      "code": "00040862",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "368,41"
+    },
+    {
+      "page": 10,
+      "code": "00040863",
+      "bank": "SINAPI",
+      "description": "EXAMES - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "227,20"
+    },
+    {
+      "page": 10,
+      "code": "00040861",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "86,09"
+    },
+    {
+      "page": 10,
+      "code": "00040919",
+      "bank": "SINAPI",
+      "description": "AJUDANTE DE ELETRICISTA (MENSALISTA)",
+      "category": "Mão de Obra",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2.775,53"
+    },
+    {
+      "page": 10,
+      "code": "00043472",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA ELETRICISTA - MENSALISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "170,96"
+    },
+    {
+      "page": 10,
+      "code": "00043496",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA ELETRICISTA - MENSALISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "207,44"
+    },
+    {
+      "page": 11,
+      "code": "00040861",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "86,09"
+    },
+    {
+      "page": 11,
+      "code": "00040862",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "368,41"
+    },
+    {
+      "page": 11,
+      "code": "00040864",
+      "bank": "SINAPI",
+      "description": "SEGURO - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "18,28"
+    },
+    {
+      "page": 11,
+      "code": "00040863",
+      "bank": "SINAPI",
+      "description": "EXAMES - MENSALISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "227,20"
+    },
+    {
+      "page": 11,
+      "code": "00043500",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA OPERADOR ESCAVADEIRA - MENSALISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "138,90"
+    },
+    {
+      "page": 11,
+      "code": "00043476",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA OPERADOR ESCAVADEIRA - MENSALISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "5,08"
+    },
+    {
+      "page": 11,
+      "code": "00010512",
+      "bank": "SINAPI",
+      "description": "MOTORISTA DE CAMINHAO (MENSALISTA)",
+      "category": "Mão de Obra",
+      "unit": "MES",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "4.146,73"
+    },
+    {
+      "page": 11,
+      "code": "00043462",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA ENGENHEIRO CIVIL - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,02"
+    },
+    {
+      "page": 11,
+      "code": "00037373",
+      "bank": "SINAPI",
+      "description": "SEGURO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 11,
+      "code": "00037372",
+      "bank": "SINAPI",
+      "description": "EXAMES - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,36"
+    },
+    {
+      "page": 11,
+      "code": "00034783",
+      "bank": "SINAPI",
+      "description": "ENGENHEIRO ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "97,03"
+    },
+    {
+      "page": 11,
+      "code": "00043486",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA ENGENHEIRO CIVIL - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,82"
+    },
+    {
+      "page": 12,
+      "code": "3803",
+      "bank": "ORSE",
+      "description": "Cabo de cobre PP Cordplast 2 x 1,5 mm2, 450/750v",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0200000",
+      "unit_price": "3,80"
+    },
+    {
+      "page": 13,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 13,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 13,
+      "code": "3803",
+      "bank": "ORSE",
+      "description": "Cabo de cobre PP Cordplast 2 x 1,5 mm2, 450/750v",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0200000",
+      "unit_price": "3,80"
+    },
+    {
+      "page": 13,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 13,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003600",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 13,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004320",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 13,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0001800",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 13,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0244320",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 13,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 13,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000480",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 13,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 13,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 13,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0000960",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 13,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0001920",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 13,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000360",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 13,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001440",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 13,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 13,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 13,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0244320",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 13,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0191400",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 13,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000120",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 13,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0005520",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 14,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 14,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000120",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 14,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 14,
+      "code": "10579",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 14,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 14,
+      "code": "3804",
+      "bank": "ORSE",
+      "description": "Cabo de cobre PP Cordplast 2 x 2,5 mm2, 450/750v",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "6,10"
+    },
+    {
+      "page": 14,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 14,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 14,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003600",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 14,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004320",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 14,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0001800",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 14,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0244320",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 14,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 14,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000480",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 14,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 14,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 14,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0000960",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 14,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0001920",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 15,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000360",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 15,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001440",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 15,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 15,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 15,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0244320",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 15,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0191400",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 15,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000120",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 15,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0005520",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 15,
+      "code": "3804",
+      "bank": "ORSE",
+      "description": "Cabo de cobre PP Cordplast 2 x 2,5 mm2, 450/750v",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "6,10"
+    },
+    {
+      "page": 15,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 15,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1200000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 15,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000120",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 15,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 15,
+      "code": "10579",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 15,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000240",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 15,
+      "code": "00001020",
+      "bank": "SINAPI",
+      "description": "CABO DE COBRE, FLEXIVEL, CLASSE 4 OU 5, ISOLACAO EM PVC/A, ANTICHAMA BWF-B, COBERTURA PVC-ST1, ANTICHAMA BWF-B, 1 CONDUTOR, 0,6/1 KV, SECAO NOMINAL 10 MM2",
+      "category": "Material",
+      "unit": "M",
+      "composition_coefficient": "1,0401000",
+      "unit_price": "13,62"
+    },
+    {
+      "page": 16,
+      "code": "00001020",
+      "bank": "SINAPI",
+      "description": "CABO DE COBRE, FLEXIVEL, CLASSE 4 OU 5, ISOLACAO EM PVC/A, ANTICHAMA BWF-B, COBERTURA PVC-ST1, ANTICHAMA BWF-B, 1 CONDUTOR, 0,6/1 KV, SECAO NOMINAL 10 MM2",
+      "category": "Material",
+      "unit": "M",
+      "composition_coefficient": "1,2434000",
+      "unit_price": "13,62"
+    },
+    {
+      "page": 16,
+      "code": "00021127",
+      "bank": "SINAPI",
+      "description": "FITA ISOLANTE ADESIVA ANTICHAMA, USO ATE 750 V, EM ROLO DE 19 MM X 5 M",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "0,0094000",
+      "unit_price": "6,84"
+    },
+    {
+      "page": 16,
+      "code": "00002678",
+      "bank": "SINAPI",
+      "description": "ELETRODUTO DE PVC RIGIDO SOLDAVEL, CLASSE B, DE 25 MM",
+      "category": "Material",
+      "unit": "M",
+      "composition_coefficient": "1,0481000",
+      "unit_price": "2,87"
+    },
+    {
+      "page": 16,
+      "code": "00020083",
+      "bank": "SINAPI",
+      "description": "SOLUCAO PREPARADORA / LIMPADORA PARA PVC, FRASCO COM 1000 CM3",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "0,0080000",
+      "unit_price": "69,74"
+    },
+    {
+      "page": 16,
+      "code": "00001927",
+      "bank": "SINAPI",
+      "description": "CURVA DE PVC 45 GRAUS, SOLDAVEL, 25 MM, COR MARROM, PARA AGUA FRIA PREDIAL",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,54"
+    },
+    {
+      "page": 16,
+      "code": "00038383",
+      "bank": "SINAPI",
+      "description": "LIXA D'AGUA EM FOLHA, COR PRETA, GRAO 100",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "0,0108000",
+      "unit_price": "2,38"
+    },
+    {
+      "page": 16,
+      "code": "00000122",
+      "bank": "SINAPI",
+      "description": "ADESIVO PLASTICO PARA PVC, FRASCO COM *850* GR",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "0,0071000",
+      "unit_price": "61,55"
+    },
+    {
+      "page": 17,
+      "code": "4621",
+      "bank": "ORSE",
+      "description": "Cabo de aluminio 0,6/1kv multiplexados 2x1x16 +16mm²",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "8,53"
+    },
+    {
+      "page": 17,
+      "code": "4621",
+      "bank": "ORSE",
+      "description": "Cabo de aluminio 0,6/1kv multiplexados 2x1x16 +16mm²",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "8,53"
+    },
+    {
+      "page": 17,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 17,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 17,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 17,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0054000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 17,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0024000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 17,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,3054000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 17,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0135000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 17,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0006000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 17,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0135000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 17,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0135000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 17,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 18,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0024000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 18,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 18,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0018000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 18,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0006000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 18,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0006000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 18,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,3054000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 18,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,2823000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 18,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 18,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0069000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 18,
+      "code": "1678",
+      "bank": "ORSE",
+      "description": "Parafuso cabeça quadrada 16 x 150mm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "10,77"
+    },
+    {
+      "page": 18,
+      "code": "1678",
+      "bank": "ORSE",
+      "description": "Parafuso cabeça quadrada 16 x 150mm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "10,77"
+    },
+    {
+      "page": 18,
+      "code": "00011267",
+      "bank": "SINAPI",
+      "description": "ARRUELA LISA, REDONDA, DE LATAO POLIDO, DIAMETRO NOMINAL 5/8\", DIAMETRO EXTERNO = 34 MM, DIAMETRO DO FURO = 17 MM, ESPESSURA = *2,5* MM",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "1,29"
+    },
+    {
+      "page": 18,
+      "code": "00001091",
+      "bank": "SINAPI",
+      "description": "ARMACAO VERTICAL COM HASTE E CONTRA-PINO, EM CHAPA DE ACO GALVANIZADO 3/16\", COM 1 ESTRIBO E 1 ISOLADOR",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "42,42"
+    },
+    {
+      "page": 18,
+      "code": "00039996",
+      "bank": "SINAPI",
+      "description": "VERGALHAO ZINCADO ROSCA TOTAL, 1/4\" (6,3 MM)",
+      "category": "Material",
+      "unit": "M",
+      "composition_coefficient": "0,1664000",
+      "unit_price": "5,27"
+    },
+    {
+      "page": 19,
+      "code": "00039997",
+      "bank": "SINAPI",
+      "description": "PORCA ZINCADA, SEXTAVADA, DIAMETRO 1/4\"",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "0,28"
+    },
+    {
+      "page": 19,
+      "code": "E00390",
+      "bank": "SEDOP",
+      "description": "Base para relé fotoelétrico",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "18,10"
+    },
+    {
+      "page": 19,
+      "code": "E00599",
+      "bank": "SEDOP",
+      "description": "Luminária pública simples",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "334,20"
+    },
+    {
+      "page": 19,
+      "code": "00003798",
+      "bank": "SINAPI",
+      "description": "LUMINARIA ABERTA P/ ILUMINACAO PUBLICA, TIPO X-57 PETERCO OU EQUIV",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "64,17"
+    },
+    {
+      "page": 19,
+      "code": "00002512",
+      "bank": "SINAPI",
+      "description": "BRACO P/ LUMINARIA PUBLICA 1 X 1,50M ROMAGNOLE OU EQUIV",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "29,94"
+    },
+    {
+      "page": 19,
+      "code": "00021127",
+      "bank": "SINAPI",
+      "description": "FITA ISOLANTE ADESIVA ANTICHAMA, USO ATE 750 V, EM ROLO DE 19 MM X 5 M",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "0,0140000",
+      "unit_price": "6,84"
+    },
+    {
+      "page": 21,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1500000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 21,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1500000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 21,
+      "code": "8928",
+      "bank": "ORSE",
+      "description": "Soquete ou bocal de louça (porcelana) E27 de tempo, ref.MT-2233, marca Decorlux ou similar",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "6,45"
+    },
+    {
+      "page": 21,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004500",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 21,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0005400",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 21,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0002250",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 21,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0305400",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 21,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0013500",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 21,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 21,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0013500",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 21,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0013500",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 21,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0001200",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 21,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0002400",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 21,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000450",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 21,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001800",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 21,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 21,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 21,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0305400",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 21,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0239250",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 21,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000150",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 21,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0006900",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 21,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1500000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 22,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000150",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 22,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 22,
+      "code": "10579",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 22,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 22,
+      "code": "11848",
+      "bank": "ORSE",
+      "description": "Conector cabo-haste em bronze natural para 2 cabos cobre de 16mm² a 70mm² comgrampo \"U\" e porcas de aço galv.Ref:TEL-583 ou similar",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "4,92"
+    },
+    {
+      "page": 22,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 22,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 22,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 22,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003600",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 22,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0001500",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 22,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0203600",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 22,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0009000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 22,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000400",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 22,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 22,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 22,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0000800",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 23,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0001600",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 23,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 23,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001200",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 23,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000200",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 23,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000200",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 23,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0203600",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 23,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0159500",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 23,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000100",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 23,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0004600",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 23,
+      "code": "11848",
+      "bank": "ORSE",
+      "description": "Conector cabo-haste em bronze natural para 2 cabos cobre de 16mm² a 70mm² comgrampo \"U\" e porcas de aço galv.Ref:TEL-583 ou similar",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "4,92"
+    },
+    {
+      "page": 23,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000100",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 23,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000200",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 23,
+      "code": "10579",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000200",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 23,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000200",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 23,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 23,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,1000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 23,
+      "code": "6883",
+      "bank": "ORSE",
+      "description": "Poste concreto duplo T (DT) 9/600",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.512,27"
+    },
+    {
+      "page": 23,
+      "code": "6883",
+      "bank": "ORSE",
+      "description": "Poste concreto duplo T (DT) 9/600",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.512,27"
+    },
+    {
+      "page": 24,
+      "code": "1865",
+      "bank": "ORSE",
+      "description": "Poste concreto duplo T (DT) 11/ 300",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.730,00"
+    },
+    {
+      "page": 24,
+      "code": "1865",
+      "bank": "ORSE",
+      "description": "Poste concreto duplo T (DT) 11/ 300",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.730,00"
+    },
+    {
+      "page": 24,
+      "code": "00001022",
+      "bank": "SINAPI",
+      "description": "CABO DE COBRE, FLEXIVEL, CLASSE 4 OU 5, ISOLACAO EM PVC/A, ANTICHAMA BWF-B, COBERTURA PVC-ST1, ANTICHAMA BWF-B, 1 CONDUTOR, 0,6/1 KV, SECAO NOMINAL 2,5 MM2",
+      "category": "Material",
+      "unit": "M",
+      "composition_coefficient": "5,0000000",
+      "unit_price": "3,72"
+    },
+    {
+      "page": 24,
+      "code": "00002512",
+      "bank": "SINAPI",
+      "description": "BRACO P/ LUMINARIA PUBLICA 1 X 1,50M ROMAGNOLE OU EQUIV",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "29,94"
+    },
+    {
+      "page": 24,
+      "code": "003129",
+      "bank": "SBC",
+      "description": "PORCA ACO SEXTAVADA A325 5/8\"",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "1,10"
+    },
+    {
+      "page": 24,
+      "code": "032462",
+      "bank": "SBC",
+      "description": "CAMINHAO GUINDAUTO FORD F12000 8tn 130CV",
+      "category": "Material",
+      "unit": "H",
+      "composition_coefficient": "0,4500000",
+      "unit_price": "150,00"
+    },
+    {
+      "page": 25,
+      "code": "008269",
+      "bank": "SBC",
+      "description": "ARRUELA PRESSAO ACO 5/8\"",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "4,0000000",
+      "unit_price": "0,37"
+    },
+    {
+      "page": 25,
+      "code": "009534",
+      "bank": "SBC",
+      "description": "BRACO TUBO ACO ZINCADO 1,20m PARA ILUMINACAO PUBLICA",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "231,43"
+    },
+    {
+      "page": 25,
+      "code": "004855",
+      "bank": "SBC",
+      "description": "PARAFUSO ESTRUTURAL SEXTAVADO ASTM A-325 UNC 5/8\" x 3.1/2\"",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "9,68"
+    },
+    {
+      "page": 25,
+      "code": "099806",
+      "bank": "SBC",
+      "description": "AJUDANTE DE ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,4890000",
+      "unit_price": "16,74"
+    },
+    {
+      "page": 25,
+      "code": "099250",
+      "bank": "SBC",
+      "description": "ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,4890000",
+      "unit_price": "22,35"
+    },
+    {
+      "page": 25,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 25,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 25,
+      "code": "1316",
+      "bank": "ORSE",
+      "description": "Lâmpada vapor sódio alta pressão 70 w (philips ref. son 70w ou similar)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "27,20"
+    },
+    {
+      "page": 25,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 25,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0027000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 25,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 25,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 25,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0004800",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 25,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0002400",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 25,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0013800",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 25,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 25,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0027000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 25,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0610800",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 26,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001200",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 26,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 26,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 26,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0027000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 26,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003600",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 26,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0004500",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 26,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0478500",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 26,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0610800",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 26,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000900",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 26,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 26,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 26,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 26,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 26,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 26,
+      "code": "1316",
+      "bank": "ORSE",
+      "description": "Lâmpada vapor sódio alta pressão 70 w (philips ref. son 70w ou similar)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "27,20"
+    },
+    {
+      "page": 26,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 26,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 26,
+      "code": "1317",
+      "bank": "ORSE",
+      "description": "Lâmpada vapor sódio alta pressão 150 w (philips ref. son 150w ou similar)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "37,10"
+    },
+    {
+      "page": 27,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 27,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 27,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 27,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0010800",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 27,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0004500",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 27,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0610800",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 27,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0027000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 27,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001200",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 27,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0027000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 27,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0027000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 27,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0002400",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 27,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0004800",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 27,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000900",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 27,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003600",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 27,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 27,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 27,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0610800",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 27,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0478500",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 27,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 27,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0013800",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 27,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 27,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 27,
+      "code": "10579",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 27,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 27,
+      "code": "1317",
+      "bank": "ORSE",
+      "description": "Lâmpada vapor sódio alta pressão 150 w (philips ref. son 150w ou similar)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "37,10"
+    },
+    {
+      "page": 28,
+      "code": "1914",
+      "bank": "ORSE",
+      "description": "Reator externo p/ lâmpada vapor sódio 70w",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "52,60"
+    },
+    {
+      "page": 28,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 28,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 28,
+      "code": "1914",
+      "bank": "ORSE",
+      "description": "Reator externo p/ lâmpada vapor sódio 70w",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "52,60"
+    },
+    {
+      "page": 28,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 28,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 28,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0030000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 28,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 28,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0016000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 28,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 28,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0046000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 28,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 28,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 28,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 28,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 28,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 28,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 28,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 28,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 29,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 29,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1595000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 29,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 29,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 29,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 29,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 29,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 29,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 29,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 29,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 29,
+      "code": "1915",
+      "bank": "ORSE",
+      "description": "Reator externo p/ lâmpada vapor sódio 150w",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "101,00"
+    },
+    {
+      "page": 29,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 29,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 29,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 29,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 29,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0030000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 29,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 29,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0016000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 30,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 30,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0046000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 30,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 30,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 30,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 30,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 30,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 30,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 30,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 30,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 30,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 30,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1595000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 30,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 30,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 30,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 30,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 30,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 30,
+      "code": "1915",
+      "bank": "ORSE",
+      "description": "Reator externo p/ lâmpada vapor sódio 150w",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "101,00"
+    },
+    {
+      "page": 30,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 31,
+      "code": "12774",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,50W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "992,68"
+    },
+    {
+      "page": 31,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 31,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 31,
+      "code": "12774",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,50W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "992,68"
+    },
+    {
+      "page": 31,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 31,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 31,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 31,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 31,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0030000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 31,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 31,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0016000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 31,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 31,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0046000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 31,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 31,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 31,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 31,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 31,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 32,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 32,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 32,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 32,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 32,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1595000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 32,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 32,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 32,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 32,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 32,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 32,
+      "code": "12776",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,100W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.239,24"
+    },
+    {
+      "page": 32,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 32,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 32,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0030000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 32,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 33,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 33,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 33,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 33,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 33,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 33,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 33,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 33,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0016000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 33,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 33,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 33,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 33,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 33,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 33,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1595000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 33,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 33,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0046000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 33,
+      "code": "12776",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,100W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.239,24"
+    },
+    {
+      "page": 33,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 33,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 33,
+      "code": "10579",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 33,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 33,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 33,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 34,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 34,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 34,
+      "code": "12777",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,120W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.371,28"
+    },
+    {
+      "page": 34,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 34,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 34,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0030000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 34,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 34,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0016000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 34,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 34,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0046000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 34,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 34,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 34,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 34,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 34,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 34,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 35,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 35,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 35,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 35,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1595000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 35,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 35,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 35,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 35,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 35,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 35,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 35,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 35,
+      "code": "12777",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,120W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.371,28"
+    },
+    {
+      "page": 35,
+      "code": "12778",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,150W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.527,25"
+    },
+    {
+      "page": 35,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 35,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 36,
+      "code": "12778",
+      "bank": "ORSE",
+      "description": "Luminária em LED para iluminação pública,150W,bivolt, Selo A Inmetro, corpo em alumínio inj, FP 0,95, prot. DPS 10kv, IP66, IK09, Temp. cor 5000k, IRC= ou 70%, v. útil 50.000h, 130 lm/w.gar.5 anos, modelo GL216 G-light ou similar un",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1.527,25"
+    },
+    {
+      "page": 36,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 36,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 36,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0030000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 36,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 36,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0016000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 36,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 36,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0046000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 36,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 36,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 36,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 36,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 36,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 36,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 36,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0090000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 36,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 36,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 36,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1595000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 36,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,2036000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 36,
+      "code": "00006111",
+      "bank": "SINAPI",
+      "description": "SERVENTE DE OBRAS (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "14,93"
+    },
+    {
+      "page": 36,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 36,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 37,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 37,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 37,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 37,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,5000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 37,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 37,
+      "code": "1691",
+      "bank": "ORSE",
+      "description": "Parafuso metal 2 1/2\" x 12 p/ bucha s-10",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "0,85"
+    },
+    {
+      "page": 37,
+      "code": "13524",
+      "bank": "ORSE",
+      "description": "Refletor Slim LED 200W de potência, branco Frio, 6500k, Autovolt, marca G-light ou similar",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "109,89"
+    },
+    {
+      "page": 37,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,5000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 37,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000500",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 37,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 37,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0012000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 37,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0014400",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 37,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0006400",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 37,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0003200",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 37,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0018400",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 37,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 37,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 37,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0814400",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 38,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001600",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 38,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 38,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 38,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0036000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 38,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004800",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 38,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0005900",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 38,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0609300",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 38,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0814400",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 38,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,3000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 38,
+      "code": "1691",
+      "bank": "ORSE",
+      "description": "Parafuso metal 2 1/2\" x 12 p/ bucha s-10",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "0,85"
+    },
+    {
+      "page": 38,
+      "code": "13524",
+      "bank": "ORSE",
+      "description": "Refletor Slim LED 200W de potência, branco Frio, 6500k, Autovolt, marca G-light ou similar",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "109,89"
+    },
+    {
+      "page": 38,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000900",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 38,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 38,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 38,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0000300",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 38,
+      "code": "00001574",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 10 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M6",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "1,92"
+    },
+    {
+      "page": 38,
+      "code": "00001620",
+      "bank": "SINAPI",
+      "description": "CONTATOR TRIPOLAR, CORRENTE DE *38* A, TENSAO NOMINAL DE *500* V, CATEGORIA AC-2 E AC-3",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "388,25"
+    },
+    {
+      "page": 39,
+      "code": "00001571",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 4 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M5",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "1,49"
+    },
+    {
+      "page": 39,
+      "code": "00001625",
+      "bank": "SINAPI",
+      "description": "CONTATOR TRIPOLAR, CORRENTE DE *22* A, TENSAO NOMINAL DE *500* V, CATEGORIA AC-2 E AC-3",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "184,30"
+    },
+    {
+      "page": 39,
+      "code": "00002388",
+      "bank": "SINAPI",
+      "description": "DISJUNTOR TIPO NEMA, BIPOLAR 10 ATE 50 A, TENSAO MAXIMA 415 V",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "53,98"
+    },
+    {
+      "page": 39,
+      "code": "00001571",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 4 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M5",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "1,49"
+    },
+    {
+      "page": 39,
+      "code": "00002373",
+      "bank": "SINAPI",
+      "description": "DISJUNTOR TIPO NEMA, TRIPOLAR 60 ATE 100 A, TENSAO MAXIMA DE 415 V",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "94,86"
+    },
+    {
+      "page": 39,
+      "code": "00001576",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 25 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M8",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "3,16"
+    },
+    {
+      "page": 40,
+      "code": "00034653",
+      "bank": "SINAPI",
+      "description": "DISJUNTOR TERMOMAGNETICO PARA TRILHO DIN (IEC), MONOPOLAR, 6 - 32 A",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "7,74"
+    },
+    {
+      "page": 40,
+      "code": "00001571",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 4 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M5",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,49"
+    },
+    {
+      "page": 40,
+      "code": "00001573",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 6 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M6",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,78"
+    },
+    {
+      "page": 40,
+      "code": "00034653",
+      "bank": "SINAPI",
+      "description": "DISJUNTOR TERMOMAGNETICO PARA TRILHO DIN (IEC), MONOPOLAR, 6 - 32 A",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "7,74"
+    },
+    {
+      "page": 40,
+      "code": "00034686",
+      "bank": "SINAPI",
+      "description": "DISJUNTOR TERMOMAGNETICO PARA TRILHO DIN (IEC), MONOPOLAR, 40 - 50 A",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "11,48"
+    },
+    {
+      "page": 40,
+      "code": "00001574",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 10 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M6",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,92"
+    },
+    {
+      "page": 40,
+      "code": "00001575",
+      "bank": "SINAPI",
+      "description": "TERMINAL A COMPRESSAO EM COBRE ESTANHADO PARA CABO 16 MM2, 1 FURO E 1 COMPRESSAO, PARA PARAFUSO DE FIXACAO M6",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,28"
+    },
+    {
+      "page": 40,
+      "code": "00034686",
+      "bank": "SINAPI",
+      "description": "DISJUNTOR TERMOMAGNETICO PARA TRILHO DIN (IEC), MONOPOLAR, 40 - 50 A",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "11,48"
+    },
+    {
+      "page": 41,
+      "code": "099806",
+      "bank": "SBC",
+      "description": "AJUDANTE DE ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,2410000",
+      "unit_price": "16,74"
+    },
+    {
+      "page": 41,
+      "code": "005249",
+      "bank": "SBC",
+      "description": "RELE FOTOELETRICO PARA LUMINARIAS 127/220V",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "19,58"
+    },
+    {
+      "page": 41,
+      "code": "099250",
+      "bank": "SBC",
+      "description": "ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,2410000",
+      "unit_price": "22,35"
+    },
+    {
+      "page": 41,
+      "code": "1094",
+      "bank": "ORSE",
+      "description": "Haste cobreada copperweld p/ aterramento 254 micr d= 3/4\" x 3,00 m c/conector",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "112,00"
+    },
+    {
+      "page": 41,
+      "code": "663",
+      "bank": "ORSE",
+      "description": "Conector p/ haste de aterramento 3/4\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "7,00"
+    },
+    {
+      "page": 41,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "4,8000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 41,
+      "code": "314",
+      "bank": "ORSE",
+      "description": "Bucha aluminio p/eletroduto d=1 1/ 4\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "2,45"
+    },
+    {
+      "page": 41,
+      "code": "209",
+      "bank": "ORSE",
+      "description": "Arruela de alumínio p/eletroduto d=1 1/ 4\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "1,80"
+    },
+    {
+      "page": 41,
+      "code": "436",
+      "bank": "ORSE",
+      "description": "Caixa de medicao bi ou trifásica, em noril (policarbonato)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "91,50"
+    },
+    {
+      "page": 41,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "4,8000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 41,
+      "code": "10394",
+      "bank": "ORSE",
+      "description": "Bucha em liga zamak para eletroduto 16mm, d=1/2\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,35"
+    },
+    {
+      "page": 41,
+      "code": "00000868/SIN",
+      "bank": "ORSE",
+      "description": "Cabo de cobre nu 25 mm2 meio-duro",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "31,43"
+    },
+    {
+      "page": 41,
+      "code": "414",
+      "bank": "ORSE",
+      "description": "Cabo cobre rígido, isolado, 16mm2 - 450/750v / 70º",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "19,76"
+    },
+    {
+      "page": 41,
+      "code": "865",
+      "bank": "ORSE",
+      "description": "Eletroduto condulete pvc rígido, d= 1/2\"",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,5000000",
+      "unit_price": "3,40"
+    },
+    {
+      "page": 41,
+      "code": "1094",
+      "bank": "ORSE",
+      "description": "Haste cobreada copperweld p/ aterramento 254 micr d= 3/4\" x 3,00 m c/conector",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "112,00"
+    },
+    {
+      "page": 42,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004800",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 42,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0432000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 42,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0144000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 42,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0172800",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 42,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0076800",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 42,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0038400",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 42,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0220800",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 42,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009600",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 42,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0432000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 42,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,9772800",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 42,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0019200",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 42,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009600",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 42,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009600",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 42,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0432000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 42,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0057600",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 42,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0072000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 42,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,7656000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 42,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,9772800",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 42,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0014400",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 42,
+      "code": "10788",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009600",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 42,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0009600",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 42,
+      "code": "47A2P9I",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0004800",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 42,
+      "code": "663",
+      "bank": "ORSE",
+      "description": "Conector p/ haste de aterramento 3/4\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "7,00"
+    },
+    {
+      "page": 42,
+      "code": "00002436/SIN",
+      "bank": "ORSE",
+      "description": "Eletricista (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "4,8000000",
+      "unit_price": "20,45"
+    },
+    {
+      "page": 42,
+      "code": "314",
+      "bank": "ORSE",
+      "description": "Bucha aluminio p/eletroduto d=1 1/ 4\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "2,45"
+    },
+    {
+      "page": 42,
+      "code": "209",
+      "bank": "ORSE",
+      "description": "Arruela de alumínio p/eletroduto d=1 1/ 4\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "3,0000000",
+      "unit_price": "1,80"
+    },
+    {
+      "page": 43,
+      "code": "436",
+      "bank": "ORSE",
+      "description": "Caixa de medicao bi ou trifásica, em noril (policarbonato)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "91,50"
+    },
+    {
+      "page": 43,
+      "code": "00006111/SIN",
+      "bank": "ORSE",
+      "description": "Servente de obras (horista)",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "4,8000000",
+      "unit_price": "15,59"
+    },
+    {
+      "page": 43,
+      "code": "10394",
+      "bank": "ORSE",
+      "description": "Bucha em liga zamak para eletroduto 16mm, d=1/2\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,35"
+    },
+    {
+      "page": 43,
+      "code": "00000868/SIN",
+      "bank": "ORSE",
+      "description": "Cabo de cobre nu 25 mm2 meio-duro",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "2,0000000",
+      "unit_price": "31,43"
+    },
+    {
+      "page": 43,
+      "code": "414",
+      "bank": "ORSE",
+      "description": "Cabo cobre rígido, isolado, 16mm2 - 450/750v / 70º",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "19,76"
+    },
+    {
+      "page": 43,
+      "code": "865",
+      "bank": "ORSE",
+      "description": "Eletroduto condulete pvc rígido, d= 1/2\"",
+      "category": "Material",
+      "unit": "m",
+      "composition_coefficient": "1,5000000",
+      "unit_price": "3,40"
+    },
+    {
+      "page": 43,
+      "code": "00043460",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA ELETRICISTA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,02"
+    },
+    {
+      "page": 43,
+      "code": "00043484",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA ELETRICISTA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,24"
+    },
+    {
+      "page": 43,
+      "code": "00037372",
+      "bank": "SINAPI",
+      "description": "EXAMES - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,36"
+    },
+    {
+      "page": 43,
+      "code": "00000247",
+      "bank": "SINAPI",
+      "description": "AJUDANTE DE ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "15,76"
+    },
+    {
+      "page": 43,
+      "code": "00037373",
+      "bank": "SINAPI",
+      "description": "SEGURO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 43,
+      "code": "00037370",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,20"
+    },
+    {
+      "page": 43,
+      "code": "00037371",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,51"
+    },
+    {
+      "page": 43,
+      "code": "EC373720",
+      "bank": "SEDOP",
+      "description": "EXAMES - HORISTA (ENCARGOS COMPLEMENTARES) (COLETA CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,51"
+    },
+    {
+      "page": 43,
+      "code": "EC373700",
+      "bank": "SEDOP",
+      "description": "ALIMENTACAO - HORISTA (ENCARGOS COMPLEMENTARES)(COLETADOCAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "5,15"
+    },
+    {
+      "page": 44,
+      "code": "MO247000",
+      "bank": "SEDOP",
+      "description": "AJUDANTE DE ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "16,17"
+    },
+    {
+      "page": 44,
+      "code": "EC434840",
+      "bank": "SEDOP",
+      "description": "EPI - FAMILIA ELETRICISTA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,65"
+    },
+    {
+      "page": 44,
+      "code": "EC373710",
+      "bank": "SEDOP",
+      "description": "TRANSPORTE - HORISTA (ENCARGOS COMPLEMENTARES)(COLETADOCAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,19"
+    },
+    {
+      "page": 44,
+      "code": "EC373730",
+      "bank": "SEDOP",
+      "description": "SEGURO - HORISTA (ENCARGOS COMPLEMENTARES) (COLETA CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 44,
+      "code": "EC434600",
+      "bank": "SEDOP",
+      "description": "FERRAMENTAS - FAMILIA ELETRICISTA - HORISTA (ENCARGOSCOMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,86"
+    },
+    {
+      "page": 44,
+      "code": "00043461",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA ENCANADOR - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,55"
+    },
+    {
+      "page": 44,
+      "code": "00037372",
+      "bank": "SINAPI",
+      "description": "EXAMES - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,36"
+    },
+    {
+      "page": 44,
+      "code": "00000246",
+      "bank": "SINAPI",
+      "description": "AUXILIAR DE ENCANADOR OU BOMBEIRO HIDRAULICO (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "15,76"
+    },
+    {
+      "page": 44,
+      "code": "00037373",
+      "bank": "SINAPI",
+      "description": "SEGURO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 44,
+      "code": "00043485",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA ENCANADOR - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,11"
+    },
+    {
+      "page": 44,
+      "code": "00037371",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,51"
+    },
+    {
+      "page": 44,
+      "code": "00037370",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,20"
+    },
+    {
+      "page": 44,
+      "code": "00001159",
+      "bank": "SINAPI",
+      "description": "CAMINHONETE COM MOTOR A DIESEL, POTENCIA *160* CV, CABINE DUPLA, 4X4",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000480",
+      "unit_price": "281.980,00"
+    },
+    {
+      "page": 44,
+      "code": "00001159",
+      "bank": "SINAPI",
+      "description": "CAMINHONETE COM MOTOR A DIESEL, POTENCIA *160* CV, CABINE DUPLA, 4X4",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000060",
+      "unit_price": "281.980,00"
+    },
+    {
+      "page": 45,
+      "code": "00001159",
+      "bank": "SINAPI",
+      "description": "CAMINHONETE COM MOTOR A DIESEL, POTENCIA *160* CV, CABINE DUPLA, 4X4",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000148",
+      "unit_price": "281.980,00"
+    },
+    {
+      "page": 45,
+      "code": "00001159",
+      "bank": "SINAPI",
+      "description": "CAMINHONETE COM MOTOR A DIESEL, POTENCIA *160* CV, CABINE DUPLA, 4X4",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000600",
+      "unit_price": "281.980,00"
+    },
+    {
+      "page": 45,
+      "code": "00004221",
+      "bank": "SINAPI",
+      "description": "OLEO DIESEL COMBUSTIVEL COMUM METROPOLITANO S-10 OU S-500",
+      "category": "Material",
+      "unit": "L",
+      "composition_coefficient": "5,8900000",
+      "unit_price": "6,87"
+    },
+    {
+      "page": 45,
+      "code": "00000247",
+      "bank": "SINAPI",
+      "description": "AJUDANTE DE ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,0373200",
+      "unit_price": "15,76"
+    },
+    {
+      "page": 45,
+      "code": "MO247000",
+      "bank": "SEDOP",
+      "description": "AJUDANTE DE ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,0373000",
+      "unit_price": "16,17"
+    },
+    {
+      "page": 45,
+      "code": "00000246",
+      "bank": "SINAPI",
+      "description": "AUXILIAR DE ENCANADOR OU BOMBEIRO HIDRAULICO (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,0179800",
+      "unit_price": "15,76"
+    },
+    {
+      "page": 46,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,0373200",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 46,
+      "code": "MO243600",
+      "bank": "SEDOP",
+      "description": "ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "0,0373200",
+      "unit_price": "21,92"
+    },
+    {
+      "page": 46,
+      "code": "00002696",
+      "bank": "SINAPI",
+      "description": "ENCANADOR OU BOMBEIRO HIDRAULICO (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,0179800",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 46,
+      "code": "00034783",
+      "bank": "SINAPI",
+      "description": "ENGENHEIRO ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,0357800",
+      "unit_price": "97,03"
+    },
+    {
+      "page": 46,
+      "code": "00004095",
+      "bank": "SINAPI",
+      "description": "MOTORISTA DE CARRO DE PASSEIO (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,0050900",
+      "unit_price": "20,36"
+    },
+    {
+      "page": 46,
+      "code": "00004096",
+      "bank": "SINAPI",
+      "description": "MOTORISTA OPERADOR DE CAMINHAO COM MUNCK (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "0,0163700",
+      "unit_price": "26,41"
+    },
+    {
+      "page": 47,
+      "code": "MO243600",
+      "bank": "SEDOP",
+      "description": "ELETRICISTA",
+      "category": "Mão de Obra",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "21,92"
+    },
+    {
+      "page": 47,
+      "code": "EC373710",
+      "bank": "SEDOP",
+      "description": "TRANSPORTE - HORISTA (ENCARGOS COMPLEMENTARES)(COLETADOCAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,19"
+    },
+    {
+      "page": 47,
+      "code": "EC373700",
+      "bank": "SEDOP",
+      "description": "ALIMENTACAO - HORISTA (ENCARGOS COMPLEMENTARES)(COLETADOCAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "5,15"
+    },
+    {
+      "page": 47,
+      "code": "EC373730",
+      "bank": "SEDOP",
+      "description": "SEGURO - HORISTA (ENCARGOS COMPLEMENTARES) (COLETA CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 47,
+      "code": "EC434600",
+      "bank": "SEDOP",
+      "description": "FERRAMENTAS - FAMILIA ELETRICISTA - HORISTA (ENCARGOSCOMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,86"
+    },
+    {
+      "page": 47,
+      "code": "EC373720",
+      "bank": "SEDOP",
+      "description": "EXAMES - HORISTA (ENCARGOS COMPLEMENTARES) (COLETA CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,51"
+    },
+    {
+      "page": 47,
+      "code": "EC434840",
+      "bank": "SEDOP",
+      "description": "EPI - FAMILIA ELETRICISTA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Material",
+      "unit": "h",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,65"
+    },
+    {
+      "page": 47,
+      "code": "00043460",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA ELETRICISTA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,02"
+    },
+    {
+      "page": 47,
+      "code": "00037371",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,51"
+    },
+    {
+      "page": 47,
+      "code": "00037370",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,20"
+    },
+    {
+      "page": 47,
+      "code": "00002436",
+      "bank": "SINAPI",
+      "description": "ELETRICISTA (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 47,
+      "code": "00037373",
+      "bank": "SINAPI",
+      "description": "SEGURO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 47,
+      "code": "00043484",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA ELETRICISTA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,24"
+    },
+    {
+      "page": 47,
+      "code": "00037372",
+      "bank": "SINAPI",
+      "description": "EXAMES - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,36"
+    },
+    {
+      "page": 47,
+      "code": "00043485",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA ENCANADOR - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,11"
+    },
+    {
+      "page": 47,
+      "code": "00002696",
+      "bank": "SINAPI",
+      "description": "ENCANADOR OU BOMBEIRO HIDRAULICO (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,70"
+    },
+    {
+      "page": 48,
+      "code": "00037370",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,20"
+    },
+    {
+      "page": 48,
+      "code": "00043461",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA ENCANADOR - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,55"
+    },
+    {
+      "page": 48,
+      "code": "00037373",
+      "bank": "SINAPI",
+      "description": "SEGURO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 48,
+      "code": "00037372",
+      "bank": "SINAPI",
+      "description": "EXAMES - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,36"
+    },
+    {
+      "page": 48,
+      "code": "00037371",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,51"
+    },
+    {
+      "page": 48,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 48,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 48,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 48,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0018000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 48,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 48,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 48,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0023000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 48,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 48,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 48,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 48,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 48,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 48,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 48,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 48,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0006000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 48,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0007000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 48,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0654000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 49,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 49,
+      "code": "11242",
+      "bank": "ORSE",
+      "description": "Chave inglesa 12\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "44,00"
+    },
+    {
+      "page": 49,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 49,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 49,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0018000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 49,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 49,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 49,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0023000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 49,
+      "code": "11240",
+      "bank": "ORSE",
+      "description": "Alicate com isolamento",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "47,69"
+    },
+    {
+      "page": 49,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 49,
+      "code": "10761",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 49,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 49,
+      "code": "105A7P9I",
+      "bank": "ORSE",
+      "description": "Chave de fenda chata 30 cm",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "26,90"
+    },
+    {
+      "page": 49,
+      "code": "11241",
+      "bank": "ORSE",
+      "description": "Alicate volt-amperimetro",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "156,60"
+    },
+    {
+      "page": 49,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 49,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0006000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 49,
+      "code": "AP I\n00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0007000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 49,
+      "code": "23A7P8I",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0654000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 49,
+      "code": "158",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 49,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 50,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0018000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 50,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 50,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 50,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 50,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 50,
+      "code": "105A9P6I",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 50,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 50,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 50,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 50,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 50,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0006000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 50,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 50,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 50,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 50,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0941000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 50,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 50,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0023000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 50,
+      "code": "941",
+      "bank": "ORSE",
+      "description": "Fardamento com mangas curta",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0015000",
+      "unit_price": "196,67"
+    },
+    {
+      "page": 50,
+      "code": "10599",
+      "bank": "ORSE",
+      "description": "Protetor solar fps 30 com 120ml",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0018000",
+      "unit_price": "18,34"
+    },
+    {
+      "page": 50,
+      "code": "00012893/SIN",
+      "bank": "ORSE",
+      "description": "Bota de seguranca com biqueira de aco e colarinho acolchoado",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "76,67"
+    },
+    {
+      "page": 50,
+      "code": "107A6P1I",
+      "bank": "ORSE",
+      "description": "Refeição - café da manhã ( café com leite e dois pães com manteiga)",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "5,00"
+    },
+    {
+      "page": 50,
+      "code": "10362",
+      "bank": "ORSE",
+      "description": "Seguro de vida e acidente em grupo",
+      "category": "Serviços",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "12,54"
+    },
+    {
+      "page": 50,
+      "code": "00012894/SIN",
+      "bank": "ORSE",
+      "description": "Capa para chuva em pvc com forro de poliester, com capuz (amarela ou azul)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "20,85"
+    },
+    {
+      "page": 51,
+      "code": "10596",
+      "bank": "ORSE",
+      "description": "Protetor auricular",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "4,90"
+    },
+    {
+      "page": 51,
+      "code": "10492",
+      "bank": "ORSE",
+      "description": "Cesta Básica",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0045000",
+      "unit_price": "205,00"
+    },
+    {
+      "page": 51,
+      "code": "10517",
+      "bank": "ORSE",
+      "description": "Exames admissionais/demissionais (checkup)",
+      "category": "Serviços",
+      "unit": "cj",
+      "composition_coefficient": "0,0004000",
+      "unit_price": "300,00"
+    },
+    {
+      "page": 51,
+      "code": "1651",
+      "bank": "ORSE",
+      "description": "Óculos branco proteção",
+      "category": "Material",
+      "unit": "pr",
+      "composition_coefficient": "0,0008000",
+      "unit_price": "6,00"
+    },
+    {
+      "page": 51,
+      "code": "4728",
+      "bank": "ORSE",
+      "description": "Talhadeira chata 10\"",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0003000",
+      "unit_price": "18,58"
+    },
+    {
+      "page": 51,
+      "code": "00012895/SIN",
+      "bank": "ORSE",
+      "description": "Capacete de seguranca aba frontal com suspensao de polietileno, sem jugular (classe b)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0006000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 51,
+      "code": "107A8P8I",
+      "bank": "ORSE",
+      "description": "Pá quadrada",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "36,90"
+    },
+    {
+      "page": 51,
+      "code": "00002711/SIN",
+      "bank": "ORSE",
+      "description": "Carrinho de mao, em aco, com capacidade de *45 a 65* l / *100* kg, pneu com camara",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0002000",
+      "unit_price": "175,45"
+    },
+    {
+      "page": 51,
+      "code": "1A5P8I",
+      "bank": "ORSE",
+      "description": "Almoço (Participação do empregador)",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,1018000",
+      "unit_price": "14,00"
+    },
+    {
+      "page": 51,
+      "code": "2378",
+      "bank": "ORSE",
+      "description": "Vale transporte",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0941000",
+      "unit_price": "4,50"
+    },
+    {
+      "page": 51,
+      "code": "4729",
+      "bank": "ORSE",
+      "description": "Marreta 1 kg com cabo",
+      "category": "Material",
+      "unit": "un",
+      "composition_coefficient": "0,0001000",
+      "unit_price": "39,50"
+    },
+    {
+      "page": 51,
+      "code": "00012892/SIN",
+      "bank": "ORSE",
+      "description": "Luva raspa de couro, cano curto (punho *7* cm)",
+      "category": "Material",
+      "unit": "par",
+      "composition_coefficient": "0,0023000",
+      "unit_price": "11,28"
+    },
+    {
+      "page": 51,
+      "code": "00039140",
+      "bank": "SINAPI",
+      "description": "ABRACADEIRA EM ACO PARA AMARRACAO DE ELETRODUTOS, TIPO U SIMPLES, COM 1 1/4\"",
+      "category": "Material",
+      "unit": "UN",
+      "composition_coefficient": "0,6667000",
+      "unit_price": "1,98"
+    },
+    {
+      "page": 52,
+      "code": "00037775",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 14340 KG, MOMENTO MAXIMO DE CARGA 42,3 TM, ALCANCE MAXIMO HORIZONTAL 16,80 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 23000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000552",
+      "unit_price": "408.789,06"
+    },
+    {
+      "page": 52,
+      "code": "00044061",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TRUCADO, PESO BRUTO TOTAL 23000 KG, CARGA UTIL MAXIMA 16540 KG, DISTANCIA ENTRE EIXOS 4,80 M, POTENCIA 256 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000343",
+      "unit_price": "771.994,61"
+    },
+    {
+      "page": 52,
+      "code": "00037775",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 14340 KG, MOMENTO MAXIMO DE CARGA 42,3 TM, ALCANCE MAXIMO HORIZONTAL 16,80 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 23000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000059",
+      "unit_price": "408.789,06"
+    },
+    {
+      "page": 52,
+      "code": "00044061",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TRUCADO, PESO BRUTO TOTAL 23000 KG, CARGA UTIL MAXIMA 16540 KG, DISTANCIA ENTRE EIXOS 4,80 M, POTENCIA 256 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000057",
+      "unit_price": "771.994,61"
+    },
+    {
+      "page": 52,
+      "code": "00037775",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 14340 KG, MOMENTO MAXIMO DE CARGA 42,3 TM, ALCANCE MAXIMO HORIZONTAL 16,80 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 23000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000145",
+      "unit_price": "408.789,06"
+    },
+    {
+      "page": 52,
+      "code": "00044061",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TRUCADO, PESO BRUTO TOTAL 23000 KG, CARGA UTIL MAXIMA 16540 KG, DISTANCIA ENTRE EIXOS 4,80 M, POTENCIA 256 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000141",
+      "unit_price": "771.994,61"
+    },
+    {
+      "page": 53,
+      "code": "00037775",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 14340 KG, MOMENTO MAXIMO DE CARGA 42,3 TM, ALCANCE MAXIMO HORIZONTAL 16,80 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 23000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000690",
+      "unit_price": "408.789,06"
+    },
+    {
+      "page": 53,
+      "code": "00044061",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TRUCADO, PESO BRUTO TOTAL 23000 KG, CARGA UTIL MAXIMA 16540 KG, DISTANCIA ENTRE EIXOS 4,80 M, POTENCIA 256 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000643",
+      "unit_price": "771.994,61"
+    },
+    {
+      "page": 53,
+      "code": "00004221",
+      "bank": "SINAPI",
+      "description": "OLEO DIESEL COMBUSTIVEL COMUM METROPOLITANO S-10 OU S-500",
+      "category": "Material",
+      "unit": "L",
+      "composition_coefficient": "26,3800000",
+      "unit_price": "6,87"
+    },
+    {
+      "page": 55,
+      "code": "00003363",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 6200 KG, MOMENTO MAXIMO DE CARGA 11,7 TM, ALCANCE MAXIMO HORIZONTAL 9,70 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 13000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000551",
+      "unit_price": "143.750,00"
+    },
+    {
+      "page": 55,
+      "code": "00037752",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TOCO, PESO BRUTO TOTAL 16000 KG, CARGA UTIL MAXIMA 11030 KG, DISTANCIA ENTRE EIXOS 5,41 M, POTENCIA 185 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000343",
+      "unit_price": "645.891,87"
+    },
+    {
+      "page": 55,
+      "code": "00003363",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 6200 KG, MOMENTO MAXIMO DE CARGA 11,7 TM, ALCANCE MAXIMO HORIZONTAL 9,70 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 13000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000058",
+      "unit_price": "143.750,00"
+    },
+    {
+      "page": 55,
+      "code": "00037752",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TOCO, PESO BRUTO TOTAL 16000 KG, CARGA UTIL MAXIMA 11030 KG, DISTANCIA ENTRE EIXOS 5,41 M, POTENCIA 185 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000057",
+      "unit_price": "645.891,87"
+    },
+    {
+      "page": 55,
+      "code": "00037752",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TOCO, PESO BRUTO TOTAL 16000 KG, CARGA UTIL MAXIMA 11030 KG, DISTANCIA ENTRE EIXOS 5,41 M, POTENCIA 185 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000141",
+      "unit_price": "645.891,87"
+    },
+    {
+      "page": 55,
+      "code": "00003363",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 6200 KG, MOMENTO MAXIMO DE CARGA 11,7 TM, ALCANCE MAXIMO HORIZONTAL 9,70 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 13000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000144",
+      "unit_price": "143.750,00"
+    },
+    {
+      "page": 56,
+      "code": "00003363",
+      "bank": "SINAPI",
+      "description": "GUINDAUTO HIDRAULICO, CAPACIDADE MAXIMA DE CARGA 6200 KG, MOMENTO MAXIMO DE CARGA 11,7 TM, ALCANCE MAXIMO HORIZONTAL 9,70 M, PARA MONTAGEM SOBRE CHASSI DE CAMINHAO PBT MINIMO 13000 KG (INCLUI MONTAGEM, NAO INCLUI CAMINHAO)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000689",
+      "unit_price": "143.750,00"
+    },
+    {
+      "page": 56,
+      "code": "00037752",
+      "bank": "SINAPI",
+      "description": "CAMINHAO TOCO, PESO BRUTO TOTAL 16000 KG, CARGA UTIL MAXIMA 11030 KG, DISTANCIA ENTRE EIXOS 5,41 M, POTENCIA 185 CV (INCLUI CABINE E CHASSI, NAO INCLUI CARROCERIA)",
+      "category": "Equipamento para Aquisição Permanente",
+      "unit": "UN",
+      "composition_coefficient": "0,0000643",
+      "unit_price": "645.891,87"
+    },
+    {
+      "page": 56,
+      "code": "00004221",
+      "bank": "SINAPI",
+      "description": "OLEO DIESEL COMBUSTIVEL COMUM METROPOLITANO S-10 OU S-500",
+      "category": "Material",
+      "unit": "L",
+      "composition_coefficient": "26,4300000",
+      "unit_price": "6,87"
+    },
+    {
+      "page": 56,
+      "code": "00043464",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA OPERADOR ESCAVADEIRA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,03"
+    },
+    {
+      "page": 56,
+      "code": "00037370",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,20"
+    },
+    {
+      "page": 56,
+      "code": "00037373",
+      "bank": "SINAPI",
+      "description": "SEGURO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 56,
+      "code": "00043488",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA OPERADOR ESCAVADEIRA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,83"
+    },
+    {
+      "page": 56,
+      "code": "00037371",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,51"
+    },
+    {
+      "page": 56,
+      "code": "00037372",
+      "bank": "SINAPI",
+      "description": "EXAMES - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,36"
+    },
+    {
+      "page": 56,
+      "code": "00004095",
+      "bank": "SINAPI",
+      "description": "MOTORISTA DE CARRO DE PASSEIO (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "20,36"
+    },
+    {
+      "page": 57,
+      "code": "00037372",
+      "bank": "SINAPI",
+      "description": "EXAMES - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "1,36"
+    },
+    {
+      "page": 57,
+      "code": "00037373",
+      "bank": "SINAPI",
+      "description": "SEGURO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,11"
+    },
+    {
+      "page": 57,
+      "code": "00037371",
+      "bank": "SINAPI",
+      "description": "TRANSPORTE - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,51"
+    },
+    {
+      "page": 57,
+      "code": "00004096",
+      "bank": "SINAPI",
+      "description": "MOTORISTA OPERADOR DE CAMINHAO COM MUNCK (HORISTA)",
+      "category": "Mão de Obra",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "26,41"
+    },
+    {
+      "page": 57,
+      "code": "00043464",
+      "bank": "SINAPI",
+      "description": "FERRAMENTAS - FAMILIA OPERADOR ESCAVADEIRA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,03"
+    },
+    {
+      "page": 57,
+      "code": "00043488",
+      "bank": "SINAPI",
+      "description": "EPI - FAMILIA OPERADOR ESCAVADEIRA - HORISTA (ENCARGOS COMPLEMENTARES - COLETADO CAIXA)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "0,83"
+    },
+    {
+      "page": 57,
+      "code": "00037370",
+      "bank": "SINAPI",
+      "description": "ALIMENTACAO - HORISTA (COLETADO CAIXA - ENCARGOS COMPLEMENTARES)",
+      "category": "Encargos Complementares",
+      "unit": "H",
+      "composition_coefficient": "1,0000000",
+      "unit_price": "2,20"
+    }
+  ],
+  "requires_review": [
+    {
+      "page": 20,
+      "row": [
+        "Insumo",
+        "00001022",
+        "SINAPI",
+        "CABO DE COBRE, FLEXIVEL, CLASSE 4 OU 5, ISOLACAO EM PVC/A,\nANTICHAMA BWF-B, COBERTURA PVC-ST1, ANTICHAMA BWF-B, 1\nCONDUTOR, 0,6/1 KV, SECAO NOMINAL 2,5 MM2",
+        "Material",
+        null,
+        "M",
+        "5,0000000",
+        "3,72",
+        "18,60"
+      ]
+    },
+    {
+      "page": 20,
+      "row": [
+        "Insumo",
+        "00003378",
+        "SINAPI",
+        "HASTE DE ATERRAMENTO EM ACO COM 3,00 M DE COMPRIMENTO E DN =\n3/4\", REVESTIDA COM BAIXA CAMADA DE COBRE, SEM CONECTOR",
+        "Material",
+        null,
+        "UN",
+        "1,0000000",
+        "103,92",
+        "103,92"
+      ]
+    },
+    {
+      "page": 20,
+      "row": [
+        "Insumo",
+        "010101",
+        "IOPES",
+        "AJUDANTE (AJUDANTE PRATICO - SINDUSCON)",
+        "0,2000000",
+        "",
+        "",
+        "",
+        "21,94",
+        "Total\n4,38"
+      ]
+    },
+    {
+      "page": 20,
+      "row": [
+        "Insumo",
+        "049503",
+        "IOPES",
+        "FITA ISOLANTE NR 33 - 19MM X 20M",
+        "1,0000000",
+        "UN",
+        "33,62",
+        null,
+        null,
+        "33,62"
+      ]
+    },
+    {
+      "page": 20,
+      "row": [
+        "Insumo",
+        "00006111/SIN",
+        "ORSE",
+        "Servente de obras (horista)",
+        "Mão de Obra",
+        null,
+        "h",
+        "0,1500000",
+        "15,59",
+        "2,33"
+      ]
+    },
+    {
+      "page": 20,
+      "row": [
+        "Insumo",
+        "8928",
+        "ORSE",
+        "Soquete ou bocal de louça (porcelana) E27 de tempo, ref.MT-2233, marca\nDecorlux ou similar",
+        "Material",
+        null,
+        "un",
+        "1,0000000",
+        "6,45",
+        "6,45"
+      ]
+    }
+  ],
+  "note": "Coeficientes pertencem às composições; não são quantidades planejadas da obra."
+}

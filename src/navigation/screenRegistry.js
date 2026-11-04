@@ -1,3 +1,6 @@
+import {AuditScreen} from '../screens/AuditScreen';
+import { ComparisonScreen } from '../screens/ComparisonScreen';
+import { MarketPricesScreen } from '../screens/MarketPricesScreen';
 import {
   AccessibilityScreen,
   AddExpenseScreen,
@@ -40,6 +43,9 @@ const TAB_COMPONENTS = Object.freeze({
 });
 
 const SCREEN_COMPONENTS = Object.freeze({
+  [SCREENS.AUDIT]: AuditScreen,
+  [SCREENS.COMPARISON]: ComparisonScreen,
+  [SCREENS.MARKET_PRICES]: MarketPricesScreen,
   [SCREENS.REQUEST]: RequestMaterialScreen,
   [SCREENS.QUOTES]: QuotesScreen,
   [SCREENS.CREATE_QUOTE]: CreateQuoteScreen,
@@ -50,7 +56,7 @@ const SCREEN_COMPONENTS = Object.freeze({
   [SCREENS.TRANSFERS]: TransfersScreen,
   [SCREENS.REPORTS]: ReportsScreen,
   [SCREENS.ORDERS]: PurchasesScreen,
-  [SCREENS.APPROVALS]: FeatureScreen,
+  [SCREENS.APPROVALS]: PurchasesScreen,
   [SCREENS.ALERTS]: AlertsScreen,
   [SCREENS.PROFILE]: ProfileScreen,
   [SCREENS.COMPANY_PERMISSIONS]: CompanyPermissionsScreen,

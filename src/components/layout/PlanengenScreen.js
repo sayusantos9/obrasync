@@ -12,14 +12,14 @@ export function usePlanengenStyle() {
   const text = (style, color = colors.text) => [style, { color, fontSize: style.fontSize * (theme.fontScale || 1) }];
   return { colors, text };
 }
-export function PlanengenScreen({ title, children, bottomTabs = false }) {
+export function PlanengenScreen({ title, children, bottomTabs = false, scroll = true }) {
   const { goBack } = useApp();
   const { colors, text } = usePlanengenStyle();
   const insets = useSafeAreaInsets();
   return <SafeAreaView edges={['top', 'left', 'right']} style={styles.screen}>
     <View style={styles.brand}><Image source={require('../../assets/brand/planengen-light.png')} resizeMode="contain" accessibilityLabel="Planengen" style={styles.logo}/><Text style={text(styles.brandText, '#B8C9E4')}>OBRASYNC</Text></View>
     <View style={styles.header}><TouchableOpacity accessibilityRole="button" accessibilityLabel="Voltar" onPress={goBack} style={styles.back}><Ionicons name="arrow-back" size={23} color="#FFFFFF"/></TouchableOpacity><Text accessibilityRole="header" style={text(styles.title, '#FFFFFF')}>{title}</Text></View>
-    <ScrollView showsVerticalScrollIndicator={false} style={[styles.body, { backgroundColor: colors.background }]} contentContainerStyle={{ padding: 20, paddingBottom: (bottomTabs ? 110 : 28) + insets.bottom }}>{children}</ScrollView>
+    {scroll ? <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} style={[styles.body, { backgroundColor: colors.background }]} contentContainerStyle={{ padding: 20, paddingBottom: (bottomTabs ? 110 : 28) + insets.bottom }}>{children}</ScrollView> : <View style={[styles.body,{backgroundColor:colors.background,overflow:'hidden'}]}>{children}</View>}
   </SafeAreaView>;
 }
 const styles = StyleSheet.create({

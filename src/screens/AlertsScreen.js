@@ -41,8 +41,8 @@ function buildAlerts({ dashboard, orders, requests, budgetDocuments }) {
   }
 
   const lateOrders = orders.filter((order) => {
-    if (!order.expected_at || ['Recebido', 'Cancelado'].includes(order.status)) return false;
-    return new Date(order.expected_at) < new Date();
+    if (!order.expected_at || !order.purchased_at || ['RECEIVED', 'CANCELLED', 'Recebido', 'Cancelado'].includes(order.status)) return false;
+    return new Date(`${order.expected_at.slice(0,10)}T23:59:59`) < new Date();
   });
 
   if (lateOrders.length) {
@@ -57,7 +57,7 @@ function buildAlerts({ dashboard, orders, requests, budgetDocuments }) {
     });
   }
 
-  const pendingRequests = requests.filter((request) => request.status === 'Pendente');
+  const pendingRequests = requests.filter((request) => ['PENDING','Pendente'].includes(request.status));
   if (pendingRequests.length) {
     result.push({
       id: 'pending-requests',

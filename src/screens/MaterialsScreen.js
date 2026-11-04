@@ -1,9 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from 'styled-components/native';
-import { SearchBar } from '../components/common/SearchBar';
-import { Screen } from '../components/ui/primitives';
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../contexts/AppContext';
 import { SCREENS } from '../navigation/routes';
 import { fetchInputCatalog } from '../services/inputCatalogService';
@@ -11,7 +10,9 @@ import { CATALOG_ROLES, filterInputCatalog } from '../utils/inputCatalog';
 import { formatCurrency } from '../utils/currency';
 
 export function MaterialsScreen() {
-  const theme = useTheme();
+  const styles=useInventoryStyles(baseStyles);
+  const theme = useInventoryTheme();
+  const insets=useSafeAreaInsets();
   const { currentUser, openScreen, selectedProject } = useApp();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,9 +65,9 @@ export function MaterialsScreen() {
 
   const header = <View>
     <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}>
-      <Text style={styles.title}>Insumos e materiais</Text>
-      <Text style={styles.subtitle}>Materiais de referência para as empresas</Text>
-      <View style={styles.search}><SearchBar value={query} onChangeText={setQuery} placeholder="Descrição, código ou unidade" /></View>
+      <Text style={styles.title}>Encontre o insumo certo.</Text>
+      <Text style={styles.subtitle}>Códigos, unidades e referências em um só lugar.</Text>
+      <View style={[styles.search,{backgroundColor:'#FFFFFF',borderRadius:12,paddingHorizontal:12,flexDirection:'row',alignItems:'center'}]}><Ionicons name="search-outline" size={22} color={theme.colors.accent}/><TextInput accessibilityLabel="Buscar insumo no catálogo" value={query} onChangeText={setQuery} placeholder="Descrição, código ou unidade" placeholderTextColor={theme.colors.textMuted} style={{flex:1,minWidth:0,minHeight:50,padding:10,fontSize:16,color:theme.colors.text}}/></View>
     </View>
     <View style={styles.headerContent}>
       {canStock && <TouchableOpacity accessibilityRole="button" onPress={() => openScreen(SCREENS.STOCK)}
@@ -75,13 +76,13 @@ export function MaterialsScreen() {
         <Text style={[styles.actionText, { color: theme.colors.primary }]}>Estoque da obra</Text>
         <Ionicons name="chevron-forward" size={18} color={theme.colors.primary} />
       </TouchableOpacity>}
-      <Text style={[styles.notice, { color: theme.colors.textMuted }]}>Preços de referência da planilha. A data-base não foi informada. As quantidades de referência não representam saldo em estoque.</Text>
+      <Text style={[styles.notice, { color: theme.colors.textMuted }]}>Preços das fontes cadastradas, não ofertas atuais das lojas. Consulte a data-base nos detalhes. Quantidades de referência não são saldo em estoque.</Text>
       {canRead && <>
         {filters('CATEGORIA NA PLANILHA', categories, category, setCategory)}
         {filters('BASE DE ORIGEM', banks, bank, setBank)}
         <View style={styles.summary}>
           <Text style={[styles.count, { color: theme.colors.text }]}>{visible.length} de {items.length} insumos</Text>
-          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Atualizar catálogo" disabled={loading} onPress={reload}>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Atualizar catálogo" disabled={loading} onPress={reload} style={{minWidth:44,minHeight:44,alignItems:'center',justifyContent:'center'}}>
             <Ionicons name="refresh-outline" size={23} color={theme.colors.primary} />
           </TouchableOpacity>
         </View>
@@ -103,7 +104,7 @@ export function MaterialsScreen() {
         <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={18} color={theme.colors.textMuted} />
       </View>
       <Text style={[styles.name, { color: theme.colors.text }]}>{item.description}</Text>
-      <Text style={[styles.meta, { color: theme.colors.textMuted }]}>Material · Unidade: {item.unit}</Text>
+      <Text style={[styles.meta, { color: theme.colors.textMuted }]}>{item.category || 'Insumo'} · Unidade: {item.unit}</Text>
       <View style={styles.priceRow}>
         <Text style={[styles.label, { color: theme.colors.textMuted }]}>PREÇO DE REFERÊNCIA</Text>
         <Text style={[styles.price, { color: theme.colors.primary }]}>{formatCurrency(Number(item.reference_unit_price))} / {item.unit}</Text>
@@ -112,49 +113,49 @@ export function MaterialsScreen() {
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Identificador interno: {item.catalog_code}</Text>
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Código de origem: {item.source_code || 'Não informado'}</Text>
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Categoria na planilha: {item.category || 'Não informada'}</Text>
-        <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Quantidade de referência: {Number(item.reference_quantity).toLocaleString('pt-BR', { maximumFractionDigits: 12 })} {item.unit}</Text>
-        <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Valor da linha na planilha: {formatCurrency(Number(item.reference_value))}</Text>
+        <Text style={[styles.detail, { color: theme.colors.textMuted }]}>{item.source_page ? 'Quantidade global não importada. Os coeficientes pertencem às composições do arquivo de origem.' : `Quantidade de referência: ${Number(item.reference_quantity).toLocaleString('pt-BR', { maximumFractionDigits: 12 })} ${item.unit}`}</Text>
+        {!item.source_page && <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Valor da linha na planilha: {formatCurrency(Number(item.reference_value))}</Text>}
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Data-base: {item.reference_date || 'Não informada'}</Text>
-        <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Origem: {item.source_file} · linha {item.source_row}</Text>
+        <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Origem: {item.source_file} · {item.source_page ? `página ${item.source_page}` : `linha ${item.source_row}`}</Text>
       </View>}
     </TouchableOpacity>;
   }
 
-  return <Screen><FlatList data={visible} keyExtractor={(item) => item.id} renderItem={renderItem}
-    extraData={expandedId} ListHeaderComponent={header} contentContainerStyle={styles.list}
+  return <InventoryScreen title="Catálogo de insumos" scroll={false}><FlatList data={visible} keyExtractor={(item) => item.id} renderItem={renderItem}
+    extraData={expandedId} ListHeaderComponent={header} keyboardShouldPersistTaps="handled" contentContainerStyle={[styles.list,{paddingBottom:110+insets.bottom}]}
     refreshing={loading && items.length > 0} onRefresh={canRead ? reload : undefined}
     ListEmptyComponent={<View style={[styles.message, styles.empty, surface]}>
       {loading ? <ActivityIndicator color={theme.colors.primary} /> : <Text style={{ color: theme.colors.textMuted }}>
         {!canRead ? 'Catálogo disponível para os perfis internos de uma empresa.' : error ? 'O catálogo não foi carregado.' : items.length ? 'Nenhum insumo encontrado para esses filtros.' : 'Nenhum insumo cadastrado na base.'}
       </Text>}
-    </View>} /></Screen>;
+    </View>} /></InventoryScreen>;
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   list: { paddingBottom: 110 },
-  hero: { paddingTop: 48, paddingHorizontal: 20, paddingBottom: 22 },
-  title: { color: '#FFFFFF', fontSize: 25, fontWeight: '900' },
+  hero: { margin:20,marginBottom:0,borderRadius:20,padding:20 },
+  title: { color: '#FFFFFF', fontSize: 25, fontWeight: '700' },
   subtitle: { color: '#FFFFFF', opacity: 0.8, fontSize: 12, marginTop: 6 },
   search: { marginTop: 16 },
   headerContent: { paddingHorizontal: 20 },
   stockAction: { padding: 14, borderRadius: 14, marginTop: 16, flexDirection: 'row', alignItems: 'center' },
-  actionText: { flex: 1, marginLeft: 8, fontWeight: '800' },
+  actionText: { flex: 1, marginLeft: 8, fontWeight: '600' },
   notice: { fontSize: 12, lineHeight: 18, marginTop: 16 },
   filterBlock: { marginTop: 16 },
-  label: { fontSize: 10, fontWeight: '800', marginBottom: 6 },
-  chip: { paddingVertical: 9, paddingHorizontal: 12, marginRight: 8, borderRadius: 18, borderWidth: 1 },
+  label: { fontSize: 10, fontWeight: '600', marginBottom: 6 },
+  chip: { minHeight:44,justifyContent:'center',paddingVertical: 9, paddingHorizontal: 12, marginRight: 8, borderRadius: 18, borderWidth: 1 },
   summary: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 20 },
-  count: { fontSize: 17, fontWeight: '800' },
+  count: { fontSize: 17, fontWeight: '600' },
   card: { marginHorizontal: 20, marginBottom: 12, padding: 16, borderWidth: 1, borderRadius: 17 },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  code: { fontSize: 11, fontWeight: '800', flex: 1 },
+  code: { fontSize: 11, fontWeight: '600', flex: 1 },
   name: { fontSize: 14, fontWeight: '700', marginTop: 8, lineHeight: 21 },
   meta: { fontSize: 12, marginTop: 8 },
   priceRow: { marginTop: 14 },
-  price: { fontSize: 18, fontWeight: '900' },
+  price: { fontSize: 18, fontWeight: '700' },
   details: { borderTopWidth: 1, marginTop: 14, paddingTop: 10 },
   detail: { fontSize: 12, lineHeight: 20 },
   message: { padding: 18, borderWidth: 1, borderRadius: 14, marginBottom: 14 },
   empty: { marginHorizontal: 20 },
-  retry: { fontWeight: '800', marginTop: 12 },
+  retry: { fontWeight: '600', marginTop: 12 },
 });

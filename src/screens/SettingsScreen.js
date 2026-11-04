@@ -12,7 +12,7 @@ const LOGO = require('../assets/brand/planengen-light.png');
 export function SettingsScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const { isOffline, setIsOffline, openScreen, goBack, pendingRequests, syncPendingRequests, isSyncing, accessibilitySettings, currentUser, logout } = useApp();
+  const { isOffline, setIsOffline, openScreen, goBack, pendingRequests, syncPendingRequests, discardPendingRequest, isSyncing, accessibilitySettings, currentUser, logout } = useApp();
   function confirmLogout() {
     Alert.alert('Sair da conta', 'Deseja encerrar esta sessão?', [
       { text: 'Cancelar', style: 'cancel' },
@@ -25,7 +25,7 @@ export function SettingsScreen() {
   const disabled = isOffline || isSyncing || !pendingRequests.length;
   async function synchronize() {
     try { await syncPendingRequests(); }
-    catch (error) { Alert.alert('Não foi possível concluir a simulação', error.message); }
+    catch (error) { Alert.alert('Não foi possível enviar a fila', error.message); }
   }
   function Link({ icon, title, subtitle, screen }) {
     return <TouchableOpacity accessibilityRole="button" accessibilityLabel={title} onPress={() => openScreen(screen)} style={[styles.link, { borderColor: colors.border }]}>
@@ -47,27 +47,23 @@ export function SettingsScreen() {
       <Text accessibilityRole="header" style={text(styles.section, NAVY)}>Preferências e ajuda</Text>
       <Link icon="accessibility-outline" title="Acessibilidade" subtitle="Contraste, tamanho do texto e recursos de interação." screen={SCREENS.ACCESSIBILITY}/>
       <Link icon="book-outline" title="Cartilha de uso" subtitle="Orientações sobre os perfis e os fluxos do aplicativo." screen={SCREENS.GUIDE}/>
-      <Text accessibilityRole="header" style={text(styles.section, NAVY)}>Acessos da operação</Text>
+      <Text accessibilityRole="header" style={text(styles.section, NAVY)}>Acessos da operação</Text>{[USER_ROLES.MASTER,USER_ROLES.ENGINEERING].includes(currentUser?.role) && <Link icon="analytics-outline" title="Previsto × compra real" subtitle="Preço médio, desvio e impacto por insumo." screen={SCREENS.COMPARISON}/>}
       {currentUser?.role === USER_ROLES.MASTER && <Link icon="people-outline" title="Empresas e permissões" subtitle="Acesse a gestão da empresa e da equipe." screen={SCREENS.MASTER_PANEL}/>}
       {currentUser?.role !== USER_ROLES.CLIENT && <Link icon="notifications-outline" title="Alertas" subtitle={`${pendingRequests.length} registro(s) local(is) pendente(s).`} screen={SCREENS.ALERTS}/>}
-      {[USER_ROLES.MASTER, USER_ROLES.PURCHASING].includes(currentUser?.role) && <Link icon="swap-horizontal-outline" title="Transferências" subtitle="Saídas e transferências de materiais." screen={SCREENS.TRANSFERS}/>}
+      {[USER_ROLES.MASTER, USER_ROLES.PURCHASING, USER_ROLES.REQUESTER].includes(currentUser?.role) && <Link icon="swap-horizontal-outline" title="Consumo e transferências" subtitle="Saídas e transferências de materiais." screen={SCREENS.TRANSFERS}/>}
+      {[USER_ROLES.MASTER,USER_ROLES.PURCHASING].includes(currentUser?.role) && <Link icon="cart-outline" title="Pedidos e compras" subtitle="Criar, aprovar e confirmar compras." screen={SCREENS.PURCHASES}/>}
+      {[USER_ROLES.MASTER,USER_ROLES.PURCHASING,USER_ROLES.REQUESTER].includes(currentUser?.role) && <Link icon="archive-outline" title="Recebimento" subtitle="Conferência parcial e entrada no estoque." screen={SCREENS.RECEIPT}/>}
+      {currentUser?.role===USER_ROLES.MASTER && <Link icon="time-outline" title="Histórico de operações" subtitle="Auditoria das novas operações e arquivamentos." screen={SCREENS.AUDIT}/>}
+      {[USER_ROLES.MASTER,USER_ROLES.ENGINEERING,USER_ROLES.PURCHASING].includes(currentUser?.role) && <Link icon="pricetags-outline" title="Preços de mercado" subtitle="Pesquisas nas lojas e comparação com o orçamento." screen={SCREENS.MARKET_PRICES}/>}
       <Link icon="bar-chart-outline" title="Relatórios" subtitle="Consulte os relatórios disponíveis." screen={SCREENS.REPORTS}/>
-      {currentUser?.role !== USER_ROLES.CLIENT && <><Text accessibilityRole="header" style={text(styles.section, NAVY)}>Demonstração de solicitações</Text>
-      <View style={[styles.demo, { borderColor: colors.border }]}>
-        <View style={styles.demoHeading}><View style={styles.icon}><Ionicons name="flask-outline" size={23} color={colors.blue}/></View><View style={styles.info}><Text style={text(styles.itemTitle, NAVY)}>Ambiente de simulação</Text><Text style={text(styles.itemDescription, colors.muted)}>Estes controles atuam somente nas solicitações locais.</Text></View></View>
-        <View style={[styles.divider, { backgroundColor: colors.border }]}/>
-        <Text style={text(styles.itemTitle, NAVY)}>Simular modo offline</Text>
-        <Text style={text(styles.itemDescription, colors.muted)}>Novas solicitações ficam na fila local. Isso não desliga a internet nem as operações conectadas do app.</Text>
-        <View style={styles.switchRow}><Text style={text(styles.status, colors.blue)}>{isOffline ? 'Simulação ativa' : 'Simulação desativada'}</Text><Switch accessibilityLabel="Simular modo offline" disabled={isSyncing} value={isOffline} onValueChange={setIsOffline} trackColor={{ false: '#9CA6B5', true: colors.blue }} thumbColor="#FFFFFF"/></View>
-        <View style={[styles.divider, { backgroundColor: colors.border }]}/>
-        <View style={styles.queue}><Ionicons name="layers-outline" size={21} color={colors.blue}/><Text accessibilityLiveRegion="polite" style={[text(styles.itemTitle, NAVY), { flex: 1 }]}>{pendingRequests.length} {pendingRequests.length === 1 ? 'solicitação pendente' : 'solicitações pendentes'}</Text></View>
-        <Text style={text(styles.itemDescription, colors.muted)}>{isSyncing ? 'Movendo pendências para a lista local...' : isOffline ? 'Desative a simulação offline para mover as pendências.' : pendingRequests.length ? 'A simulação move a fila para a lista local, sem enviar ao servidor.' : 'Não há pendências locais para processar.'}</Text>
-        <TouchableOpacity accessibilityRole="button" accessibilityLabel="Simular sincronização" accessibilityState={{ disabled, busy: Boolean(isSyncing) }} disabled={disabled} onPress={synchronize} style={[styles.sync, { backgroundColor: disabled ? '#E5E9F0' : NAVY }]}>
-          {isSyncing ? <ActivityIndicator color={NAVY}/> : <Ionicons name="sync-outline" size={21} color={disabled ? colors.muted : '#FFFFFF'}/>}
-          <Text style={[text(styles.syncText, disabled ? colors.muted : '#FFFFFF'), { flexShrink: 1 }]}>{isSyncing ? 'Processando...' : 'Simular sincronização'}</Text>
-        </TouchableOpacity>
-      </View>
-      </>}<View style={styles.note}><Ionicons name="information-circle-outline" size={22} color={colors.blue}/><View style={styles.info}><Text style={text(styles.itemTitle, NAVY)}>Sobre os dados</Text><Text style={text(styles.itemDescription, colors.muted)}>O app combina cadastros conectados, como usuários e obras, com fluxos locais de demonstração. As solicitações locais podem ser perdidas ao fechar ou recarregar o app.</Text></View></View>
+      {[USER_ROLES.MASTER,USER_ROLES.PURCHASING,USER_ROLES.REQUESTER].includes(currentUser?.role) && <View style={styles.demo}>
+        <Text style={text(styles.section)}>Solicitações pendentes</Text>
+        <Text style={text(styles.itemDescription)}>A fila fica salva neste aparelho, separada por usuário e empresa. O envio repetido da mesma solicitação não duplica o registro.</Text>
+        <View style={styles.switchRow}><Text style={text(styles.itemTitle)}>Preencher solicitações offline</Text><Switch accessibilityLabel="Preencher solicitações offline" value={isOffline} onValueChange={setIsOffline}/></View>
+        {pendingRequests.map(r=><View key={r.id} style={{marginTop:16}}><Text style={text(styles.itemTitle)}>{r.data?.material} · {r.data?.quantity} {r.data?.unit}</Text><TouchableOpacity accessibilityRole="button" onPress={()=>Alert.alert('Descartar pendência','Isso remove somente a cópia local. Se ela já tiver sido recebida pelo servidor, o registro remoto será preservado.',[{text:'Manter'},{text:'Descartar',style:'destructive',onPress:()=>discardPendingRequest(r.id).catch(e=>Alert.alert('Erro',e.message))}])}><Text style={text(styles.itemDescription,'#B42318')}>Descartar cópia local</Text></TouchableOpacity></View>)}
+        <TouchableOpacity accessibilityRole="button" disabled={disabled} onPress={synchronize} style={[styles.sync,{backgroundColor:disabled?'#777':NAVY}]}><Text style={text(styles.syncText,'white')}>{isSyncing?'Enviando...':`Enviar ${pendingRequests.length} pendência(s)`}</Text></TouchableOpacity>
+      </View>}
+      <View style={styles.note}><Text style={text(styles.itemDescription,colors.muted)}>Pedidos, compras, recebimentos e estoque exigem conexão. O modo offline acima atende somente solicitações.</Text></View>
       <TouchableOpacity accessibilityRole="button" accessibilityLabel="Sair da conta" onPress={confirmLogout} style={[styles.sync, { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#B42318', marginTop: 24 }]}>
         <Ionicons name="log-out-outline" size={21} color="#B42318"/><Text style={text(styles.syncText, '#B42318')}>Sair da conta</Text>
       </TouchableOpacity>

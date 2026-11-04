@@ -20,7 +20,9 @@ test('cliente só abre consulta; operações sem obra exigem seleção', () => {
   assert(canAccessRoute('CLIENT', 'tabs', 'budget'));
   assert(canAccessRoute('CLIENT', 'reports'));
   for (const route of ['receipt', 'stock', 'create-quote', 'create-budget', 'create-member', 'request']) assert(!canAccessRoute('CLIENT', route));
-  assert(!canAccessRoute('REQUESTER', 'transfers'));
+  assert(canAccessRoute('REQUESTER', 'transfers'));
+  assert(canPerform('REQUESTER','consumeStock'));
+  assert(!canAccessRoute('REQUESTER','label'));
   assert(requiresProject('stock'));
   assert(requiresProject('tabs', 'costs'));
   assert(!requiresProject('tabs', 'materials'));

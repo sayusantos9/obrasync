@@ -1,3 +1,4 @@
+import {ArchiveDialog} from '../components/documents/ArchiveDialog';
 import { Ionicons } from '@expo/vector-icons';
 import { ProjectSelector } from '../components/budget/ProjectSelector';
 import { useState } from 'react';
@@ -23,11 +24,9 @@ export function QuotesScreen(){
   catch(e){Alert.alert('Erro ao exportar cotação',e?.message||'Falha ao gerar o arquivo.');}
   finally{setBusy('');}
  }
- function confirmRemove(quote){Alert.alert('Excluir cotação',`Excluir ${quote.number}?`,[
-   {text:'Cancelar',style:'cancel'},
-   {text:'Excluir',style:'destructive',onPress:()=>removeQuote(quote.id).catch(e=>Alert.alert('Erro ao excluir',e?.message||'Falha no Supabase'))},
- ]);}
- return <Screen><ScreenHeader title="Cotações"/><Scroll><Content>
+ const [archive,setArchive]=useState(null);
+ function confirmRemove(doc){setArchive(doc);}
+ return <Screen><ArchiveDialog document={archive} onCancel={()=>setArchive(null)} onConfirm={removeQuote}/><ScreenHeader title="Cotações"/><Scroll><Content>
   <View style={styles.hero}><Ionicons name="document-text-outline" size={25} color="#FFF"/><View style={{flex:1,marginLeft:12}}><Text style={styles.heroTitle}>Cotações da obra</Text><Text style={styles.heroSubtitle}>{selectedProject?.name||'Nenhuma obra selecionada'}</Text></View></View>
   <ProjectSelector label="OBRA DAS COTAÇÕES"/>
   {!selectedProject&&<View style={styles.emptyCard}><Text style={styles.emptyTitle}>Escolha uma obra</Text><Text style={styles.emptyText}>Selecione uma obra antes de cadastrar ou consultar cotações.</Text>

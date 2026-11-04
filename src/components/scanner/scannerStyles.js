@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../../theme';
+import { theme as baseTheme } from '../../theme';
+const theme={...baseTheme,colors:{...baseTheme.colors,primary:'#010028',primaryDark:'#010028',accent:'#0084F4',text:'#202020',textMuted:'#575D6B',border:'#DFE3EA'}};
 
 export const scannerStyles = StyleSheet.create({
   header: {
@@ -23,12 +24,13 @@ export const scannerStyles = StyleSheet.create({
     borderRadius: 14,
   },
   headerCopy: { alignItems: 'center', flex: 1 },
-  title: { color: theme.colors.text, fontSize: 19, fontWeight: '900' },
+  title: { color: theme.colors.text, fontSize: 19, fontWeight: '700' },
   subtitle: { color: theme.colors.textMuted, fontSize: 12, marginTop: 2 },
   cameraArea: {
-    backgroundColor: '#17111B',
+    backgroundColor: '#010028',
     flex: 1,
-    minHeight: 350,
+    minHeight: 380,
+    borderRadius:20,
     overflow: 'hidden',
   },
   camera: { ...StyleSheet.absoluteFillObject },
@@ -48,7 +50,7 @@ export const scannerStyles = StyleSheet.create({
   permissionTitle: {
     color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: '900',
+    fontWeight: '700',
     marginTop: 14,
     textAlign: 'center',
   },
@@ -67,7 +69,8 @@ export const scannerStyles = StyleSheet.create({
     borderWidth: 1,
     height: 250,
     justifyContent: 'center',
-    width: 250,
+    width: '100%',
+    maxWidth:250,
   },
   corner: {
     borderColor: theme.colors.accent,
@@ -114,7 +117,7 @@ export const scannerStyles = StyleSheet.create({
   cameraHint: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '600',
     marginTop: 22,
     textAlign: 'center',
   },
@@ -135,7 +138,7 @@ export const scannerStyles = StyleSheet.create({
   },
   actions: {
     backgroundColor: theme.colors.surface,
-    paddingBottom: 106,
+    paddingBottom: 16,
     paddingHorizontal: 20,
     paddingTop: 14,
   },
@@ -144,13 +147,14 @@ export const scannerStyles = StyleSheet.create({
     backgroundColor: theme.colors.accent,
     borderRadius: 17,
     flexDirection: 'row',
-    height: 56,
+    minHeight: 56,
+    padding:10,
     justifyContent: 'center',
   },
   primaryText: {
-    color: theme.colors.primaryDark,
+    color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: '900',
+    fontWeight: '700',
     marginLeft: 8,
   },
   secondaryButton: {
@@ -159,14 +163,15 @@ export const scannerStyles = StyleSheet.create({
     borderRadius: 17,
     borderWidth: 1,
     flexDirection: 'row',
-    height: 52,
+    minHeight: 52,
+    padding:10,
     justifyContent: 'center',
     marginTop: 10,
   },
   secondaryText: {
     color: theme.colors.primary,
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: '600',
     marginLeft: 8,
   },
 });

@@ -1,3 +1,4 @@
+import {ArchiveDialog} from '../components/documents/ArchiveDialog';
 import { Ionicons } from '@expo/vector-icons';
 import { ProjectSelector } from '../components/budget/ProjectSelector';
 import { useState } from 'react';
@@ -21,11 +22,9 @@ export function BudgetScreen() {
     catch(e){Alert.alert(`Não foi possível gerar ${format==='pdf'?'PDF':'Excel'}`,e?.message||'Falha na exportação');}
     finally{setLoading('');}
   }
-  function confirmDelete(doc){Alert.alert('Excluir orçamento',`Deseja excluir ${doc.number}?`,[
-    {text:'Cancelar',style:'cancel'},
-    {text:'Excluir',style:'destructive',onPress:()=>removeBudgetDocument(doc.id).catch(e=>Alert.alert('Erro',e.message))}
-  ]);}
-  return <Screen><Scroll><View style={styles.header}><Text style={styles.headerTitle}>Orçamento</Text><Text style={styles.headerSub}>{selectedProject?.name||'Nenhuma obra selecionada'}</Text></View><Content>
+  const [archive,setArchive]=useState(null);
+ function confirmDelete(doc){setArchive(doc);}
+  return <Screen><ArchiveDialog document={archive} onCancel={()=>setArchive(null)} onConfirm={removeBudgetDocument}/><Scroll><View style={styles.header}><Text style={styles.headerTitle}>Orçamento</Text><Text style={styles.headerSub}>{selectedProject?.name||'Nenhuma obra selecionada'}</Text></View><Content>
     <ProjectSelector label="SELECIONAR OBRA PARA ORÇAMENTO"/>
     {!selectedProject ? <View style={styles.empty}><Text style={styles.emptyTitle}>Escolha uma obra</Text><Text style={styles.emptyText}>Selecione uma obra para consultar, exportar ou criar orçamentos.</Text>
       <TouchableOpacity style={styles.createButton} onPress={()=>selectTab(TABS.PROJECTS)}><Text style={styles.createText}>Selecionar obra</Text></TouchableOpacity></View> : <>

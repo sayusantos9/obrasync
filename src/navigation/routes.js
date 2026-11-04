@@ -21,6 +21,9 @@ export const SCREENS = Object.freeze({
   REPORTS: 'reports',
   ORDERS: 'orders',
   APPROVALS: 'approvals',
+  AUDIT: 'audit',
+  COMPARISON: 'comparison',
+  MARKET_PRICES: 'market-prices',
   ALERTS: 'alerts',
   PROFILE: 'profile',
   COMPANY_PERMISSIONS: 'company-permissions',
@@ -40,7 +43,7 @@ const baseTabs = [
   { id: 'home', label: 'Início', icon: 'home', tab: TABS.HOME },
   { id: 'projects', label: 'Obra', icon: 'business', tab: TABS.PROJECTS },
   { id: 'budget', label: 'Orçamento', icon: 'calculator', tab: TABS.BUDGET },
-  { id: 'materials', label: 'Materiais', icon: 'cube', tab: TABS.MATERIALS },
+  { id: 'materials', label: 'Insumos', icon: 'cube', tab: TABS.MATERIALS },
   { id: 'costs', label: 'Custos', icon: 'wallet', tab: TABS.COSTS },
 ];
 
@@ -70,7 +73,7 @@ export function getRoleTabs(role) {
       { id: 'home', label: 'Início', icon: 'home', tab: TABS.HOME },
       { id: 'request', label: 'Solicitar', icon: 'cart', screen: SCREENS.REQUEST },
       { id: 'projects', label: 'Obras', icon: 'business', tab: TABS.PROJECTS },
-      { id: 'materials', label: 'Materiais', icon: 'cube', tab: TABS.MATERIALS },
+      { id: 'materials', label: 'Insumos', icon: 'cube', tab: TABS.MATERIALS },
       { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.SETTINGS },
     ];
   }

@@ -7,7 +7,7 @@ import { theme } from '../../theme';
 
 export function ProjectSelector({label='SELECIONE A OBRA'}) {
   const {projects=[],selectedProject,chooseProject,selectTab,currentUser,refreshCurrentProject}=useApp();
-  const canCreate=[USER_ROLES.MASTER,USER_ROLES.ENGINEERING].includes(currentUser?.role);
+  const canCreate=[USER_ROLES.MASTER].includes(currentUser?.role);
   const visible=projects.filter(p=>!['CANCELED','CANCELLED','ARCHIVED'].includes(String(p.status).toUpperCase()));
   return <View style={styles.box}>
     <Text style={styles.label}>{label}</Text>

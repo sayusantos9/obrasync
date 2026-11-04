@@ -1,5 +1,6 @@
+import { readRequestQueue, updateRequestQueue, operationId } from '../services/requestQueue';
+import { procurementAction, fetchOperations } from '../services/procurementService';
 import { assertPermission } from '../utils/permissions';
-import { applyStockMovement } from '../utils/stockMovement';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AccessibilityInfo, Alert, Vibration } from 'react-native';
@@ -125,7 +126,7 @@ export function AppProvider({ children }) {
   const [requests, setRequests] = useState(DEMO_REQUESTS);
   const [orders, setOrders] = useState(DEMO_ORDERS);
   const [receipts, setReceipts] = useState(DEMO_RECEIPTS);
-  const [stock, setStock] = useState(DEMO_STOCK);
+  const [stock, setStock] = useState([]);
   const [extraExpenses, setExtraExpenses] = useState(DEMO_EXPENSES);
   const [companies, setCompanies] = useState([]);
   const [members, setMembers] = useState([]);
@@ -210,6 +211,7 @@ export function AppProvider({ children }) {
 
     const nextProjects = (projectsResult.data || []).map(toProject);
     const nextBudgets = (budgetsResult.data || []).map(toBudget);
+    await refreshOperations();
     setProjects(nextProjects);
     setBudgetDocuments(nextBudgets);
     setSelectedProject((current) => reconcileSelectedProject(current, nextProjects));
@@ -237,7 +239,7 @@ export function AppProvider({ children }) {
       setProjects([]);
       setBudgetDocuments([]);
       setQuotes([]); setCostInputs([]); setCostInputsError('');
-      setRequests([]); setOrders([]); setReceipts([]); setExtraExpenses([]); setPendingRequests([]);
+      setRequests([]); setOrders([]); setReceipts([]); setStock([]); setExtraExpenses([]); setPendingRequests([]);
       setMembers([]);
       setCompanies([]);
       setSelectedProject(null);
@@ -250,6 +252,7 @@ export function AppProvider({ children }) {
 
     setCurrentUser(profile);
     await loadAppData(profile);
+    setPendingRequests(await readRequestQueue(profile));
     return profile;
   }
 
@@ -342,6 +345,7 @@ export function AppProvider({ children }) {
     profile = await ensureMasterCompany(data.user, profile);
     setCurrentUser(profile);
     await loadAppData(profile);
+    setPendingRequests(await readRequestQueue(profile));
     setAuthError('');
     navigation.resetNavigation();
     navigation.openScreen(SCREENS.MASTER_PANEL);
@@ -359,7 +363,7 @@ export function AppProvider({ children }) {
       setProjects([]);
       setBudgetDocuments([]);
       setQuotes([]); setCostInputs([]); setCostInputsError('');
-      setRequests([]); setOrders([]); setReceipts([]); setExtraExpenses([]); setPendingRequests([]);
+      setRequests([]); setOrders([]); setReceipts([]); setStock([]); setExtraExpenses([]); setPendingRequests([]);
       setMembers([]);
       setCompanies([]);
       setSelectedProject(null);
@@ -459,7 +463,7 @@ export function AppProvider({ children }) {
       input_id: item.source === 'company' ? item.inputId : null,
       catalog_input_id: item.source === 'shared' ? item.inputId : null,
       input_code: item.code,
-      input_type: 'MATERIAL',
+      input_type: item.inputType,
       description: item.description,
       quantity: Number(item.quantity || 0),
       unit: item.unit || 'un',
@@ -469,7 +473,7 @@ export function AppProvider({ children }) {
     if (itemRows.length) {
       const { error: itemsError } = await supabase.from('budget_items').insert(itemRows);
       if (itemsError) {
-        await supabase.from('budgets').delete().eq('id', budget.id);
+        await supabase.rpc('archive_document',{p_kind:'budget',p_id:budget.id,p_reason:'Falha técnica ao gravar itens do orçamento'});
         throw itemsError;
       }
     }
@@ -501,10 +505,10 @@ export function AppProvider({ children }) {
     return document;
   }
 
-  async function removeBudgetDocument(id) {
+  async function removeBudgetDocument(id, reason) {
     assertPermission(currentUser?.role, 'writeBudget');
     if (!supabase) return;
-    const { error } = await supabase.from('budgets').delete().eq('id', id);
+    const { error } = await supabase.rpc('archive_document',{p_kind:'budget',p_id:id,p_reason:reason});
     if (error) throw error;
     setBudgetDocuments((current) => current.filter((item) => item.id !== id));
   }
@@ -530,38 +534,46 @@ export function AppProvider({ children }) {
     return member;
   }
 
+  async function refreshOperations() {
+    const data = await fetchOperations();
+    setRequests(data.requests); setOrders(data.orders); setReceipts(data.receipts); setStock(data.stock); setExtraExpenses(data.expenses);
+  }
+  async function refreshAfterWrite() {
+    try { await refreshOperations(); }
+    catch { Alert.alert('Registro salvo','O servidor confirmou a gravação, mas não foi possível atualizar a lista. Atualize a obra para consultar.'); }
+  }
   async function submitMaterialRequest(data) {
     assertPermission(currentUser?.role, 'requestMaterial');
-    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.');
-    const item = { projectId: selectedProject.id, id: `REQ-${Date.now()}`, status: isOffline ? 'Aguardando sincronização' : 'Pendente', ...data };
-    if (isOffline) setPendingRequests((current) => [item, ...current]);
-    else setRequests((current) => [item, ...current]);
-    return item;
-  }
-
-  async function syncPendingRequests() {
-    if (syncingRef.current) return;
-    if (isOffline) {
-      Alert.alert('Simulação offline ativa', 'Desative a simulação offline antes de mover as pendências locais.');
-      return;
-    }
-    if (!pendingRequests.length) {
-      Alert.alert('Tudo certo', 'Não há pendências.');
-      return;
-    }
-    syncingRef.current = true;
-    setIsSyncing(true);
-    const batch = pendingRequests;
-    const ids = new Set(batch.map(item => item.id));
+    if(!selectedProject?.id) throw new Error('Selecione uma obra.');
+    const id=data.clientRequestId || operationId();
+    const record={id,userId:currentUser.id,companyId:currentUser.companyId,projectId:selectedProject.id,data:{...data,clientRequestId:id}};
+    setPendingRequests(await updateRequestQueue(currentUser,rows=>[...rows.filter(r=>r.id!==id),record]));
+    if(isOffline) return {id,status:'QUEUED'};
     try {
-      setRequests((current) => [...batch.map((item) => ({ ...item, status: 'Pendente' })), ...current.filter(item => !ids.has(item.id))]);
-      setPendingRequests(current => current.filter(item => !ids.has(item.id)));
-      await new Promise(resolve => setTimeout(resolve, 350));
-      Alert.alert('Simulação concluída', 'As pendências foram movidas para a lista local. Nenhum dado foi enviado ao servidor.');
-    } finally {
-      syncingRef.current = false;
-      setIsSyncing(false);
+      const item=await procurementAction('REQUEST',record.projectId,record.data);
+      setPendingRequests(await updateRequestQueue(currentUser,rows=>rows.filter(r=>r.id!==id)));
+      await refreshAfterWrite();
+      return {...item,status:'PENDING'};
+    } catch(error) {
+      return {id,status:'QUEUED',message:error.message};
     }
+  }
+  async function discardPendingRequest(id) {
+    setPendingRequests(await updateRequestQueue(currentUser,rows=>rows.filter(r=>r.id!==id)));
+  }
+  async function syncPendingRequests() {
+    assertPermission(currentUser?.role,'requestMaterial');
+    if(syncingRef.current) return;
+    if(isOffline) throw new Error('Desative o modo de preenchimento offline para enviar.');
+    syncingRef.current=true; setIsSyncing(true);
+    try {
+      const batch=await readRequestQueue(currentUser);
+      for(const record of batch) {
+        await procurementAction('REQUEST',record.projectId,record.data);
+        setPendingRequests(await updateRequestQueue(currentUser,rows=>rows.filter(r=>r.id!==record.id)));
+      }
+      await refreshAfterWrite();
+    } finally { syncingRef.current=false; setIsSyncing(false); }
   }
 
   async function addQuote(data) {
@@ -578,29 +590,42 @@ export function AppProvider({ children }) {
     setQuotes((current) => [item, ...current]);
     return item;
   }
-  async function removeQuote(id) {
+  async function removeQuote(id, reason) {
     assertPermission(currentUser?.role, 'writeQuote');
-    const { error } = await supabase.from('quotations').delete().eq('id', id);
+    const { error } = await supabase.rpc('archive_document',{p_kind:'quote',p_id:id,p_reason:reason});
     if (error) throw error;
     setQuotes((current) => current.filter((item) => item.id !== id));
   }
   async function addExpense(data) {
     assertPermission(currentUser?.role, 'writeExpense');
-    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.'); const item = { id: `EXP-${Date.now()}`, ...data, projectId: selectedProject?.id, amount: Number(data.amount || 0) }; setExtraExpenses((c) => [item, ...c]); return item; }
+    const item=await procurementAction('EXPENSE',selectedProject?.id,data);
+    await refreshAfterWrite(); return {...data,...item};
+  }
   async function createCompany() { throw new Error('A empresa principal é criada no primeiro cadastro do Gestor.'); }
   async function createOrder(data) {
     assertPermission(currentUser?.role, 'managePurchase');
-    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.'); const item = { id: `PO-${Date.now()}`, number: `PED-${String(Date.now()).slice(-6)}`, status: 'Criado', ...data, projectId: selectedProject?.id }; setOrders((c) => [item, ...c]); return item; }
+    const item = await procurementAction('ORDER', selectedProject?.id, data);
+    await refreshAfterWrite(); return item;
+  }
+  async function confirmPurchase(id) {
+    assertPermission(currentUser?.role,'managePurchase');
+    await procurementAction('PURCHASE',selectedProject?.id,{id});
+    await refreshAfterWrite();
+  }
+  async function decideOrder(id, approve) {
+    assertPermission(currentUser?.role, 'manageCompany');
+    await procurementAction(approve ? 'APPROVE' : 'REJECT', selectedProject?.id, { id });
+    await refreshAfterWrite();
+  }
   async function createReceipt(data) {
-    assertPermission(currentUser?.role, 'managePurchase');
-    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.'); const item = { id: `REC-${Date.now()}`, receivedAt: new Date().toLocaleDateString('pt-BR'), ...data, projectId: selectedProject?.id }; setReceipts((c) => [item, ...c]); return item; }
-  async function createStockMovement(data) {
-    assertPermission(currentUser?.role, 'manageStock');
-    if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.');
-    const next = applyStockMovement(stock, data);
-    setStock(next);
-    return { id: `MOV-${Date.now()}`, ...data, projectId: selectedProject.id, quantity: Number(String(data.quantity).replace(',', '.')) };
-  }  async function createLabel(data) {
+    const item = await procurementAction('RECEIVE', selectedProject?.id, data);
+    await refreshAfterWrite(); return item;
+  }  async function createStockMovement(data) {
+    assertPermission(currentUser?.role, 'consumeStock');
+    const item=await procurementAction('STOCK',selectedProject?.id,data);
+    await refreshAfterWrite(); return item;
+  }
+  async function createLabel(data) {
     assertPermission(currentUser?.role, 'manageStock');
     if (!selectedProject?.id) throw new Error('Selecione uma obra antes de continuar.');
     const id = `LBL-${String(Date.now()).slice(-8)}`;
@@ -626,8 +651,10 @@ export function AppProvider({ children }) {
 
   const dashboard = useMemo(() => {
     const budget = Number(selectedProject?.budget || 0);
-    return { ...DASHBOARD, budget, progress: Number(selectedProject?.progress || 0), pendingRequests: requests.filter((item) => item.status === 'Pendente').length };
-  }, [selectedProject, requests]);
+    const bought=orders.filter(o=>o.projectId===selectedProject?.id && o.purchased_at && o.status!=='CANCELLED');
+    const realized=bought.reduce((sum,o)=>sum+Number(o.total),0)+extraExpenses.filter(e=>e.projectId===selectedProject?.id).reduce((sum,e)=>sum+Number(e.amount),0);
+    return { ...DASHBOARD, budget, realized, deviation:budget>0?(realized-budget)/budget*100:0, progress: Number(selectedProject?.progress || 0), pendingRequests: requests.filter(item=>item.projectId===selectedProject?.id && item.status==='PENDING').length };
+  }, [selectedProject, requests, orders, extraExpenses]);
 
   const value = useMemo(() => ({
     ...navigation,
@@ -659,20 +686,22 @@ export function AppProvider({ children }) {
     quotes,
     addQuote,
     removeQuote,
-    requests,
+    requests: requests.filter(item => item.projectId === selectedProject?.id),
     pendingRequests,
     submitMaterialRequest,
-    syncPendingRequests,
+    syncPendingRequests, discardPendingRequest,
     isSyncing,
     isOffline,
     setIsOffline,
-    orders,
+    orders: orders.filter(item => item.projectId === selectedProject?.id),
     createOrder,
-    receipts,
+    decideOrder, confirmPurchase,
+    refreshOperations,
+    receipts: receipts.filter(item => item.projectId === selectedProject?.id),
     createReceipt,
-    stock,
+    stock: stock.filter(item => item.projectId === selectedProject?.id),
     createStockMovement,
-    extraExpenses,
+    extraExpenses: extraExpenses.filter(item=>item.projectId===selectedProject?.id),
     addExpense,
     companies,
     members,

@@ -38,7 +38,7 @@ export function CostInputEditor({items,onChange,disabled}) {
     finally{setLoading(false);}
   }
   return <View style={styles.root} pointerEvents={disabled ? 'none' : 'auto'}>
-    {!!costInputsError && <Text accessibilityRole="alert" style={styles.empty}>Falha ao carregar materiais: {costInputsError}. Toque em atualizar para tentar novamente.</Text>}
+    {!!costInputsError && <Text accessibilityRole="alert" style={styles.empty}>Falha ao carregar insumos: {costInputsError}. Toque em atualizar para tentar novamente.</Text>}
     <Text style={styles.title}>Insumos do orçamento</Text>
     <Text style={styles.description}>Selecione um insumo por código, nome ou unidade. Quantidade/coeficiente × preço unitário = custo do item sem BDI.</Text>
     <View style={styles.searchRow}><TextInput placeholder="Pesquisar código ou nome do insumo" placeholderTextColor="#8692A4" style={[styles.input,{flex:1}]} value={query} onChangeText={setQuery} />
@@ -60,7 +60,7 @@ export function CostInputEditor({items,onChange,disabled}) {
     <TouchableOpacity style={styles.newInput} onPress={()=>setCreating(v=>!v)}><Ionicons name={creating?'close':'add'} size={18} color={theme.colors.primary}/><Text style={styles.newText}>{creating?'Fechar cadastro':'Cadastrar novo insumo (código automático)'}</Text></TouchableOpacity>
     {creating&&<View style={styles.form}>
       <Text style={styles.label}>NOME / DESCRIÇÃO</Text><TextInput value={draft.description} onChangeText={v=>setDraft(d=>({...d,description:v}))} placeholder="Ex.: Cabo de cobre 10 mm²" style={styles.input}/>
-      <Text style={styles.label}>TIPO DE INSUMO</Text><View style={styles.types}>{['MATERIAL'].map(t=><TouchableOpacity key={t} onPress={()=>setDraft(d=>({...d,inputType:t}))} style={[styles.type,draft.inputType===t&&styles.typeSelected]}><Text style={styles.typeName}>{t.replaceAll('_',' ')}</Text></TouchableOpacity>)}</View>
+      <Text style={styles.label}>TIPO DE INSUMO</Text><View style={styles.types}>{['MATERIAL','LABOR','EQUIPMENT','COMPLEMENTARY','SERVICE_INPUT','OTHER'].map(t=><TouchableOpacity key={t} onPress={()=>setDraft(d=>({...d,inputType:t}))} style={[styles.type,draft.inputType===t&&styles.typeSelected]}><Text style={styles.typeName}>{({MATERIAL:'Material',LABOR:'Mão de obra',EQUIPMENT:'Equipamento',COMPLEMENTARY:'Encargo complementar',SERVICE_INPUT:'Serviço como insumo',OTHER:'Outro'})[t]}</Text></TouchableOpacity>)}</View>
       <Text style={styles.label}>UNIDADE (UN, M, KG, H, M², M³...)</Text><TextInput value={draft.unit} onChangeText={v=>setDraft(d=>({...d,unit:v}))} style={styles.input}/>
       <Text style={styles.label}>PREÇO UNITÁRIO (R$)</Text><TextInput keyboardType="decimal-pad" value={draft.unitPrice} onChangeText={v=>setDraft(d=>({...d,unitPrice:v}))} placeholder="0,00" style={styles.input}/>
       <TouchableOpacity disabled={loading} style={styles.save} onPress={saveInput}><Text style={styles.white}>{loading?'Cadastrando...':'Salvar insumo no Supabase'}</Text></TouchableOpacity>

@@ -127,7 +127,7 @@ export function AddExpenseScreen() {
             <View style={styles.offlineNotice}>
               <Ionicons name="cloud-offline" size={20} color="#9B4B11" />
               <Text style={styles.offlineText}>
-                A despesa será salva localmente e continuará visível no controle de custos.
+                Despesas exigem conexão com o Supabase para serem salvas.
               </Text>
             </View>
           )}

@@ -11,12 +11,12 @@ const Selector = styled.ScrollView.attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
 })`
-  margin: 16px -20px 0;
-  padding-left: 20px;
+  margin: 16px 0 0;
+  padding-left: 0px;
 `;
 
 const Chip = styled.TouchableOpacity`
-  height: 40px;
+  min-height: 44px;
   margin-right: 8px;
   padding: 0 15px;
   align-items: center;
@@ -35,7 +35,7 @@ const ChipText = styled.Text`
     $isActive ? 'white' : theme.colors.textMuted
   )};
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
 `;
 
 const LabelCard = styled.View`
@@ -57,7 +57,7 @@ const BrandRow = styled.View`
 const Brand = styled.Text`
   color: ${({ theme }) => theme.colors.primaryDark};
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 700;
 `;
 
 const BrandAccent = styled.Text`
@@ -73,7 +73,7 @@ const Status = styled.View`
 const StatusText = styled.Text`
   color: ${({ theme }) => theme.colors.success};
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
 `;
 
 const QrShell = styled.View`
@@ -103,7 +103,7 @@ const PlaceholderText = styled.Text`
   margin-top: 10px;
   color: ${({ theme }) => theme.colors.primary};
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 17px;
   text-align: center;
 `;
@@ -111,7 +111,7 @@ const PlaceholderText = styled.Text`
 const MaterialName = styled.Text`
   color: ${({ theme }) => theme.colors.text};
   font-size: 19px;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
 `;
 
@@ -119,7 +119,7 @@ const MaterialCode = styled.Text`
   margin-top: 4px;
   color: ${({ theme }) => theme.colors.primary};
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
 `;
 
 const Divider = styled.View`
@@ -145,7 +145,7 @@ const InfoValue = styled.Text`
   max-width: 62%;
   color: ${({ theme }) => theme.colors.text};
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   text-align: right;
 `;
 
@@ -181,7 +181,7 @@ const GenerateText = styled.Text`
   margin-left: 8px;
   color: white;
   font-size: 15px;
-  font-weight: 900;
+  font-weight: 700;
 `;
 
 const ButtonRow = styled.View`
@@ -212,7 +212,7 @@ const ButtonText = styled.Text`
     $secondary ? theme.colors.primary : theme.colors.primaryDark
   )};
   font-size: 13px;
-  font-weight: 900;
+  font-weight: 700;
 `;
 
 export const labelStyles = {

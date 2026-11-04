@@ -2,15 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { useTheme } from 'styled-components/native';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
+import { InventoryScreen, useInventoryTheme } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
 import { printMaterialLabel, shareMaterialLabel } from '../services/labelService';
 import { labelStyles as S } from './LabelScreen.styles';
 
 export function LabelScreen() {
-  const theme = useTheme();
+  const theme = useInventoryTheme();
   const qrRef = useRef(null);
   const { createLabel, selectedProject, stock } = useApp();
   const [selectedId, setSelectedId] = useState(stock[0]?.id || '');
@@ -52,7 +50,7 @@ export function LabelScreen() {
   async function share(){try{setBusy(true);const ok=await shareMaterialLabel(printable(),ensureQr());if(!ok)Alert.alert('Compartilhamento indisponível','Use a opção Imprimir/Salvar PDF.');}catch(e){Alert.alert('Erro ao gerar PDF',e.message)}finally{setBusy(false)}}
   const ready=Boolean(generated&&qrBase64);
 
-  return <Screen><ScreenHeader title="Etiquetas QR"/><Scroll><Content>
+  return <InventoryScreen title="Etiquetas QR">
     <S.Intro>Selecione um material do estoque. O QR Code é gerado localmente e pode ser impresso ou compartilhado em PDF.</S.Intro>
     <S.Selector>{stock.map(entry=><S.Chip accessibilityRole="button" accessibilityState={{selected:entry.id===selected?.id}} key={entry.id} $isActive={entry.id===selected?.id} onPress={()=>select(entry.id)}><S.ChipText $isActive={entry.id===selected?.id}>{entry.code}</S.ChipText></S.Chip>)}</S.Selector>
     <S.LabelCard><S.BrandRow><S.Brand>Obra<S.BrandAccent>Sync</S.BrandAccent></S.Brand><S.Status><S.StatusText>{generated?'QR GERADO':'AGUARDANDO'}</S.StatusText></S.Status></S.BrandRow>
@@ -63,6 +61,6 @@ export function LabelScreen() {
     <S.Hint><Ionicons name="server-outline" size={21} color={theme.colors.accent}/><S.HintText>O QR contém os dados demonstrativos da etiqueta. O PDF é gerado localmente pelo Expo Print.</S.HintText></S.Hint>
     <S.GenerateButton disabled={busy||!selected} onPress={generate}><Ionicons name="qr-code-outline" size={21} color="white"/><S.GenerateText>{busy?'Processando...':'Gerar QR Code'}</S.GenerateText></S.GenerateButton>
     <S.ButtonRow><S.Button disabled={busy||!ready} onPress={print}><Ionicons name="print" size={20} color={theme.colors.primaryDark}/><S.ButtonText>Imprimir</S.ButtonText></S.Button><S.Button $secondary disabled={busy||!ready} onPress={share}><Ionicons name="share-outline" size={20} color={theme.colors.primary}/><S.ButtonText $secondary>Compartilhar PDF</S.ButtonText></S.Button></S.ButtonRow>
-  </Content></Scroll></Screen>;
+  </InventoryScreen>;
 }
 function Info({label,value}){return <S.InfoRow><S.InfoLabel>{label}</S.InfoLabel><S.InfoValue>{value}</S.InfoValue></S.InfoRow>}

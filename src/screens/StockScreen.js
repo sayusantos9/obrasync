@@ -1,9 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo, useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useTheme } from 'styled-components/native';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
+import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
 import { SCREENS, TABS } from '../navigation/routes';
@@ -20,48 +18,51 @@ const INITIAL_FORM = {
 };
 
 export function StockScreen() {
-  const theme = useTheme();
-  const { createStockMovement, currentUser, openScreen, selectTab, selectedProject, stock } = useApp();
+  const styles=useInventoryStyles(baseStyles);
+  const theme = useInventoryTheme();
+  const { createStockMovement, currentUser, openScreen, selectTab, selectedProject, stock, refreshOperations } = useApp();
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(INITIAL_FORM);
+  const [saving,setSaving]=useState(false);
+  const [query,setQuery]=useState('');
+  const [onlyAvailable,setOnlyAvailable]=useState(false);
+  const [refreshing,setRefreshing]=useState(false);
+  const selectedItem=stock.find(i=>i.code===form.materialCode.trim());
+  const filtered=useMemo(()=>stock.filter(i=>(!onlyAvailable||Number(i.quantity)>0)&&`${i.code} ${i.name}`.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(query.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())),[stock,query,onlyAvailable]);
   const canWrite = WRITABLE_ROLES.has(currentUser?.role);
-  const totalUnits = useMemo(
-    () => stock.reduce((sum, item) => sum + Number(item.quantity || 0), 0),
-    [stock],
-  );
   const setValue = (key) => (value) => setForm((current) => ({ ...current, [key]: value }));
 
   async function saveMovement() {
     const quantity = Number(String(form.quantity).replace(',', '.'));
-    if (!form.materialCode.trim() || !form.materialName.trim() || quantity <= 0) {
-      Alert.alert('Dados incompletos', 'Informe código, material e quantidade.');
+    if (!stock.some(i=>i.code===form.materialCode.trim()) || !Number.isFinite(quantity) || quantity <= 0 || !form.reason.trim()) {
+      Alert.alert('Dados incompletos', 'Informe um código já presente no estoque, quantidade e motivo. Insumos novos entram pelo recebimento de pedidos.');
       return;
     }
 
+    if(saving) return;
+    setSaving(true);
     try {
       await createStockMovement({
         ...form,
         materialCode: form.materialCode.trim(),
-        materialName: form.materialName.trim(),
+        materialName: selectedItem.name,
+        unit: selectedItem.unit,
         quantity,
       });
       setForm(INITIAL_FORM);
       setShowForm(false);
-      Alert.alert('Estoque atualizado', 'A movimentação foi aplicada localmente na demonstração.');
+      Alert.alert('Estoque atualizado', 'A movimentação foi registrada no Supabase.');
     } catch (error) {
       Alert.alert('Não foi possível movimentar', error.message);
-    }
+    } finally { setSaving(false); }
   }
 
   return (
-    <Screen>
-      <ScreenHeader title="Estoque" />
-      <Scroll>
-        <Content>
+    <InventoryScreen title="Estoque da obra">
           <View style={[styles.summary, { backgroundColor: theme.colors.primary }]}> 
             <Text style={styles.eyebrow}>{selectedProject.name.toUpperCase()}</Text>
-            <Text style={styles.big}>{stock.length} materiais</Text>
-            <Text style={styles.summaryText}>{totalUnits.toLocaleString('pt-BR')} unidades registradas</Text>
+            <Text style={styles.big}>{stock.length} insumos no estoque</Text>
+            <Text style={styles.summaryText}>Saldos por insumo e unidade, registrados no Supabase</Text>
           </View>
 
           <View style={styles.actionRow}>
@@ -72,20 +73,24 @@ export function StockScreen() {
               label="Catálogo de insumos"
               onPress={() => selectTab(TABS.MATERIALS)}
             />
-            <ActionCard
+            {canWrite && <ActionCard
               background={theme.colors.accentSoft}
               color={theme.colors.accent}
               icon="qr-code-outline"
               label="Gerar etiqueta"
               onPress={() => openScreen(SCREENS.LABEL)}
-            />
+            />}
             <ActionCard
-              background={theme.colors.successSoft}
-              color={theme.colors.success}
+              background={theme.colors.primarySoft}
+              color={theme.colors.accent}
               icon="scan-outline"
               label="Ler QR Code"
               onPress={() => openScreen(SCREENS.SCANNER)}
             />
+          </View>
+          <View style={styles.actionRow}>
+            {['MASTER','PURCHASING','REQUESTER'].includes(currentUser?.role)&&<ActionCard background={theme.colors.primarySoft} color={theme.colors.accent} icon="archive-outline" label="Receber pedido" onPress={()=>openScreen(SCREENS.RECEIPT)}/>}
+            {['MASTER','PURCHASING','REQUESTER'].includes(currentUser?.role)&&<ActionCard background={theme.colors.primarySoft} color={theme.colors.accent} icon="swap-horizontal-outline" label="Consumo e transferências" onPress={()=>openScreen(SCREENS.TRANSFERS)}/>}
           </View>
 
           {canWrite && (
@@ -107,22 +112,24 @@ export function StockScreen() {
                 <DirectionButton active={form.direction === 'OUT'} color={theme.colors.danger} background={theme.colors.dangerSoft} label="Saída" onPress={() => setValue('direction')('OUT')} theme={theme} />
               </View>
               <Input label="CÓDIGO" value={form.materialCode} onChangeText={setValue('materialCode')} theme={theme} />
-              <Input label="MATERIAL" value={form.materialName} onChangeText={setValue('materialName')} theme={theme} />
+              <Input label="INSUMO IDENTIFICADO" value={selectedItem?.name||''} editable={false} placeholder="Informe um código do estoque" theme={theme} />
               <View style={styles.row}>
-                <View style={styles.half}><Input label="UNIDADE" value={form.unit} onChangeText={setValue('unit')} theme={theme} /></View>
+                <View style={styles.half}><Input label="UNIDADE" value={selectedItem?.unit||''} editable={false} theme={theme} /></View>
                 <View style={styles.half}><Input label="QUANTIDADE" value={form.quantity} onChangeText={setValue('quantity')} keyboardType="decimal-pad" theme={theme} /></View>
               </View>
-              <Input label="LOCAL" value={form.location} onChangeText={setValue('location')} theme={theme} />
               <Input label="MOTIVO" value={form.reason} onChangeText={setValue('reason')} theme={theme} />
-              <TouchableOpacity accessibilityRole="button" onPress={saveMovement} style={[styles.save, { backgroundColor: theme.colors.primary }]}> 
+              <TouchableOpacity accessibilityRole="button" disabled={saving} onPress={saveMovement} style={[styles.save, { backgroundColor: theme.colors.primary }]}>
                 <Text style={styles.primaryText}>Salvar movimentação</Text>
               </TouchableOpacity>
             </View>
           )}
 
-          <Text style={[styles.section, { color: theme.colors.text }]}>Materiais cadastrados</Text>
-          {!stock.length && <Text style={[styles.empty, { color: theme.colors.textMuted }]}>Nenhum item no estoque. Registre um recebimento ou uma entrada.</Text>}
-          {stock.map((item) => (
+          <Text style={[styles.section, { color: theme.colors.text }]}>Saldos da obra</Text>
+          <Input label="BUSCAR NO ESTOQUE" value={query} onChangeText={setQuery} placeholder="Código ou nome do insumo" theme={theme}/>
+          <View style={[styles.choiceRow,{marginTop:12}]}>{[false,true].map(value=><DirectionButton key={String(value)} active={onlyAvailable===value} background={theme.colors.primarySoft} color={theme.colors.accent} label={value?'Com saldo':'Todos'} onPress={()=>setOnlyAvailable(value)} theme={theme}/>)}</View>
+          <TouchableOpacity accessibilityRole="button" disabled={refreshing} onPress={async()=>{setRefreshing(true);try{await refreshOperations();}catch(e){Alert.alert('Não foi possível atualizar',e.message);}finally{setRefreshing(false);}}} style={{paddingVertical:16,minHeight:44}}><Text style={{color:theme.colors.accent}}>{refreshing?'Atualizando...':`${filtered.length} insumo(s) · Atualizar saldos`}</Text></TouchableOpacity>
+          {!filtered.length && <Text style={[styles.empty, { color: theme.colors.textMuted }]}>{stock.length?'Nenhum insumo corresponde aos filtros.':'O estoque está vazio. Registre o recebimento de um pedido para adicionar insumos.'}</Text>}
+          {filtered.map((item) => (
             <View
               accessible
               accessibilityLabel={`${item.name}, ${item.quantity} ${item.unit}`}
@@ -137,16 +144,15 @@ export function StockScreen() {
                 <Text style={[styles.name, { color: theme.colors.text }]}>{item.name}</Text>
                 <Text style={[styles.meta, { color: theme.colors.textMuted }]}>{item.location || 'Local não informado'}</Text>
               </View>
-              <Text style={[styles.qty, { color: theme.colors.text }]}>{Number(item.quantity).toLocaleString('pt-BR')} {item.unit}</Text>
+              <View style={[styles.balance,{backgroundColor:theme.colors.primarySoft}]}><Text style={[styles.meta,{color:theme.colors.textMuted}]}>SALDO DISPONÍVEL</Text><Text style={[styles.qty, { color: theme.colors.accent }]}>{Number(item.quantity).toLocaleString('pt-BR')} {item.unit}</Text></View>
             </View>
           ))}
-        </Content>
-      </Scroll>
-    </Screen>
+    </InventoryScreen>
   );
 }
 
 function ActionCard({ background, color, icon, label, onPress }) {
+  const styles=useInventoryStyles(baseStyles);
   return (
     <TouchableOpacity accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={[styles.action, { backgroundColor: background }]}> 
       <Ionicons name={icon} size={24} color={color} />
@@ -156,6 +162,7 @@ function ActionCard({ background, color, icon, label, onPress }) {
 }
 
 function DirectionButton({ active, background, color, label, onPress, theme }) {
+  const styles=useInventoryStyles(baseStyles);
   return (
     <TouchableOpacity
       accessibilityRole="radio"
@@ -163,12 +170,13 @@ function DirectionButton({ active, background, color, label, onPress, theme }) {
       onPress={onPress}
       style={[styles.choice, { borderColor: active ? color : theme.colors.border, backgroundColor: active ? background : theme.colors.background }]}
     >
-      <Text style={{ color: theme.colors.text, fontWeight: '800' }}>{label}</Text>
+      <Text style={{ color: theme.colors.text, fontWeight: '600' }}>{label}</Text>
     </TouchableOpacity>
   );
 }
 
 function Input({ label, theme, ...props }) {
+  const styles=useInventoryStyles(baseStyles);
   return (
     <View style={styles.inputBlock}>
       <Text style={[styles.label, { color: theme.colors.textMuted }]}>{label}</Text>
@@ -182,32 +190,33 @@ function Input({ label, theme, ...props }) {
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   summary: { borderRadius: 22, marginTop: 18, padding: 18 },
-  eyebrow: { color: 'rgba(255,255,255,.7)', fontSize: 10, fontWeight: '900' },
-  big: { color: '#FFFFFF', fontSize: 27, fontWeight: '900', marginTop: 8 },
+  eyebrow: { color: 'rgba(255,255,255,.7)', fontSize: 12, fontWeight: '700' },
+  big: { color: '#FFFFFF', fontSize: 27, fontWeight: '700', marginTop: 8 },
   summaryText: { color: 'rgba(255,255,255,.75)', fontSize: 12, marginTop: 3 },
-  actionRow: { flexDirection: 'row', gap: 10, marginTop: 14 },
-  action: { alignItems: 'center', borderRadius: 17, flex: 1, padding: 14 },
-  actionText: { fontSize: 12, fontWeight: '900', marginTop: 7 },
+  actionRow: { flexDirection: 'row', flexWrap:'wrap', gap: 10, marginTop: 14 },
+  action: { alignItems: 'center', borderRadius: 17, flex: 1, minWidth:90, padding: 14 },
+  actionText: { fontSize: 12, fontWeight: '700', marginTop: 7 },
   primary: { alignItems: 'center', borderRadius: 15, flexDirection: 'row', justifyContent: 'center', marginTop: 14, minHeight: 52 },
-  primaryText: { color: '#FFFFFF', fontSize: 14, fontWeight: '900', marginLeft: 7 },
+  primaryText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', marginLeft: 7 },
   form: { borderRadius: 18, borderWidth: 1, marginTop: 12, padding: 14 },
   choiceRow: { flexDirection: 'row', gap: 8 },
   choice: { alignItems: 'center', borderRadius: 12, borderWidth: 1, flex: 1, padding: 11 },
   inputBlock: { marginTop: 12 },
-  label: { fontSize: 10, fontWeight: '900', marginBottom: 6 },
+  label: { fontSize: 12, fontWeight: '700', marginBottom: 6 },
   input: { borderRadius: 12, borderWidth: 1, minHeight: 48, paddingHorizontal: 12 },
   row: { flexDirection: 'row', gap: 10 },
   half: { flex: 1 },
   save: { alignItems: 'center', borderRadius: 13, justifyContent: 'center', marginTop: 16, minHeight: 50 },
-  section: { fontSize: 19, fontWeight: '900', marginBottom: 4, marginTop: 24 },
+  section: { fontSize: 19, fontWeight: '700', marginBottom: 4, marginTop: 24 },
   empty: { fontSize: 13, lineHeight: 20, marginTop: 12, textAlign: 'center' },
-  card: { alignItems: 'center', borderRadius: 17, borderWidth: 1, flexDirection: 'row', marginTop: 10, padding: 13 },
+  card: { alignItems: 'center', borderRadius: 18, borderWidth: 1, flexDirection: 'row', flexWrap:'wrap', marginTop: 12, padding: 16 },
+  balance: {width:'100%',borderRadius:12,padding:12,marginTop:14},
   icon: { alignItems: 'center', borderRadius: 13, height: 44, justifyContent: 'center', width: 44 },
   info: { flex: 1, marginLeft: 11 },
-  code: { fontSize: 10, fontWeight: '900' },
-  name: { fontSize: 14, fontWeight: '900', marginTop: 2 },
-  meta: { fontSize: 10, marginTop: 3 },
-  qty: { fontSize: 13, fontWeight: '900' },
+  code: { fontSize: 12, fontWeight: '700' },
+  name: { fontSize: 14, fontWeight: '700', marginTop: 2 },
+  meta: { fontSize: 12, marginTop: 3 },
+  qty: { fontSize: 13, fontWeight: '700' },
 });

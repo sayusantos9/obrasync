@@ -1,17 +1,15 @@
 import { ScannerActions } from '../components/scanner/ScannerActions';
 import { ScannerCameraPanel } from '../components/scanner/ScannerCameraPanel';
-import { ScannerHeader } from '../components/scanner/ScannerHeader';
-import { Screen } from '../components/ui/primitives';
-import { useApp } from '../contexts/AppContext';
+import { InventoryScreen } from '../components/layout/InventoryScreen';
+import {Text,TouchableOpacity} from 'react-native';
 import { useScanner } from '../hooks/useScanner';
 
 export function ScannerScreen() {
-  const { goBack } = useApp();
   const scanner = useScanner();
 
   return (
-    <Screen>
-      <ScannerHeader onBack={goBack} onHelp={scanner.handleHelp} />
+    <InventoryScreen title="Ler código">
+      <TouchableOpacity accessibilityRole="button" onPress={scanner.handleHelp} style={{paddingVertical:14,minHeight:44}}><Text style={{color:'#0066BE'}}>Como identificar um insumo</Text></TouchableOpacity>
 
       <ScannerCameraPanel
         hasPermission={scanner.hasCameraPermission}
@@ -27,6 +25,6 @@ export function ScannerScreen() {
         onPrimaryAction={scanner.handlePrimaryAction}
         onManualCode={scanner.handleManualCode}
       />
-    </Screen>
+    </InventoryScreen>
   );
 }

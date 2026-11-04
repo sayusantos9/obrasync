@@ -8,6 +8,9 @@ import { Content, Screen, Scroll } from '../components/ui/primitives';
 import { useApp } from '../contexts/AppContext';
 import { theme } from '../theme';
 import { requestMaterialStyles as styles } from './RequestMaterialScreen.styles';
+import { parseDecimal } from '../utils/bdi';
+import { useRef } from 'react';
+import { operationId } from '../services/requestQueue';
 
 const DEFAULT_REQUEST_FORM = {
   material: '',
@@ -19,6 +22,7 @@ const DEFAULT_REQUEST_FORM = {
 
 export function RequestMaterialScreen() {
   const { goBack, isOffline, submitMaterialRequest } = useApp();
+  const requestId=useRef(operationId());
   const {
     control,
     handleSubmit,
@@ -28,15 +32,16 @@ export function RequestMaterialScreen() {
 
   async function handleSaveRequest(formValues) {
     try {
-      const savedRequest = await submitMaterialRequest(formValues);
+      const savedRequest = await submitMaterialRequest({...formValues,clientRequestId:requestId.current,quantity:parseDecimal(formValues.quantity)});
+      requestId.current=operationId();
       reset(DEFAULT_REQUEST_FORM);
       Alert.alert(
-        'Solicitação registrada localmente',
-        `${savedRequest.id}\n${savedRequest.status}\nRegistro de demonstração. Não enviado ao servidor.`,
+        savedRequest.status==='QUEUED'?'Solicitação na fila do aparelho':'Solicitação salva no Supabase',
+        savedRequest.status==='QUEUED'?`Abra Mais → Solicitações pendentes para enviar. ${savedRequest.message || ''}`:`${savedRequest.id}\nAguardando atendimento`,
         [{ text: 'Concluir', onPress: goBack }],
       );
-    } catch {
-      Alert.alert('Erro', 'Não foi possível registrar a solicitação.');
+    } catch (error) {
+      Alert.alert('Erro', error.message || 'Não foi possível registrar a solicitação.');
     }
   }
 
@@ -66,7 +71,7 @@ export function RequestMaterialScreen() {
               placeholder="120"
               rules={{
                 required: 'Obrigatório.',
-                validate: (quantity) => Number(quantity) > 0 || 'Valor inválido.',
+                validate: (quantity) => Number.isFinite(parseDecimal(quantity)) && parseDecimal(quantity) > 0 || 'Valor inválido.',
               }}
               containerStyle={styles.halfField}
             />

@@ -8,12 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useTheme } from 'styled-components/native';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
+import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
 
 function TransferField({ label, theme, ...inputProps }) {
+  const styles=useInventoryStyles(baseStyles);
   return (
     <View style={styles.field}>
       <Text style={[styles.label, { color: theme.colors.textMuted }]}>{label}</Text>
@@ -35,11 +34,13 @@ function TransferField({ label, theme, ...inputProps }) {
 }
 
 export function TransfersScreen() {
-  const theme = useTheme();
-  const { createStockMovement, stock } = useApp();
+  const styles=useInventoryStyles(baseStyles);
+  const theme = useInventoryTheme();
+  const { createStockMovement, stock, projects, selectedProject, currentUser } = useApp();
   const [code, setCode] = useState('');
   const [quantity, setQuantity] = useState('');
   const [destination, setDestination] = useState('');
+  const [destinationProjectId,setDestinationProjectId]=useState('');
   const [isSaving, setIsSaving] = useState(false);
 
   const material = useMemo(() => {
@@ -77,14 +78,16 @@ export function TransfersScreen() {
         materialName: material.name,
         unit: material.unit,
         quantity: numericQuantity,
+        destinationProjectId: destinationProjectId || null,
         direction: 'OUT',
-        reason: `Transferência para ${destination.trim()}`,
+        reason: destination.trim(),
       });
 
       setCode('');
       setQuantity('');
       setDestination('');
-      Alert.alert('Transferência registrada', 'A movimentação foi registrada localmente.');
+      setDestinationProjectId('');
+      Alert.alert('Movimentação registrada', 'Movimentação e saldo atualizados no Supabase.');
     } catch (error) {
       Alert.alert('Não foi possível transferir', error.message);
     } finally {
@@ -93,16 +96,16 @@ export function TransfersScreen() {
   }
 
   return (
-    <Screen>
-      <ScreenHeader title="Transferências" />
-      <Scroll>
-        <Content>
+    <InventoryScreen title="Consumo e transferências">
+          <Text style={{color:theme.colors.text,marginTop:12}}>Para consumo, descreva o local/motivo no destino. Para transferir, selecione outra obra abaixo.</Text>
+          <TouchableOpacity accessibilityRole="radio" accessibilityState={{checked:!destinationProjectId}} onPress={()=>setDestinationProjectId('')} style={{padding:12}}><Text style={{color:theme.colors.primary}}>{!destinationProjectId?'✓ ':''}Consumo nesta obra</Text></TouchableOpacity>
+          {currentUser?.role!=='REQUESTER' && projects.filter(p=>p.id!==selectedProject?.id).map(p=><TouchableOpacity key={p.id} accessibilityRole="radio" accessibilityState={{checked:destinationProjectId===p.id}} onPress={()=>setDestinationProjectId(p.id)} style={{padding:12}}><Text style={{color:theme.colors.primary}}>{destinationProjectId===p.id?'✓ ':''}Transferir para {p.name}</Text></TouchableOpacity>)}
           <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}> 
-            <View style={[styles.heroIcon, { backgroundColor: theme.colors.accent }]}> 
+          <View style={[styles.heroIcon, { backgroundColor: theme.colors.accent }]}>
               <Ionicons name="swap-horizontal" size={26} color="#FFFFFF" />
             </View>
             <View style={styles.heroCopy}>
-              <Text style={styles.heroTitle}>Transferir material</Text>
+              <Text style={styles.heroTitle}>{destinationProjectId?'Transferir insumo':'Registrar consumo'}</Text>
               <Text style={styles.heroText}>
                 Registre a saída para outro setor, depósito ou canteiro.
               </Text>
@@ -142,7 +145,7 @@ export function TransfersScreen() {
               value={quantity}
             />
             <TransferField
-              label="DESTINO"
+              label="MOTIVO / LOCAL DE UTILIZAÇÃO"
               onChangeText={setDestination}
               placeholder="Ex.: Almoxarifado bloco B"
               theme={theme}
@@ -161,17 +164,15 @@ export function TransfersScreen() {
             >
               <Ionicons name="swap-horizontal" size={19} color="#FFFFFF" />
               <Text style={styles.buttonText}>
-                {isSaving ? 'Registrando...' : 'Registrar transferência'}
+                {isSaving ? 'Registrando...' : 'Registrar movimentação'}
               </Text>
             </TouchableOpacity>
           </View>
-        </Content>
-      </Scroll>
-    </Screen>
+    </InventoryScreen>
   );
 }
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   hero: {
     alignItems: 'center',
     borderRadius: 22,
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     width: 50,
   },
   heroCopy: { flex: 1, marginLeft: 13 },
-  heroTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '900' },
+  heroTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '700' },
   heroText: {
     color: 'rgba(255,255,255,.76)',
     fontSize: 12,
@@ -197,12 +198,12 @@ const styles = StyleSheet.create({
   form: {
     borderRadius: 18,
     borderWidth: 1,
-    marginBottom: 110,
+    marginBottom: 12,
     marginTop: 16,
     padding: 14,
   },
   field: { marginTop: 12 },
-  label: { fontSize: 10, fontWeight: '900', marginBottom: 6 },
+  label: { fontSize: 12, fontWeight: '700', marginBottom: 6 },
   input: {
     borderRadius: 12,
     borderWidth: 1,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     paddingVertical: 9,
   },
-  materialFoundText: { flex: 1, fontSize: 11, fontWeight: '800', marginLeft: 7 },
+  materialFoundText: { flex: 1, fontSize: 11, fontWeight: '600', marginLeft: 7 },
   button: {
     alignItems: 'center',
     borderRadius: 13,
@@ -226,6 +227,6 @@ const styles = StyleSheet.create({
     marginTop: 18,
     minHeight: 54,
   },
-  buttonText: { color: '#FFFFFF', fontSize: 14, fontWeight: '900', marginLeft: 7 },
+  buttonText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700', marginLeft: 7 },
   disabled: { opacity: 0.6 },
 });
