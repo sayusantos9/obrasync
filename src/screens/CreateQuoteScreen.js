@@ -1,53 +1,53 @@
-import { useState } from 'react';
-import { ProjectSelector } from '../components/budget/ProjectSelector';
-import { Alert,StyleSheet,Text,TouchableOpacity,View } from 'react-native';
-import { useForm } from 'react-hook-form';
-import { LineItemsEditor } from '../components/documents/LineItemsEditor';
-import { CalendarField } from '../components/forms/CalendarField';
-import { FormField } from '../components/forms/FormField';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
-import { useApp } from '../contexts/AppContext';
-import { QUOTE_TEMPLATE } from '../data/quoteTemplate';
-import { TABS } from '../navigation/routes';
-import { theme } from '../theme';
-
-const DEFAULT_VALUES={title:'',clientName:'',clientDocument:'',supplierName:'',supplierDocument:'',supplierContact:'',supplierEmail:'',validUntil:'',paymentTerms:'',notes:''};
+import {QuoteRequestPicker} from '../components/procurement/QuoteRequestPicker';
+import {OriginCard} from '../components/procurement/OriginCard';
+import {prepareRequestItems} from '../utils/procurementTrace';
+import {SupplierPicker} from '../components/forms/SupplierPicker';
+import {useEffect,useState} from 'react';
+import {Alert} from 'react-native';
+import {useForm} from 'react-hook-form';
+import {AccessibleView as View,AccessibleTouchableOpacity as Button} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+import {InventoryScreen,useInventoryTheme} from '../components/layout/InventoryScreen';
+import {ProjectSelector} from '../components/budget/ProjectSelector';
+import {CostInputEditor} from '../components/budget/CostInputEditor';
+import {CalendarField} from '../components/forms/CalendarField';
+import {FormField} from '../components/forms/FormField';
+import {useApp} from '../contexts/AppContext';
+const defaults={title:'',roundTitle:'',supplierName:'',supplierDocument:'',supplierContact:'',supplierEmail:'',clientName:'',clientDocument:'',validUntil:'',expectedAt:'',paymentTerms:'',freight:'0',taxes:'0',discount:'0',notes:''};
 export function CreateQuoteScreen(){
- const {addQuote,goBack,selectedProject,selectTab}=useApp();
- const [items,setItems]=useState([]);
- const {control,handleSubmit,setValue,formState:{isSubmitting}}=useForm({defaultValues:DEFAULT_VALUES});
- function applyTemplate(){
-   setValue('title',QUOTE_TEMPLATE.title,{shouldValidate:true});
-   setValue('paymentTerms',QUOTE_TEMPLATE.paymentTerms);
-   setValue('notes',QUOTE_TEMPLATE.notes);
-   Alert.alert('Modelo-base aplicado','Preencha os dados reais do fornecedor, o cliente, a validade e os itens. Nenhum preço fictício foi adicionado.');
+ const {addQuote,goBack,selectedProject,quotes=[],costInputs=[],currentScreenParams={}}=useApp(),theme=useInventoryTheme();
+ const [supplier,setSupplier]=useState(null),[request,setRequest]=useState(null);
+ const [items,setItems]=useState([]),[roundId,setRoundId]=useState(null);
+ const {control,handleSubmit,reset,formState:{isSubmitting}}=useForm({defaultValues:defaults,shouldUnregister:true});
+ useEffect(()=>{setRequest(null);setSupplier(null);setItems([]);setRoundId(null);reset(defaults);},[selectedProject?.id,reset]);
+ const rounds=[...new Map(quotes.filter(q=>q.projectId===selectedProject?.id&&q.roundId&&!q.awardedQuoteId).map(q=>[q.roundId,q])).values()];
+ const text={color:theme.colors.text,fontSize:14},heading={...text,fontSize:19,fontWeight:'700',marginTop:20},button={backgroundColor:theme.colors.primarySoft,padding:16,borderRadius:12,marginTop:10,minHeight:48};
+ function chooseRound(q){Alert.alert('Usar itens da rodada?', 'Os itens atuais serão substituídos pelos mesmos insumos e quantidades desta rodada. Informe os preços do novo fornecedor.',[{text:'Cancelar',style:'cancel'},{text:'Usar rodada',onPress:()=>{setRoundId(q.roundId);setRequest(q.originSnapshot?.request?{...q.originSnapshot.request,needed_by:q.originSnapshot.request.neededBy}:null);setItems(q.items.map(i=>({...i,unitPrice:'',total:0})));}}]);}
+ function chooseRequest(r){
+  const existing=r?.round?quotes.find(q=>q.roundId===r.round.id):null;
+  setRequest(r);setRoundId(r?.round?.id||null);
+  setItems(existing?existing.items.map(i=>({...i,unitPrice:'',total:0})):prepareRequestItems(r,costInputs));
  }
- async function save(formValues){
-   if(!selectedProject?.id){Alert.alert('Obra obrigatória','Selecione uma obra antes de salvar.');return;}
-   if(!items.length){Alert.alert('Cotação sem itens','Adicione pelo menos um material ou serviço.');return;}
-   try{const q=await addQuote({...formValues,items});
-     Alert.alert('Cotação salva no Supabase',`${q.number} • ${q.items.length} item(ns).`,[{text:'Concluir',onPress:goBack}]);
-   }catch(error){Alert.alert('Erro ao salvar cotação',error?.message||'Revise a conexão e tente novamente.');}
- }
- return <Screen><ScreenHeader title="Nova cotação"/><Scroll><Content>
-   <ProjectSelector label="OBRA DA COTAÇÃO"/>
-   <View style={styles.projectCard}><Text style={styles.projectLabel}>OBRA ATIVA</Text><Text style={styles.projectName}>{selectedProject?.name||'Nenhuma obra selecionada'}</Text>
-     {!selectedProject&&<TouchableOpacity style={styles.choose} onPress={()=>selectTab(TABS.PROJECTS)}><Text style={styles.chooseText}>Selecionar obra</Text></TouchableOpacity>}</View>
-   <View style={styles.model}><Text style={styles.modelTitle}>Modelo-base de cotação</Text><Text style={styles.modelDesc}>Estrutura sugerida: identificação, cliente, fornecedor, condição de pagamento, validade e itens com valores reais.</Text>
-     <TouchableOpacity style={styles.modelButton} onPress={applyTemplate}><Text style={styles.modelText}>Usar modelo-base</Text></TouchableOpacity></View>
-   <Text style={styles.section}>Identificação</Text><FormField control={control} name="title" label="TÍTULO / REFERÊNCIA" placeholder="Ex.: Cotação de materiais elétricos" rules={{required:'Informe o título.'}}/>
-   <Text style={styles.section}>Cliente</Text><FormField control={control} name="clientName" label="NOME / RAZÃO SOCIAL" placeholder="Cliente" rules={{required:'Informe o cliente.'}}/>
-   <FormField control={control} name="clientDocument" label="CPF / CNPJ" placeholder="00.000.000/0001-00"/>
-   <Text style={styles.section}>Fornecedor</Text><FormField control={control} name="supplierName" label="NOME / RAZÃO SOCIAL" placeholder="Fornecedor" rules={{required:'Informe o fornecedor.'}}/>
-   <FormField control={control} name="supplierDocument" label="CNPJ" placeholder="00.000.000/0001-00"/>
-   <FormField control={control} name="supplierContact" label="CONTATO" placeholder="Nome ou telefone"/>
-   <FormField control={control} autoCapitalize="none" keyboardType="email-address" name="supplierEmail" label="E-MAIL" placeholder="vendas@fornecedor.com" rules={{pattern:{value:/^$|\S+@\S+\.\S+$/,message:'E-mail inválido.'}}}/>
-   <CalendarField control={control} name="validUntil" label="VALIDADE DA COTAÇÃO" rules={{required:'Informe a validade.'}}/>
-   <FormField control={control} name="paymentTerms" label="CONDIÇÃO DE PAGAMENTO" placeholder="Ex.: PIX, boleto, 30 dias"/>
-   <LineItemsEditor items={items} onChange={setItems} title="Materiais e serviços cotados"/>
-   <FormField control={control} multiline name="notes" label="OBSERVAÇÕES" placeholder="Frete, entrega e garantia"/>
-   <TouchableOpacity disabled={isSubmitting||!selectedProject} onPress={handleSubmit(save)} style={[styles.save,(isSubmitting||!selectedProject)&&{opacity:.5}]}><Text style={styles.saveText}>{isSubmitting?'Salvando...':'Salvar cotação'}</Text></TouchableOpacity>
- </Content></Scroll></Screen>;
+ async function save(values){try{if(!supplier)throw new Error('Selecione um fornecedor cadastrado.');if(request&&items.length!==(request.items||[]).length)throw new Error('Associe todos os itens da solicitação ao catálogo.');const q=await addQuote({...values,requestId:request?.id||null,supplierId:supplier.id,supplierName:supplier.name,roundId,items});Alert.alert('Proposta salva',`${q.number}. Consulte o mapa comparativo em Cotações.`,[{text:'Concluir',onPress:goBack}]);}catch(e){Alert.alert('Revise a proposta',e.message);}}
+ return <InventoryScreen title="Nova cotação" bottomTabs={false}><ProjectSelector label="OBRA DA COTAÇÃO"/>
+ <View style={{padding:20,borderRadius:20,backgroundColor:theme.colors.primary,marginTop:16}}><Text style={{color:'#FFF',fontSize:24,fontWeight:'700'}}>Compare antes de comprar.</Text><Text style={{color:'#DCE4F0',marginTop:10}}>Uma rodada reúne propostas de fornecedores para os mesmos insumos, unidades e quantidades.</Text></View>
+ <Text style={heading}>Rodada de cotações</Text><Button accessibilityRole="radio" accessibilityState={{checked:!roundId}} style={button} onPress={()=>{setRoundId(null);setRequest(null);setItems([]);}}><Text style={text}>{!roundId?'● ':'○ '}Criar nova rodada</Text></Button>
+ {rounds.map(q=><Button key={q.roundId} accessibilityRole="radio" accessibilityState={{checked:roundId===q.roundId}} style={button} onPress={()=>chooseRound(q)}><Text style={text}>{roundId===q.roundId?'● ':'○ '}{q.roundTitle}</Text></Button>)}
+ {!roundId&&<FormField control={control} name="roundTitle" label="NOME DA RODADA" rules={{required:'Informe o nome da rodada.'}} placeholder="Ex.: Elétrica — etapa 1"/>}
+ <QuoteRequestPicker projectId={selectedProject?.id} initialRequestId={currentScreenParams.requestId} request={request} roundId={roundId} items={items} onChoose={chooseRequest} onMap={item=>setItems(previous=>[...previous.filter(i=>i.requestItemId!==item.requestItemId),item])} disabled={isSubmitting}/>
+ {roundId&&<OriginCard origin={quotes.find(q=>q.roundId===roundId)?.originSnapshot} traceVersion={quotes.find(q=>q.roundId===roundId)?.traceVersion}/>}
+ <FormField control={control} name="title" label="TÍTULO DA PROPOSTA" rules={{required:'Informe o título.'}}/>
+ <Text style={heading}>Fornecedor e condições</Text>
+ <SupplierPicker value={supplier} onChange={setSupplier} disabled={isSubmitting}/>
+ <CalendarField control={control} name="validUntil" label="VALIDADE DA PROPOSTA" rules={{required:'Informe a validade.'}}/>
+ <CalendarField control={control} name="expectedAt" label="ENTREGA PREVISTA" rules={{required:'Informe a entrega prevista.'}}/>
+ <FormField control={control} name="paymentTerms" label="CONDIÇÃO DE PAGAMENTO" placeholder="Ex.: PIX ou boleto em 30 dias"/>
+ <CostInputEditor editablePrices lockedItems={!!roundId||!!request} items={items} onChange={setItems} disabled={!selectedProject||isSubmitting}/>
+ {roundId&&<Text style={text}>Mantenha os códigos, unidades e quantidades da rodada. O servidor rejeita propostas com itens incompatíveis.</Text>}
+ <FormField control={control} name="freight" label="FRETE (R$)" keyboardType="decimal-pad"/>
+ <FormField control={control} name="taxes" label="TRIBUTOS ADICIONAIS NÃO INCLUSOS (R$)" keyboardType="decimal-pad"/>
+ <FormField control={control} name="discount" label="DESCONTO (R$)" keyboardType="decimal-pad"/>
+ <FormField control={control} name="notes" label="ESPECIFICAÇÃO, MARCA E OBSERVAÇÕES" multiline placeholder="Registre diferenças de marca, garantia e condições para avaliação técnica."/>
+ <Button accessibilityRole="button" accessibilityLabel="Salvar proposta" disabled={isSubmitting||!selectedProject} onPress={handleSubmit(save)} style={[button,{backgroundColor:theme.colors.accent,marginBottom:30,opacity:(isSubmitting||!selectedProject)?0.5:1}]}><Text style={{color:'#FFF',fontWeight:'700',textAlign:'center'}}>{isSubmitting?'Salvando…':'Salvar proposta'}</Text></Button>
+ </InventoryScreen>;
 }
-const styles=StyleSheet.create({projectCard:{backgroundColor:theme.colors.primarySoft,borderRadius:16,marginTop:20,padding:16},projectLabel:{color:theme.colors.primary,fontSize:11,fontWeight:'900'},projectName:{color:theme.colors.primaryDark,fontSize:16,fontWeight:'900',marginTop:4},choose:{backgroundColor:'#FFF',borderRadius:9,marginTop:12,padding:12,alignSelf:'flex-start'},chooseText:{color:theme.colors.primary,fontWeight:'900'},section:{color:theme.colors.text,fontSize:18,fontWeight:'900',marginTop:24},model:{backgroundColor:'#FFF',borderColor:theme.colors.border,borderWidth:1,borderRadius:16,padding:16,marginTop:17},modelTitle:{color:theme.colors.text,fontSize:16,fontWeight:'900'},modelDesc:{color:theme.colors.textMuted,fontSize:12,marginTop:5,lineHeight:17},modelButton:{backgroundColor:theme.colors.accentSoft,padding:13,marginTop:12,borderRadius:10,alignItems:'center'},modelText:{color:theme.colors.primaryDark,fontWeight:'900'},save:{backgroundColor:theme.colors.primary,borderRadius:16,marginVertical:25,minHeight:56,alignItems:'center',justifyContent:'center'},saveText:{color:'#FFF',fontSize:16,fontWeight:'900'}});

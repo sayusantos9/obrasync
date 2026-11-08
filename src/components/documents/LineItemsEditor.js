@@ -1,6 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
+
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet} from 'react-native';
 import { theme } from '../../theme';
 import { formatCurrency, parseCurrencyInput } from '../../utils/currency';
 

@@ -1,7 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity} from '../accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../accessibility/ReadableText';
+
 import styled from 'styled-components/native';
 
-const Row = styled.TouchableOpacity`
+const Row = styled(AccessibleTouchableOpacity)`
   min-height: 62px;
   margin-top: 12px;
   padding: 0 15px;
@@ -12,7 +15,7 @@ const Row = styled.TouchableOpacity`
   border-radius: 16px;
 `;
 
-const IconBox = styled.View`
+const IconBox = styled(AccessibleView)`
   width: 38px;
   height: 38px;
   align-items: center;
@@ -21,7 +24,7 @@ const IconBox = styled.View`
   border-radius: 12px;
 `;
 
-const Label = styled.Text`
+const Label = styled(ReadableText)`
   flex: 1;
   margin-left: 12px;
   color: ${({ theme }) => theme.colors.text};

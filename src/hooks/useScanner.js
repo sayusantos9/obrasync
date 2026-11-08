@@ -1,6 +1,6 @@
 import { useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
-import { Alert } from 'react-native';
+import { useEffect,useRef,useState } from 'react';
+import { Alert,AppState,Linking } from 'react-native';
 import { useApp } from '../contexts/AppContext';
 import { labelApi } from '../services/labelApi';
 import {
@@ -11,20 +11,25 @@ import {
 
 export function useScanner() {
   const { stock } = useApp();
-  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
+  const [cameraPermission, requestCameraPermission,refreshCameraPermission] = useCameraPermissions();
+  const scanLock=useRef(false);
   const [isFlashEnabled, setIsFlashEnabled] = useState(false);
   const [isScanned, setIsScanned] = useState(false);
   const hasCameraPermission = Boolean(cameraPermission?.granted);
+  useEffect(()=>{const listener=AppState.addEventListener('change',state=>{setIsFlashEnabled(false);if(state==='active')refreshCameraPermission().catch(()=>{});});return()=>listener.remove();},[refreshCameraPermission]);
 
   function resetScanner() {
+    scanLock.current=false;
     setIsScanned(false);
   }
 
   function showResult(title, message, buttonLabel = 'Concluir') {
-    Alert.alert(title, message, [{ text: buttonLabel, onPress: resetScanner }]);
+    Alert.alert(title, message, [{ text: buttonLabel, onPress: resetScanner }],{cancelable:false});
   }
 
   async function handleBarcodeScanned({ data, type }) {
+    if(scanLock.current)return;
+    scanLock.current=true;
     setIsScanned(true);
 
     const labelId = labelApi.getIdFromQr(data);
@@ -71,7 +76,10 @@ export function useScanner() {
 
   async function handlePrimaryAction() {
     if (!hasCameraPermission) {
-      await requestCameraPermission();
+      try{
+        if(cameraPermission?.canAskAgain===false)await Linking.openSettings();
+        else await requestCameraPermission();
+      }catch{Alert.alert('Permissão da câmera','Não foi possível solicitar acesso. Confira a permissão de câmera nas configurações do celular.');}
       return;
     }
     resetScanner();
@@ -99,7 +107,7 @@ export function useScanner() {
     hasCameraPermission,
     isFlashEnabled,
     isScanned,
-    primaryActionLabel: getScannerActionLabel(hasCameraPermission, isScanned),
+    primaryActionLabel: !hasCameraPermission&&cameraPermission?.canAskAgain===false?'Abrir configurações da câmera':getScannerActionLabel(hasCameraPermission, isScanned),
     toggleFlash: () => setIsFlashEnabled((currentValue) => !currentValue),
   };
 }

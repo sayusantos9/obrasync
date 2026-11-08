@@ -1,6 +1,8 @@
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity,AccessibleScrollView,AccessibleScrollView as ScrollView} from '../components/accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../components/accessibility/ReadableText';
 import styled from 'styled-components/native';
 
-export const Header = styled.View`
+export const Header = styled(AccessibleView)`
   padding: 52px 20px 24px;
   flex-direction: row;
   align-items: center;
@@ -8,17 +10,17 @@ export const Header = styled.View`
   background-color: ${({ theme }) => theme.colors.primary};
 `;
 
-export const Title = styled.Text`
+export const Title = styled(ReadableText)`
   color: white;
   font-size: 28px;
   font-weight: 900;
 `;
 
-export const MarkButton = styled.TouchableOpacity`
+export const MarkButton = styled(AccessibleTouchableOpacity)`
   padding: 10px;
 `;
 
-export const FilterRow = styled.ScrollView.attrs({
+export const FilterRow = styled(AccessibleScrollView).attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
 })`
@@ -26,7 +28,7 @@ export const FilterRow = styled.ScrollView.attrs({
   padding-left: 20px;
 `;
 
-export const FilterChip = styled.TouchableOpacity`
+export const FilterChip = styled(AccessibleTouchableOpacity)`
   height: 38px;
   margin-right: 8px;
   padding: 0 16px;
@@ -39,7 +41,7 @@ export const FilterChip = styled.TouchableOpacity`
   border-radius: 20px;
 `;
 
-export const FilterText = styled.Text`
+export const FilterText = styled(ReadableText)`
   color: ${({ $isActive, theme }) => (
     $isActive ? 'white' : theme.colors.textMuted
   )};
@@ -47,7 +49,7 @@ export const FilterText = styled.Text`
   font-weight: 800;
 `;
 
-export const AlertCard = styled.TouchableOpacity`
+export const AlertCard = styled(AccessibleTouchableOpacity)`
   margin-top: 12px;
   padding: 16px;
   flex-direction: row;
@@ -57,7 +59,7 @@ export const AlertCard = styled.TouchableOpacity`
   border-radius: 18px;
 `;
 
-export const AlertIcon = styled.View`
+export const AlertIcon = styled(AccessibleView)`
   width: 46px;
   height: 46px;
   align-items: center;
@@ -66,25 +68,25 @@ export const AlertIcon = styled.View`
   border-radius: 15px;
 `;
 
-export const AlertInfo = styled.View`
+export const AlertInfo = styled(AccessibleView)`
   flex: 1;
   margin-left: 12px;
 `;
 
-export const AlertTitle = styled.Text`
+export const AlertTitle = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.text};
   font-size: 15px;
   font-weight: 900;
 `;
 
-export const Description = styled.Text`
+export const Description = styled(ReadableText)`
   margin-top: 4px;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 12px;
   line-height: 17px;
 `;
 
-export const Time = styled.Text`
+export const Time = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 11px;
 `;

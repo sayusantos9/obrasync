@@ -1,6 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleFlatList as FlatList,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleScrollView as ScrollView,AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Linking, StyleSheet} from 'react-native';
 import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../contexts/AppContext';
@@ -78,7 +81,7 @@ export function MaterialsScreen() {
       </TouchableOpacity>}
       <Text style={[styles.notice, { color: theme.colors.textMuted }]}>Preços das fontes cadastradas, não ofertas atuais das lojas. Consulte a data-base nos detalhes. Quantidades de referência não são saldo em estoque.</Text>
       {canRead && <>
-        {filters('CATEGORIA NA PLANILHA', categories, category, setCategory)}
+        {filters('CATEGORIA DO INSUMO', categories, category, setCategory)}
         {filters('BASE DE ORIGEM', banks, bank, setBank)}
         <View style={styles.summary}>
           <Text style={[styles.count, { color: theme.colors.text }]}>{visible.length} de {items.length} insumos</Text>
@@ -112,11 +115,13 @@ export function MaterialsScreen() {
       {expanded && <View style={[styles.details, { borderColor: theme.colors.border }]}>
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Identificador interno: {item.catalog_code}</Text>
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Código de origem: {item.source_code || 'Não informado'}</Text>
-        <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Categoria na planilha: {item.category || 'Não informada'}</Text>
+        <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Categoria: {item.category || 'Não informada'}</Text>
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>{item.source_page ? 'Quantidade global não importada. Os coeficientes pertencem às composições do arquivo de origem.' : `Quantidade de referência: ${Number(item.reference_quantity).toLocaleString('pt-BR', { maximumFractionDigits: 12 })} ${item.unit}`}</Text>
-        {!item.source_page && <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Valor da linha na planilha: {formatCurrency(Number(item.reference_value))}</Text>}
+        {!item.source_page && !item.source_url && <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Valor da linha na planilha: {formatCurrency(Number(item.reference_value))}</Text>}
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Data-base: {item.reference_date || 'Não informada'}</Text>
         <Text style={[styles.detail, { color: theme.colors.textMuted }]}>Origem: {item.source_file} · {item.source_page ? `página ${item.source_page}` : `linha ${item.source_row}`}</Text>
+        {!!item.reference_notes&&<Text style={[styles.detail,{color:theme.colors.textMuted}]}>{item.reference_notes}</Text>}
+        {!!item.source_url&&<TouchableOpacity accessibilityRole="link" onPress={()=>Linking.openURL(item.source_url).catch(()=>Alert.alert('Não foi possível abrir a fonte'))} style={{paddingVertical:14}}><Text style={{color:theme.colors.accent,textDecorationLine:'underline'}}>Consultar produto na fonte</Text></TouchableOpacity>}
       </View>}
     </TouchableOpacity>;
   }

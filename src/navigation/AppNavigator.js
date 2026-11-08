@@ -1,4 +1,6 @@
-import { ActivityIndicator, KeyboardAvoidingView, Text, TouchableOpacity, View } from 'react-native';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+import { ActivityIndicator, KeyboardAvoidingView} from 'react-native';
 import { canAccessRoute, requiresProject } from '../utils/permissions';
 import { useTheme } from 'styled-components/native';
 import { BottomTabs } from '../components/layout/BottomTabs';
@@ -21,9 +23,10 @@ export function AppNavigator() {
   const clientHome = isAuthReady && currentUser?.role === USER_ROLES.CLIENT && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   const engineeringHome = isAuthReady && currentUser?.role === USER_ROLES.ENGINEERING && currentScreen === SCREENS.TABS && activeTab === TABS.HOME;
   const projectsScreen = currentScreen === SCREENS.TABS && activeTab === TABS.PROJECTS;
+  const operationalHeader = [SCREENS.SECURITY,SCREENS.COMPANY_BDI,SCREENS.USERS,SCREENS.PURCHASE_PLANNING,SCREENS.COMPANY_PERMISSIONS,SCREENS.SUPPLIERS,SCREENS.ALERTS, SCREENS.PURCHASES, SCREENS.ORDERS, SCREENS.APPROVALS, SCREENS.QUOTES, SCREENS.CREATE_QUOTE].includes(currentScreen);
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1, backgroundColor: '#010028' }}>
-      {!clientHome && !requesterHome && !masterHome && !engineeringHome && !projectsScreen && !(currentScreen === SCREENS.TABS && (activeTab === TABS.MATERIALS || activeTab === TABS.BUDGET || activeTab === TABS.COSTS)) && ![SCREENS.REQUEST, SCREENS.ADD_EXPENSE, SCREENS.CREATE_BUDGET, SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
+      {!operationalHeader && !clientHome && !requesterHome && !masterHome && !engineeringHome && !projectsScreen && !(currentScreen === SCREENS.TABS && (activeTab === TABS.MATERIALS || activeTab === TABS.BUDGET || activeTab === TABS.COSTS)) && ![SCREENS.REQUEST, SCREENS.ADD_EXPENSE, SCREENS.CREATE_BUDGET, SCREENS.CREATE_MEMBER, SCREENS.SETTINGS, SCREENS.COMPANIES, SCREENS.ACCESSIBILITY, SCREENS.COMPARISON, SCREENS.AUDIT, SCREENS.MARKET_PRICES, SCREENS.STOCK, SCREENS.RECEIPT, SCREENS.TRANSFERS, SCREENS.LABEL, SCREENS.SCANNER, SCREENS.REPORTS].includes(currentScreen) && !(isAuthReady && !currentUser) && <PlanengenHeader />}
       <NavigatorContent />
     </KeyboardAvoidingView>
   );

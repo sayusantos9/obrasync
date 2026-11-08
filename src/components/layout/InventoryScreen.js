@@ -1,9 +1,10 @@
+import {accessibleTextStyle} from '../../utils/accessibility';
 import {ThemeProvider,useTheme} from 'styled-components/native';
 import {PlanengenScreen,usePlanengenStyle} from './PlanengenScreen';
 
 export function useInventoryStyles(base) {
- const {fontScale=1}=useTheme();
- return Object.fromEntries(Object.entries(base).map(([key,value])=>[key,{...value,...(value.fontSize?{fontSize:value.fontSize*fontScale}:{}),...(value.lineHeight?{lineHeight:value.lineHeight*fontScale}:{})}]));
+ const {fontScale=1,accessibility={}}=useTheme();
+ return Object.fromEntries(Object.entries(base).map(([key,value])=>[key,value]));
 }
 
 export function useInventoryTheme() {

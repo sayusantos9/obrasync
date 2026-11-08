@@ -1,8 +1,9 @@
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleSafeAreaView as SafeAreaView,AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import { Alert, StyleSheet} from 'react-native';
+
 import { useApp } from '../../contexts/AppContext';
-import { SCREENS } from '../../navigation/routes';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useTheme } from 'styled-components/native';
 
 const LOGO = require('../../assets/logo cinza claro.png');
@@ -10,7 +11,7 @@ const LOGO = require('../../assets/logo cinza claro.png');
 // A separate row keeps the brand clear of each screen's navigation controls.
 export function PlanengenHeader() {
   const theme = useTheme();
-  const { logout, openScreen } = useApp();
+  const { logout } = useApp();
 
   function confirmLogout() {
     Alert.alert('Sair da conta', 'Deseja encerrar sua sessão?', [
@@ -33,9 +34,6 @@ export function PlanengenHeader() {
           <TouchableOpacity accessibilityRole="button" accessibilityLabel="Sair da conta" onPress={confirmLogout} style={styles.logout}>
             <Ionicons name="log-out-outline" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Configurações" onPress={() => openScreen(SCREENS.SETTINGS)} style={[styles.settings, { backgroundColor: theme.colors.accent }]}>
-            <Ionicons name="settings" size={27} color="#FFFFFF" />
-          </TouchableOpacity>
         </View>}
       </View>
     </SafeAreaView>
@@ -50,5 +48,4 @@ const styles = StyleSheet.create({
   purchasingLogo: { alignSelf: 'center', width: 164, height: 48, flexShrink: 1 },
   actions: { flexDirection: 'row', alignItems: 'center', gap: 4, marginLeft: 10 },
   logout: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  settings: { width: 48, height: 48, borderRadius: 24, borderWidth: 4, borderColor: '#10447C', alignItems: 'center', justifyContent: 'center' },
 });

@@ -1,7 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity} from '../accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../accessibility/ReadableText';
+
 import styled from 'styled-components/native';
 
-const Pressable = styled.TouchableOpacity`
+const Pressable = styled(AccessibleTouchableOpacity)`
   width: 48%;
   min-height: 112px;
   margin-bottom: 12px;
@@ -11,9 +14,9 @@ const Pressable = styled.TouchableOpacity`
   border: 1px solid ${({ $borderColor }) => $borderColor};
   border-radius: 20px;
 `;
-const IconTile = styled.View`width:42px;height:42px;align-items:center;justify-content:center;background-color:${({$color})=>$color};border-radius:13px;`;
-const Label = styled.Text`max-width:125px;color:${({theme})=>theme.colors.text};font-size:${({theme})=>15*theme.fontScale}px;font-weight:900;line-height:${({theme})=>20*theme.fontScale}px;`;
-const Arrow = styled.View`position:absolute;right:13px;bottom:13px;width:30px;height:30px;align-items:center;justify-content:center;background-color:rgba(11,42,91,.06);border-radius:15px;`;
+const IconTile = styled(AccessibleView)`width:42px;height:42px;align-items:center;justify-content:center;background-color:${({$color})=>$color};border-radius:13px;`;
+const Label = styled(ReadableText)`max-width:125px;color:${({theme})=>theme.colors.text};font-size:${({theme})=>15*theme.fontScale}px;font-weight:900;line-height:${({theme})=>20*theme.fontScale}px;`;
+const Arrow = styled(AccessibleView)`position:absolute;right:13px;bottom:13px;width:30px;height:30px;align-items:center;justify-content:center;background-color:rgba(11,42,91,.06);border-radius:15px;`;
 
 export function QuickAction({ icon, label, color, background, onPress }) {
   return (

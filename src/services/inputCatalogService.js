@@ -1,14 +1,14 @@
 import { supabase } from '../lib/supabase';
 
 const PAGE_SIZE = 500;
-const COLUMNS = 'id,catalog_code,source_file,source_row,source_page,source_sha256,source_bank,source_code,input_type,description,category,unit,reference_quantity,reference_unit_price,reference_value,reference_date';
+const COLUMNS = 'id,catalog_code,source_file,source_row,source_page,source_sha256,source_bank,source_code,input_type,description,category,unit,reference_quantity,reference_unit_price,reference_value,reference_date,source_url,reference_notes';
 
 export async function fetchInputCatalog() {
   if (!supabase) throw new Error('Supabase não configurado.');
   const items = [];
   for (let offset = 0; ; offset += PAGE_SIZE) {
     const { data, error } = await supabase.from('input_catalog')
-      .select(COLUMNS).order('catalog_code').range(offset, offset + PAGE_SIZE - 1);
+      .select(COLUMNS).eq('catalog_active',true).order('catalog_code').range(offset, offset + PAGE_SIZE - 1);
     if (error) throw error;
     items.push(...(data || []));
     if (!data || data.length < PAGE_SIZE) return items;

@@ -1,5 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
+import { Alert, StyleSheet} from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { Content, Screen, Scroll } from '../components/ui/primitives';
 import { useApp } from '../contexts/AppContext';

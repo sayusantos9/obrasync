@@ -1,10 +1,13 @@
+import {AccessibleSafeAreaView as SafeAreaView,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import {HomeIndicators} from '../components/home/HomeIndicators';
 import {HomeHighlights} from '../components/home/HomeHighlights';
 import {KeyboardScrollView} from '../components/layout/KeyboardScrollView';
-import { Ionicons } from '@expo/vector-icons';
+
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Image, RefreshControl, TextInput, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator, Alert, RefreshControl, StyleSheet, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 
 import { useApp } from '../contexts/AppContext';

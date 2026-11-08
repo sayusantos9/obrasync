@@ -1,9 +1,14 @@
+import {rpcWithReauthentication} from '../services/recentAuth';
+import {receiptQueue,saveReceiptCache,readReceiptCache} from '../services/receiptQueue';
+import {isConnectionFailure} from '../utils/receiptQueueCore';
+import {prepareComparableQuote} from '../utils/quoteComparison';
+import {DEFAULT_ACCESSIBILITY,mergeAccessibility} from '../utils/accessibility';
 import { readRequestQueue, updateRequestQueue, operationId } from '../services/requestQueue';
 import { procurementAction, fetchOperations } from '../services/procurementService';
 import { assertPermission } from '../utils/permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { AccessibilityInfo, Alert, Vibration } from 'react-native';
+import { AccessibilityInfo, AppState, Alert, Vibration } from 'react-native';
 import { USER_ROLES } from '../data/authData';
 import { useAppNavigation } from '../hooks/useAppNavigation';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
@@ -15,15 +20,6 @@ import { toDatabaseDate } from '../utils/dates';
 import { parseProjectBudget, reconcileSelectedProject } from '../utils/projects';
 
 const AppContext = createContext(null);
-
-const DEFAULT_ACCESSIBILITY = Object.freeze({
-  highContrast: false,
-  largeText: false,
-  reduceMotion: false,
-  screenReaderOptimized: true,
-  visualAlerts: true,
-  vibrationAlerts: false,
-});
 
 const DEMO_STOCK = [
   { id: 'MAT-001', code: 'CIM-CP2-50', name: 'Cimento CP II 50kg', unit: 'sc', quantity: 86, minQuantity: 30, location: 'Almoxarifado A' },
@@ -50,6 +46,7 @@ function toProject(row) {
     status: row.status || 'PLANNED',
     progress: Number(row.progress || 0),
     budget: Number(row.budget || 0),
+    baselineBudgetId: row.baseline_budget_id || null,
     startDate: row.start_date || null,
     endDate: row.end_date || null,
   };
@@ -60,6 +57,11 @@ function toBudget(row) {
     id: row.id,
     number: row.number || `ORC-${String(row.id).slice(0, 6).toUpperCase()}`,
     title: row.title,
+    baseDate: row.base_date || null,
+    revisionOf: row.revision_of || null,
+    revisionRootId: row.revision_root_id || row.id,
+    revisionNumber: row.revision_number || 1,
+    revisionReason: row.revision_reason || "",
     description: row.description || '',
     clientUserId: row.client_user_id || null,
     clientName: row.client_name || '',
@@ -131,6 +133,12 @@ export function AppProvider({ children }) {
   const [companies, setCompanies] = useState([]);
   const [members, setMembers] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [pendingReceipts,setPendingReceipts]=useState([]);
+  const [isSyncingReceipts,setIsSyncingReceipts]=useState(false);
+  const [receiptCacheDate,setReceiptCacheDate]=useState(null);
+  const userRef=useRef(currentUser);userRef.current=currentUser;
+  const receiptSyncRef=useRef(false);
+  const receiptRunRef=useRef(null);
   const [isOffline, setIsOffline] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -145,8 +153,7 @@ export function AppProvider({ children }) {
     AsyncStorage.getItem('@obrasync:accessibility').then(raw => {
       if (!mounted || accessibilityChanged.current || !raw) return;
       const saved = JSON.parse(raw);
-      const next = { ...DEFAULT_ACCESSIBILITY };
-      for (const key of Object.keys(next)) if (typeof saved?.[key] === 'boolean') next[key] = saved[key];
+      const next = mergeAccessibility(DEFAULT_ACCESSIBILITY,saved);
       accessibilityRef.current = next;
       setAccessibilitySettings(next);
     }).catch(() => { /* Preferências inválidas não impedem a abertura do app. */ });
@@ -181,7 +188,7 @@ export function AppProvider({ children }) {
     const metadata = authUser.user_metadata || {};
     if (metadata.registration_intent !== USER_ROLES.MASTER || !metadata.company_name) return profile;
 
-    const { error } = await supabase.rpc('create_my_company', {
+    const { error } = await rpcWithReauthentication(supabase,'create_my_company', {
       p_name: metadata.company_name,
       p_document: metadata.company_document || null,
       p_email: authUser.email || null,
@@ -198,7 +205,7 @@ export function AppProvider({ children }) {
     const [projectsResult, budgetsResult, quotesResult] = await Promise.all([
       supabase.from('projects').select('*').order('created_at', { ascending: false }),
       supabase.from('budgets').select('*,budget_items(*)').order('created_at', { ascending: false }),
-      supabase.from('quotations').select('*,quotation_items(*)').order('created_at', { ascending: false }),
+      supabase.from('quotations').select('*,quotation_items(*),quote_rounds!quotations_round_id_fkey(*)').order('created_at', { ascending: false }),
     ]);
 
     if (projectsResult.error) throw projectsResult.error;
@@ -211,7 +218,9 @@ export function AppProvider({ children }) {
 
     const nextProjects = (projectsResult.data || []).map(toProject);
     const nextBudgets = (budgetsResult.data || []).map(toBudget);
-    await refreshOperations();
+    const operations=await refreshOperations(user,false);
+    await saveReceiptCache(user,nextProjects,operations.orders,operations.receipts).catch(()=>{});
+    setReceiptCacheDate(null);
     setProjects(nextProjects);
     setBudgetDocuments(nextBudgets);
     setSelectedProject((current) => reconcileSelectedProject(current, nextProjects));
@@ -235,25 +244,38 @@ export function AppProvider({ children }) {
 
   async function establishSession(authUser) {
     if (!authUser) {
-      setCurrentUser(null);
+      userRef.current=null;setCurrentUser(null);
       setProjects([]);
       setBudgetDocuments([]);
       setQuotes([]); setCostInputs([]); setCostInputsError('');
-      setRequests([]); setOrders([]); setReceipts([]); setStock([]); setExtraExpenses([]); setPendingRequests([]);
+      setRequests([]); setOrders([]); setReceipts([]); setStock([]); setExtraExpenses([]); setPendingRequests([]); setPendingReceipts([]); setReceiptCacheDate(null);
       setMembers([]);
       setCompanies([]);
       setSelectedProject(null);
       return null;
     }
 
+    try {
     let profile = await fetchProfile(authUser);
     profile = await ensureMasterCompany(authUser, profile);
     if (!profile.active) throw new Error('Este acesso está desativado. Procure o Gestor da empresa.');
 
-    setCurrentUser(profile);
+    userRef.current=profile;setCurrentUser(profile);
     await loadAppData(profile);
     setPendingRequests(await readRequestQueue(profile));
+    setPendingReceipts(await receiptQueue.read(profile));
     return profile;
+    } catch(error) {
+      if(!isConnectionFailure(error)) throw error;
+      const cached=await readReceiptCache(authUser);
+      if(!cached)throw error;
+      userRef.current=cached.profile;setCurrentUser(cached.profile);setProjects(cached.projects);setOrders(cached.orders);setReceipts(cached.receipts);
+      setSelectedProject(cached.projects[0]||null);setReceiptCacheDate(cached.savedAt);
+      setBudgetDocuments([]);setQuotes([]);setCostInputs([]);setRequests([]);setStock([]);setExtraExpenses([]);setMembers([]);setCompanies([]);
+      setPendingReceipts(await receiptQueue.read(cached.profile));setPendingRequests(await readRequestQueue(cached.profile));
+      navigation.openScreen(SCREENS.RECEIPT);
+      return cached.profile;
+    }
   }
 
   useEffect(() => {
@@ -283,7 +305,7 @@ export function AppProvider({ children }) {
 
     const { data: listener } = supabase?.auth.onAuthStateChange((event) => {
       if (!mounted || event === 'INITIAL_SESSION') return;
-      if (event === 'SIGNED_OUT') setCurrentUser(null);
+      if (event === 'SIGNED_OUT') {userRef.current=null;setCurrentUser(null);setPendingReceipts([]);setReceiptCacheDate(null);}
     }) || { data: null };
 
     return () => {
@@ -307,7 +329,7 @@ export function AppProvider({ children }) {
     const profile = await establishSession(data.user);
     if (role && profile?.role !== role) {
       await supabase.auth.signOut();
-      setCurrentUser(null);
+      userRef.current=null;setCurrentUser(null);
       throw new Error('Este usuário pertence a outro perfil. Volte e escolha o perfil correto.');
     }
 
@@ -343,7 +365,7 @@ export function AppProvider({ children }) {
 
     let profile = await fetchProfile(data.user);
     profile = await ensureMasterCompany(data.user, profile);
-    setCurrentUser(profile);
+    userRef.current=profile;setCurrentUser(profile);
     await loadAppData(profile);
     setPendingRequests(await readRequestQueue(profile));
     setAuthError('');
@@ -359,11 +381,11 @@ export function AppProvider({ children }) {
         if (error) console.warn('Falha ao encerrar sessão no Supabase:', error.message);
       }
     } finally {
-      setCurrentUser(null);
+      userRef.current=null;setCurrentUser(null);
       setProjects([]);
       setBudgetDocuments([]);
       setQuotes([]); setCostInputs([]); setCostInputsError('');
-      setRequests([]); setOrders([]); setReceipts([]); setStock([]); setExtraExpenses([]); setPendingRequests([]);
+      setRequests([]); setOrders([]); setReceipts([]); setStock([]); setExtraExpenses([]); setPendingRequests([]); setPendingReceipts([]); setReceiptCacheDate(null);
       setMembers([]);
       setCompanies([]);
       setSelectedProject(null);
@@ -377,11 +399,21 @@ export function AppProvider({ children }) {
     navigation.selectTab(TABS.HOME);
   }
 
+  useEffect(() => {
+    const subscription=AppState.addEventListener('change',state=>{
+      if(state==='active'&&currentUser) refreshCurrentProject().catch(()=>{});
+    });
+    return ()=>subscription.remove();
+  },[currentUser?.id]);
+
   async function refreshCurrentProject() {
     if (!currentUser) return;
     setIsRefreshing(true);
     try {
-      await loadAppData(currentUser);
+      const profile=await fetchProfile({id:currentUser.id});
+      if(!profile?.active){await logout();throw new Error('Este acesso foi desativado pelo Gestor.');}
+      userRef.current=profile;setCurrentUser(profile);
+      await loadAppData(profile);
     } finally {
       setIsRefreshing(false);
     }
@@ -429,54 +461,13 @@ export function AppProvider({ children }) {
 
     if (data.clientUserId && !client) throw new Error('Cliente não encontrado nesta empresa.');
 
-    const number = `ORC-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
-    const { data: budget, error: budgetError } = await supabase
-      .from('budgets')
-      .insert({
-        company_id: currentUser.companyId,
-        project_id: selectedProject.id,
-        number,
-        title: data.title?.trim(),
-        description: data.description?.trim() || null,
-        status: 'DRAFT',
-        total,
-        subtotal_without_bdi: calculated.subtotal,
-        bdi_percent: calculated.bdiRate,
-        bdi_amount: calculated.bdiAmount,
-        bdi_config: calculated.bdiConfig,
-        valid_until: data.validUntil ? toDatabaseDate(data.validUntil) : null,
-        notes: data.notes?.trim() || null,
-        client_user_id: client?.id || null,
-        client_name: client?.name || selectedProject.client || null,
-        client_document: data.clientDocument?.trim() || null,
-        client_email: client?.email || null,
-        client_phone: data.clientPhone?.trim() || null,
-        created_by: currentUser.id,
-      })
-      .select('*')
-      .single();
-
-    if (budgetError) throw budgetError;
-
-    const itemRows = items.map((item) => ({
-      budget_id: budget.id,
-      input_id: item.source === 'company' ? item.inputId : null,
-      catalog_input_id: item.source === 'shared' ? item.inputId : null,
-      input_code: item.code,
-      input_type: item.inputType,
-      description: item.description,
-      quantity: Number(item.quantity || 0),
-      unit: item.unit || 'un',
-      unit_price: Number(item.unitPrice || 0),
-    }));
-
-    if (itemRows.length) {
-      const { error: itemsError } = await supabase.from('budget_items').insert(itemRows);
-      if (itemsError) {
-        await supabase.rpc('archive_document',{p_kind:'budget',p_id:budget.id,p_reason:'Falha técnica ao gravar itens do orçamento'});
-        throw itemsError;
-      }
-    }
+    const {data: budgetId,error: budgetError}=await rpcWithReauthentication(supabase,'save_budget_version',{
+      p_project_id:selectedProject.id,
+      p_data:{...data,...calculated,clientUserId:client?.id||null,
+        baseDate:toDatabaseDate(data.baseDate),validUntil:toDatabaseDate(data.validUntil)}
+    });
+    if(budgetError)throw budgetError;
+    const budget={id:budgetId};
 
     if (client && selectedProject.clientUserId !== client.id) {
       const { error: projectLinkError } = await supabase
@@ -505,10 +496,17 @@ export function AppProvider({ children }) {
     return document;
   }
 
+  async function setBudgetBaseline(document) {
+    const {error}=await rpcWithReauthentication(supabase,'set_budget_baseline',{p_project_id:document.projectId,p_budget_id:document.id});
+    if(error)throw error;
+    const patch=p=>p?.id===document.projectId?{...p,budget:document.total,baselineBudgetId:document.id}:p;
+    setProjects(rows=>rows.map(patch));setSelectedProject(patch);
+  }
+
   async function removeBudgetDocument(id, reason) {
     assertPermission(currentUser?.role, 'writeBudget');
     if (!supabase) return;
-    const { error } = await supabase.rpc('archive_document',{p_kind:'budget',p_id:id,p_reason:reason});
+    const { error } = await rpcWithReauthentication(supabase,'archive_document',{p_kind:'budget',p_id:id,p_reason:reason});
     if (error) throw error;
     setBudgetDocuments((current) => current.filter((item) => item.id !== id));
   }
@@ -534,9 +532,12 @@ export function AppProvider({ children }) {
     return member;
   }
 
-  async function refreshOperations() {
+  async function refreshOperations(user=userRef.current,cache=true) {
     const data = await fetchOperations();
+    if(user&&userRef.current?.id!==user.id)return data;
     setRequests(data.requests); setOrders(data.orders); setReceipts(data.receipts); setStock(data.stock); setExtraExpenses(data.expenses);
+    if(cache&&user&&userRef.current?.id===user.id&&projects.length)await saveReceiptCache(user,projects,data.orders,data.receipts).catch(()=>{});
+    return data;
   }
   async function refreshAfterWrite() {
     try { await refreshOperations(); }
@@ -579,20 +580,28 @@ export function AppProvider({ children }) {
   async function addQuote(data) {
     assertPermission(currentUser?.role, 'writeQuote');
     if (!supabase || !currentUser?.companyId) throw new Error('Empresa não identificada.');
-    const prepared = prepareQuote(data, selectedProject?.id);
-    const { data: row, error } = await supabase.rpc('save_material_quote', {
-      p_project_id: prepared.projectId, p_number: 'COT-' + Date.now(),
-      p_expires_at: prepared.validUntil, p_notes: encodeQuoteMeta(prepared),
-      p_items: prepared.items.map(i => ({description:i.description, quantity:i.quantity, unit:i.unit, unit_price:i.unitPrice})),
-    });
-    if (error) throw error;
+    const prepared = prepareComparableQuote(data, selectedProject?.id);
+    const {data:id,error}=await rpcWithReauthentication(supabase,'save_comparable_quote',{p_project_id:prepared.projectId,p_data:{...prepared,encodedNotes:encodeQuoteMeta(prepared)}});
+    if(error)throw error;
+    const {data:row,error:reloadError}=await supabase.from('quotations').select('*,quotation_items(*),quote_rounds!quotations_round_id_fkey(*)').eq('id',id).single();
+    if(reloadError)throw new Error('Proposta salva. Atualize a obra para consultar; não envie novamente.');
     const item = toQuote(row);
     setQuotes((current) => [item, ...current]);
+      await refreshAfterWrite();
     return item;
+  }
+  async function awardQuote(id,reason){
+    const {data:orderId,error}=await rpcWithReauthentication(supabase,'award_quote',{p_quote_id:id,p_reason:reason});
+    if(error)throw error;
+    try {
+      const {data,error:readError}=await supabase.from('quotations').select('*,quotation_items(*),quote_rounds!quotations_round_id_fkey(*)').order('created_at',{ascending:false});
+      if(readError)throw readError;setQuotes((data||[]).map(toQuote));await refreshAfterWrite();
+    }catch{Alert.alert('Escolha registrada','Atualize a obra para visualizar o pedido e o resultado da rodada.');}
+    return orderId;
   }
   async function removeQuote(id, reason) {
     assertPermission(currentUser?.role, 'writeQuote');
-    const { error } = await supabase.rpc('archive_document',{p_kind:'quote',p_id:id,p_reason:reason});
+    const { error } = await rpcWithReauthentication(supabase,'archive_document',{p_kind:'quote',p_id:id,p_reason:reason});
     if (error) throw error;
     setQuotes((current) => current.filter((item) => item.id !== id));
   }
@@ -612,15 +621,39 @@ export function AppProvider({ children }) {
     await procurementAction('PURCHASE',selectedProject?.id,{id});
     await refreshAfterWrite();
   }
-  async function decideOrder(id, approve) {
-    assertPermission(currentUser?.role, 'manageCompany');
-    await procurementAction(approve ? 'APPROVE' : 'REJECT', selectedProject?.id, { id });
+  async function decideOrder(id, approve, reason) {
+    assertPermission(currentUser?.role, 'approvePurchase');
+    await procurementAction(approve ? 'APPROVE' : 'REJECT', selectedProject?.id, { id, reason });
     await refreshAfterWrite();
   }
-  async function createReceipt(data) {
-    const item = await procurementAction('RECEIVE', selectedProject?.id, data);
-    await refreshAfterWrite(); return item;
-  }  async function createStockMovement(data) {
+  async function createReceipt(data,action='RECEIVE') {
+    if(!(action==='RETURN'?['MASTER','PURCHASING']:['MASTER','PURCHASING','REQUESTER']).includes(currentUser?.role))throw new Error('Perfil não autorizado.');
+    const user=currentUser,order=orders.find(o=>o.id===data.orderId),id=operationId();
+    await receiptQueue.enqueue(user,selectedProject?.id,order,data,id,action);
+    setPendingReceipts(await receiptQueue.read(user));
+    if(!isOffline)await syncPendingReceipts();
+    const queued=(await receiptQueue.read(user)).find(r=>r.id===id);
+    return {id,status:queued?queued.state:'SYNCED',message:queued?.error};
+  }
+  async function discardPendingReceipt(id){setPendingReceipts(await receiptQueue.discard(currentUser,id));}
+  async function syncPendingReceipts(retryConflicts=false){
+    const user=currentUser;
+    if(!user||isOffline||receiptSyncRef.current)return;
+    receiptSyncRef.current=true;setIsSyncingReceipts(true);
+    try {
+      const result=await receiptQueue.sync(user,{retryConflicts,onChange:rows=>{if(userRef.current?.id===user.id)setPendingReceipts(rows);}});
+      if(userRef.current?.id===user.id){setPendingReceipts(result.rows);if(result.completed)await refreshAfterWrite();}
+      return result;
+    }finally{receiptSyncRef.current=false;if(userRef.current?.id===user.id)setIsSyncingReceipts(false);}
+  }
+  receiptRunRef.current=syncPendingReceipts;
+  useEffect(()=>{
+    if(!currentUser||isOffline||!['MASTER','PURCHASING','REQUESTER'].includes(currentUser.role))return;
+    const run=()=>{if(AppState.currentState==='active')receiptRunRef.current().catch(()=>{});};
+    run();const timer=setInterval(run,30000);const sub=AppState.addEventListener('change',state=>{if(state==='active')run();});
+    return()=>{clearInterval(timer);sub.remove();};
+  },[currentUser?.id,currentUser?.companyId,isOffline]);
+  async function createStockMovement(data) {
     assertPermission(currentUser?.role, 'consumeStock');
     const item=await procurementAction('STOCK',selectedProject?.id,data);
     await refreshAfterWrite(); return item;
@@ -635,8 +668,7 @@ export function AppProvider({ children }) {
 
   async function updateAccessibility(patch) {
     accessibilityChanged.current = true;
-    const next = { ...accessibilityRef.current };
-    for (const key of Object.keys(DEFAULT_ACCESSIBILITY)) if (typeof patch[key] === 'boolean') next[key] = patch[key];
+    const next = mergeAccessibility(accessibilityRef.current,patch);
     accessibilityRef.current = next;
     setAccessibilitySettings(next);
     accessibilityWrites.current = accessibilityWrites.current.catch(() => {}).then(() => AsyncStorage.setItem('@obrasync:accessibility', JSON.stringify(next)));
@@ -645,7 +677,7 @@ export function AppProvider({ children }) {
 
   function notifyAccessible(title, message) {
     if (accessibilitySettings.vibrationAlerts) Vibration.vibrate(180);
-    if (accessibilitySettings.screenReaderOptimized) AccessibilityInfo.announceForAccessibility(`${title}. ${message}`);
+    if (accessibilitySettings.screenReaderOptimized && !accessibilitySettings.muteSounds) AccessibilityInfo.announceForAccessibility(`${title}. ${message}`);
     if (accessibilitySettings.visualAlerts) Alert.alert(title, message);
   }
 
@@ -682,12 +714,15 @@ export function AppProvider({ children }) {
     isRefreshing,
     budgetDocuments,
     addBudgetDocument,
+    setBudgetBaseline,
     removeBudgetDocument,
     quotes,
     addQuote,
+    awardQuote,
     removeQuote,
     requests: requests.filter(item => item.projectId === selectedProject?.id),
     pendingRequests,
+    pendingReceipts,isSyncingReceipts,receiptCacheDate,syncPendingReceipts,discardPendingReceipt,
     submitMaterialRequest,
     syncPendingRequests, discardPendingRequest,
     isSyncing,
@@ -713,7 +748,7 @@ export function AppProvider({ children }) {
     notifyAccessible,
   }), [
     navigation, currentUser, isAuthReady, authError, projects, selectedProject, dashboard, isRefreshing,
-    budgetDocuments, quotes, requests, pendingRequests, isSyncing, isOffline, orders, receipts, stock,
+    budgetDocuments, quotes, requests, pendingRequests, pendingReceipts, isSyncingReceipts, receiptCacheDate, isSyncing, isOffline, orders, receipts, stock,
     extraExpenses, companies, members, accessibilitySettings, costInputs, costInputsError,
   ]);
 

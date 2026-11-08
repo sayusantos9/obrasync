@@ -1,3 +1,8 @@
+import {SecurityScreen} from '../screens/SecurityScreen';
+import {CompanyBdiScreen} from '../screens/CompanyBdiScreen';
+import {UsersScreen} from '../screens/UsersScreen';
+import {PurchasePlanningScreen} from '../screens/PurchasePlanningScreen';
+import {SuppliersScreen} from '../screens/SuppliersScreen';
 import {AuditScreen} from '../screens/AuditScreen';
 import { ComparisonScreen } from '../screens/ComparisonScreen';
 import { MarketPricesScreen } from '../screens/MarketPricesScreen';
@@ -43,6 +48,11 @@ const TAB_COMPONENTS = Object.freeze({
 });
 
 const SCREEN_COMPONENTS = Object.freeze({
+  [SCREENS.COMPANY_BDI]: CompanyBdiScreen,
+  [SCREENS.SECURITY]: SecurityScreen,
+  [SCREENS.USERS]: UsersScreen,
+  [SCREENS.PURCHASE_PLANNING]: PurchasePlanningScreen,
+  [SCREENS.SUPPLIERS]: SuppliersScreen,
   [SCREENS.AUDIT]: AuditScreen,
   [SCREENS.COMPARISON]: ComparisonScreen,
   [SCREENS.MARKET_PRICES]: MarketPricesScreen,
@@ -73,6 +83,10 @@ const SCREEN_COMPONENTS = Object.freeze({
 });
 
 const BOTTOM_TAB_SCREENS = new Set([
+  SCREENS.SECURITY,
+  SCREENS.COMPANY_BDI,
+  SCREENS.USERS,SCREENS.PURCHASE_PLANNING,
+  SCREENS.SUPPLIERS,
   SCREENS.SETTINGS,
   SCREENS.TABS,
   SCREENS.PROFILE,
@@ -86,12 +100,14 @@ const BOTTOM_TAB_SCREENS = new Set([
 ]);
 
 const MASTER_TAB_SCREENS = new Set([
+  SCREENS.USERS,
   SCREENS.TABS,
   SCREENS.MASTER_PANEL,
   SCREENS.COMPANIES,
   SCREENS.CREATE_MEMBER,
   SCREENS.COMPANY_PERMISSIONS,
   SCREENS.REPORTS,
+  SCREENS.SUPPLIERS,
   SCREENS.SETTINGS,
   SCREENS.PROFILE,
 ]);

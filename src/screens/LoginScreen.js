@@ -1,8 +1,13 @@
+import {AccessibleModal as Modal,AccessibleSafeAreaView as SafeAreaView,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleScrollView as ScrollView,AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import { KeyboardScrollView } from '../components/layout/KeyboardScrollView';
-import { Ionicons } from '@expo/vector-icons';
+
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, BackHandler, Image, Keyboard, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Alert, AppState, BackHandler, Keyboard, Platform, Switch, useWindowDimensions } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {createAutofillLoginGate,completeLoginPair} from '../utils/autofillLogin';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path, Line } from 'react-native-svg';
 import { useTheme } from 'styled-components/native';
@@ -40,7 +45,7 @@ function Field({ label, icon, value, onChangeText, password, inputRef, isRegiste
       <TextInput ref={inputRef} accessibilityLabel={label} value={value} onChangeText={onChangeText}
         editable={editable} autoCapitalize="none" autoCorrect={false} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         secureTextEntry={password && !visible} placeholderTextColor="#7A8392" style={[styles.input, { fontSize: 15 * fontScale }]}
-        {...(password ? { autoComplete: isRegister ? 'new-password' : 'current-password', textContentType: isRegister ? 'newPassword' : 'password' } : {})} {...props} />
+        {...(password ? Platform.OS==='ios'?{textContentType:isRegister?'newPassword':'password'}:{autoComplete:isRegister?'new-password':'current-password',...(Platform.OS==='android'?{importantForAutofill:'yes'}:{})} : {})} {...props} />
       {password && <TouchableOpacity accessibilityRole="button" accessibilityLabel={visible ? 'Ocultar senha' : 'Mostrar senha'} onPress={() => setVisible(v => !v)} style={styles.eye}>
         <Ionicons name={visible ? 'eye-off-outline' : 'eye-outline'} size={21} color={colors.muted} />
       </TouchableOpacity>}
@@ -60,12 +65,31 @@ export function LoginScreen() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', password: '', companyName: '', companyDocument: '', companyPhone: '' });
-  const setValue = key => value => { setError(''); setForm(current => ({ ...current, [key]: value })); };
+  const formRef=useRef(form),autoGate=useRef(createAutofillLoginGate()),autoTimer=useRef(null),submitRef=useRef(null);
+  const [autoEnter,setAutoEnter]=useState(true),[preferenceReady,setPreferenceReady]=useState(false),[appActive,setAppActive]=useState(AppState.currentState==='active');
+  const setValue = key => value => {
+    clearTimeout(autoTimer.current);
+    if(key==='email'||key==='password')autoGate.current.change(key,formRef.current[key],value);
+    formRef.current={...formRef.current,[key]:value};setError('');setForm(formRef.current);
+  };
+  function onCredentialKey(event){const key=event.nativeEvent.key;if(key==='Backspace'||key==='Delete'||key?.length===1){autoGate.current.key();clearTimeout(autoTimer.current);}}
+  useEffect(()=>{let live=true;AsyncStorage.getItem('@obrasync:auto-login:v1').then(v=>{if(live)setAutoEnter(v!=='false');}).catch(()=>{if(live)setAutoEnter(false);}).finally(()=>{if(live)setPreferenceReady(true);});return()=>{live=false;};},[]);
+  useEffect(()=>{const listener=AppState.addEventListener('change',state=>{setAppActive(state==='active');if(state!=='active')clearTimeout(autoTimer.current);});return()=>listener.remove();},[]);
+  useEffect(()=>{
+    clearTimeout(autoTimer.current);
+    if(!preferenceReady||!autoEnter||isRegister||profileOpen||submitting||!appActive||!completeLoginPair(form)||!autoGate.current.ready())return undefined;
+    autoTimer.current=setTimeout(()=>{
+      if(!submittingRef.current&&autoGate.current.ready()&&completeLoginPair(formRef.current))submitRef.current?.({fromAutofill:true});
+    },800);
+    return()=>clearTimeout(autoTimer.current);
+  },[form.email,form.password,role,isRegister,profileOpen,submitting,autoEnter,preferenceReady,appActive]);
+  function changeAutoEnter(value){clearTimeout(autoTimer.current);autoGate.current.reset();setAutoEnter(value);AsyncStorage.setItem('@obrasync:auto-login:v1',String(value)).catch(()=>setError('Não foi possível salvar a preferência de entrada automática neste aparelho.'));}
   const type = style => [style, { fontSize: style.fontSize * fontScale }];
   function changeMode(register) {
     if (submittingRef.current) return;
+    clearTimeout(autoTimer.current);autoGate.current.reset();
     Keyboard.dismiss(); setIsRegister(register); setError('');
-    setForm(current => ({ ...current, password: '' }));
+    formRef.current={...formRef.current,password:''};setForm(formRef.current);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
   }
   useEffect(() => {
@@ -73,27 +97,29 @@ export function LoginScreen() {
     const listener = BackHandler.addEventListener('hardwareBackPress', () => { changeMode(false); return true; });
     return () => listener.remove();
   }, [isRegister]);
-  async function submit() {
+  async function submit({fromAutofill=false}={}) {
+    clearTimeout(autoTimer.current);
     if (submittingRef.current) return;
-    if (!isRegister && !role) { setError('Selecione seu perfil de acesso.'); setProfileOpen(true); return; }
+    if (!isRegister && !role&&!fromAutofill) { setError('Selecione seu perfil de acesso.'); setProfileOpen(true); return; }
     if (!form.email.trim()) { setError('Informe seu e-mail.'); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) { setError('Informe um e-mail válido.'); return; }
     if (!form.password.trim() || form.password.length < 6) { setError('Informe uma senha com pelo menos 6 caracteres.'); return; }
     if (isRegister && !form.name.trim()) { setError('Informe o nome do Gestor.'); return; }
     if (isRegister && !form.companyName.trim()) { setError('Informe o nome da empresa.'); return; }
-    Keyboard.dismiss(); setError(''); submittingRef.current = true; setSubmitting(true);
+    autoGate.current.consume();Keyboard.dismiss(); setError(''); submittingRef.current = true; setSubmitting(true);
     try {
       if (isRegister) {
         const result = await registerCompany(form);
         if (result?.requiresEmailConfirmation) {
           Alert.alert('Confirme seu e-mail', 'Sua conta foi criada. Confirme o e-mail recebido e depois entre como Gestor/Master.');
-          setIsRegister(false); setRole(USER_ROLES.MASTER); setForm(current => ({ ...current, password: '' }));
+          setIsRegister(false); setRole(USER_ROLES.MASTER); formRef.current={...formRef.current,password:''};setForm(formRef.current);autoGate.current.reset();
           scrollRef.current?.scrollTo({ y: 0, animated: false });
         }
       } else { await login({ email: form.email, password: form.password, role }); }
     } catch (err) { setError(err?.message || 'Não foi possível continuar. Tente novamente.'); }
     finally { submittingRef.current = false; setSubmitting(false); }
   }
+  submitRef.current=submit;
   return <View style={styles.root}>
     <View style={styles.root}>
       <KeyboardScrollView ref={scrollRef} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
@@ -139,9 +165,10 @@ export function LoginScreen() {
             </View>}
             {isRegister && <Field label="Nome do Gestor" icon="person-outline" value={form.name} onChangeText={setValue('name')} editable={!submitting} placeholder="Seu nome completo" autoCapitalize="words" autoComplete="name" />}
             <Field label="E-mail" icon="mail-outline" value={form.email} onChangeText={setValue('email')} editable={!submitting} keyboardType="email-address"
-              autoComplete="email" textContentType="emailAddress" placeholder="voce@empresa.com" returnKeyType="next" onSubmitEditing={() => passwordRef.current?.focus()} />
+              {...(Platform.OS==='ios'?{textContentType:isRegister?'emailAddress':'username'}:{autoComplete:isRegister?'email':'username',...(Platform.OS==='android'?{importantForAutofill:'yes'}:{})})} onKeyPress={onCredentialKey} placeholder="voce@empresa.com" returnKeyType="next" onSubmitEditing={() => passwordRef.current?.focus()} />
             <Field label="Senha" icon="lock-closed-outline" inputRef={passwordRef} value={form.password} onChangeText={setValue('password')} editable={!submitting}
-              password isRegister={isRegister} placeholder={isRegister ? 'Mínimo de 6 caracteres' : 'Digite sua senha'} returnKeyType={isRegister ? 'next' : 'go'} onSubmitEditing={isRegister ? undefined : submit} />
+              password isRegister={isRegister} onKeyPress={onCredentialKey} placeholder={isRegister ? 'Mínimo de 6 caracteres' : 'Digite sua senha'} returnKeyType={isRegister ? 'next' : 'go'} onSubmitEditing={isRegister ? undefined : ()=>{if(appActive)submit({fromAutofill:preferenceReady&&autoEnter&&autoGate.current.ready()});}} />
+            {!isRegister&&<View style={{flexDirection:'row',alignItems:'center',gap:12,marginTop:12}}><View style={{flex:1}}><Text style={[type(styles.label),{marginBottom:3}]}>Entrar com a senha salva</Text><Text style={[type(styles.subtitle),{fontSize:11*fontScale}]}>Quando o preenchimento completo for reconhecido, a entrada é automática.</Text></View><Switch accessibilityLabel="Entrar automaticamente com senha salva" value={autoEnter} disabled={submitting||!preferenceReady} onValueChange={changeAutoEnter} trackColor={{false:'#CBD5E1',true:colors.blue}}/></View>}
             {isRegister && <>
               <View style={styles.divider} /><Text style={type(styles.groupTitle)}>Dados da empresa</Text>
               <Field label="Nome da empresa" icon="business-outline" value={form.companyName} onChangeText={setValue('companyName')} editable={!submitting} placeholder="Razão social ou nome fantasia" autoCapitalize="words" />

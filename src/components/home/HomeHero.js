@@ -1,4 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity} from '../accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../accessibility/ReadableText';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import { ImageBackground } from 'react-native';
 import styled from 'styled-components/native';
@@ -17,18 +20,18 @@ const Shade = styled(LinearGradient).attrs({
   colors: ['rgba(7,31,63,.96)', 'rgba(7,31,63,.18)'],
   start: { x: 0, y: .5 }, end: { x: 1, y: .5 },
 })`flex:1; padding:16px; justify-content:space-between;`;
-const Status = styled.View`align-self:flex-start; padding:6px 10px; flex-direction:row; align-items:center; background-color:rgba(255,255,255,.15); border-radius:18px;`;
-const Dot = styled.View`width:7px; height:7px; margin-right:7px; background-color:#35D992; border-radius:4px;`;
-const StatusText = styled.Text`color:white; font-size:10px; font-weight:900;`;
-const Title = styled.Text`color:white; font-size:${({theme})=>24*theme.fontScale}px; font-weight:900;`;
-const Sub = styled.Text`margin-top:2px; color:rgba(255,255,255,.78); font-size:${({theme})=>12*theme.fontScale}px;`;
-const ProgressRow = styled.View`flex-direction:row; align-items:flex-end;`;
-const Big = styled.Text`color:white; font-size:${({theme})=>34*theme.fontScale}px; font-weight:900;`;
-const Small = styled.Text`margin-left:8px; margin-bottom:5px; color:white; font-size:${({theme})=>11*theme.fontScale}px; line-height:15px;`;
-const Track = styled.View`height:6px; width:68%; overflow:hidden; background-color:rgba(255,255,255,.25); border-radius:4px;`;
-const Fill = styled.View`height:100%; width:${({$progress})=>$progress}%; background-color:${({theme})=>theme.colors.accent}; border-radius:4px;`;
-const Button = styled.TouchableOpacity`align-self:flex-start; min-height:38px; padding:0 14px; flex-direction:row; align-items:center; background-color:${({theme})=>theme.colors.accent}; border-radius:12px;`;
-const ButtonText = styled.Text`margin-right:7px; color:white; font-size:12px; font-weight:900;`;
+const Status = styled(AccessibleView)`align-self:flex-start; padding:6px 10px; flex-direction:row; align-items:center; background-color:rgba(255,255,255,.15); border-radius:18px;`;
+const Dot = styled(AccessibleView)`width:7px; height:7px; margin-right:7px; background-color:#35D992; border-radius:4px;`;
+const StatusText = styled(ReadableText)`color:white; font-size:10px; font-weight:900;`;
+const Title = styled(ReadableText)`color:white; font-size:${({theme})=>24*theme.fontScale}px; font-weight:900;`;
+const Sub = styled(ReadableText)`margin-top:2px; color:rgba(255,255,255,.78); font-size:${({theme})=>12*theme.fontScale}px;`;
+const ProgressRow = styled(AccessibleView)`flex-direction:row; align-items:flex-end;`;
+const Big = styled(ReadableText)`color:white; font-size:${({theme})=>34*theme.fontScale}px; font-weight:900;`;
+const Small = styled(ReadableText)`margin-left:8px; margin-bottom:5px; color:white; font-size:${({theme})=>11*theme.fontScale}px; line-height:15px;`;
+const Track = styled(AccessibleView)`height:6px; width:68%; overflow:hidden; background-color:rgba(255,255,255,.25); border-radius:4px;`;
+const Fill = styled(AccessibleView)`height:100%; width:${({$progress})=>$progress}%; background-color:${({theme})=>theme.colors.accent}; border-radius:4px;`;
+const Button = styled(AccessibleTouchableOpacity)`align-self:flex-start; min-height:38px; padding:0 14px; flex-direction:row; align-items:center; background-color:${({theme})=>theme.colors.accent}; border-radius:12px;`;
+const ButtonText = styled(ReadableText)`margin-right:7px; color:white; font-size:12px; font-weight:900;`;
 
 export function HomeHero({ project, onOpenDetails }) {
   return (

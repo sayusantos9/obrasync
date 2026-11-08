@@ -1,6 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleScrollView as ScrollView,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
 import { useRef, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RefreshControl, StyleSheet} from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { useApp } from '../contexts/AppContext';
 import { SyncStatusCard } from '../components/home';
@@ -8,7 +11,7 @@ import { SCREENS, TABS } from '../navigation/routes';
 
 const ACTIONS = [
   { title: 'Solicitações', subtitle: 'Registre as necessidades da obra', icon: 'clipboard-outline', route: SCREENS.REQUEST },
-  { title: 'Cotações', subtitle: 'Consulte propostas e fornecedores', icon: 'document-text-outline', route: SCREENS.QUOTES },
+  { title: 'Mapa de cotações', subtitle: 'Compare propostas e fornecedores', icon: 'document-text-outline', route: SCREENS.QUOTES },
   { title: 'Pedidos de compra', subtitle: 'Organize compras e entregas previstas', icon: 'cart-outline', route: SCREENS.PURCHASES },
   { title: 'Recebimentos', subtitle: 'Confira os materiais que chegaram', icon: 'file-tray-outline', route: SCREENS.RECEIPT },
   { title: 'Almoxarifado', subtitle: 'Consulte saldos e movimente materiais', icon: 'cube-outline', route: SCREENS.STOCK },

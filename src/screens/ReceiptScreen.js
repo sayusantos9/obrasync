@@ -1,6 +1,13 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useMemo, useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {ReceiptQueuePanel} from '../components/procurement/ReceiptQueuePanel';
+import {ReceiptQualityPanel} from '../components/procurement/ReceiptQualityPanel';
+import {receiptPayload} from '../utils/receiptQueueCore';
+import {OperationAttachments} from '../components/documents/OperationAttachments';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Alert, StyleSheet} from 'react-native';
 import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
@@ -13,6 +20,7 @@ export function ReceiptScreen() {
   const theme = useInventoryTheme();
   const {
     createReceipt,
+    pendingReceipts=[],
     currentUser,
     openScreen,
     orders,
@@ -22,9 +30,12 @@ export function ReceiptScreen() {
   const [selectedOrderId, setSelectedOrderId] = useState('');
   const [reference, setReference] = useState('');
   const [quantities,setQuantities] = useState({});
+  const [quality,setQuality] = useState({});
   const [saving,setSaving] = useState(false);
+  const savingRef=useRef(false);
+  useEffect(()=>{setSelectedOrderId('');setQuantities({});setQuality({});setReference('');},[selectedProject?.id]);
   const canWrite = WRITABLE_ROLES.has(currentUser?.role);
-  const openOrders = useMemo(() => orders.filter((order) => order.approval_status === 'APPROVED' && order.purchased_at && ['SENT','PARTIALLY_RECEIVED'].includes(order.status)), [orders]);
+  const openOrders = useMemo(() => orders.filter((order) => order.approval_status === 'APPROVED' && order.purchased_at && ['SENT','PARTIALLY_RECEIVED'].includes(order.status)&&!pendingReceipts.some(r=>r.data.orderId===order.id)), [orders,pendingReceipts]);
   const selectedOrder = openOrders.find((order) => order.id === selectedOrderId) || null;
 
   async function saveReceipt() {
@@ -33,30 +44,25 @@ export function ReceiptScreen() {
       return;
     }
 
-    if (saving) return;
-    setSaving(true);
+    if (savingRef.current) return;
+    savingRef.current=true;setSaving(true);
     try {
-      await createReceipt({
-        orderId: selectedOrder.id,
-        supplier: selectedOrder.supplier,
-        reference: reference.trim() || selectedOrder.number,
-        invoiceNumber: reference.trim(),
-        items: (selectedOrder.items || []).map(i=>({id:i.id,quantity:Number(String(quantities[i.id] ?? (Number(i.quantity)-Number(i.received_quantity))).replace(',','.'))})).filter(i=>i.quantity>0),
-      });
+      const result=await createReceipt(receiptPayload(selectedOrder,quantities,reference,quality));
       setSelectedOrderId('');
-      setReference(''); setQuantities({});
-      Alert.alert('Recebimento registrado', 'O estoque foi atualizado automaticamente.');
+      setReference(''); setQuantities({});setQuality({});
+      Alert.alert(result.status==='SYNCED'?'Recebimento confirmado':'Salvo no aparelho',result.status==='SYNCED'?'O servidor confirmou a entrada no estoque.':result.status==='CONFLICT'?`O envio precisa de revisão: ${result.message}`:'A entrada ficará pendente até a confirmação do servidor. Não registre a mesma entrega novamente.');
     } catch (error) {
       Alert.alert('Erro no recebimento', error.message);
-    } finally { setSaving(false); }
+    } finally { savingRef.current=false;setSaving(false); }
   }
 
   return (
     <InventoryScreen title="Recebimento">
-          <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}> 
-            <Text style={styles.eyebrow}>{selectedProject.name.toUpperCase()}</Text>
+          <ReceiptQueuePanel/>
+          <View style={[styles.hero, { backgroundColor: theme.colors.primary }]}>
+            <Text style={styles.eyebrow}>{(selectedProject?.name||'Obra').toUpperCase()}</Text>
             <Text style={styles.big}>Receber pedido</Text>
-            <Text style={styles.heroText}>Confira o pedido. Ao concluir, os itens entram no estoque.</Text>
+            <Text style={styles.heroText}>Somente a quantidade aceita entra no estoque. Rejeições ficam registradas e continuam pendentes de entrega. Devoluções retiram saldo e reabrem a reposição.</Text>
           </View>
 
           <View style={styles.quickRow}>
@@ -77,7 +83,7 @@ export function ReceiptScreen() {
           </View>
 
           {canWrite && (
-            <View style={[styles.form, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}> 
+            <View style={[styles.form, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
               <Text style={[styles.formTitle, { color: theme.colors.text }]}>Pedido recebido</Text>
               {!openOrders.length && (
                 <Text style={[styles.empty, { color: theme.colors.textMuted }]}>Não há pedidos abertos para receber.</Text>
@@ -89,7 +95,7 @@ export function ReceiptScreen() {
                     accessibilityRole="radio"
                     accessibilityState={{ checked: selected }}
                     key={order.id}
-                    onPress={() => setSelectedOrderId(order.id)}
+                    disabled={saving} onPress={() => {setSelectedOrderId(order.id);setQuantities({});setQuality({});}}
                     style={[
                       styles.orderCard,
                       { borderColor: selected ? theme.colors.accent : theme.colors.border },
@@ -105,7 +111,11 @@ export function ReceiptScreen() {
                 );
               })}
 
-              {selectedOrder?.items.map(i=><View key={i.id}><Text style={{color:theme.colors.text,marginTop:12}}>{i.name}: saldo {Number(i.quantity)-Number(i.received_quantity)} {i.unit}</Text><TextInput accessibilityLabel={`Quantidade recebida de ${i.name}`} keyboardType="decimal-pad" style={styles.input} value={String(quantities[i.id] ?? (Number(i.quantity)-Number(i.received_quantity)))} onChangeText={v=>setQuantities(q=>({...q,[i.id]:v}))}/></View>)}
+              {selectedOrder?.items.map(i=>{const input=[styles.input,{color:theme.colors.text,borderColor:theme.colors.border,backgroundColor:theme.colors.background,marginTop:8}];return <View key={i.id}><Text style={{color:theme.colors.text,marginTop:16}}>{i.name}: saldo {Number(i.quantity)-Number(i.received_quantity||0)} {i.unit}</Text>
+              <Text style={{color:theme.colors.text}}>Quantidade aceita</Text><TextInput accessibilityLabel={`Quantidade aceita de ${i.name}`} editable={!saving} keyboardType="decimal-pad" style={input} value={String(quantities[i.id] ?? (Number(i.quantity)-Number(i.received_quantity||0)))} onChangeText={v=>setQuantities(q=>({...q,[i.id]:v}))}/>
+              <Text style={{color:theme.colors.text}}>Quantidade rejeitada (não entra no estoque)</Text><TextInput accessibilityLabel={`Quantidade rejeitada de ${i.name}`} editable={!saving} keyboardType="decimal-pad" style={input} value={String(quality[i.id]?.rejectedQuantity??'0')} onChangeText={v=>setQuality(q=>({...q,[i.id]:{...q[i.id],rejectedQuantity:v}}))}/>
+              {Number(String(quality[i.id]?.rejectedQuantity||0).replace(',','.'))>0&&<><TextInput accessibilityLabel={`Motivo da rejeição de ${i.name}`} editable={!saving} style={input} placeholder="Motivo obrigatório" placeholderTextColor={theme.colors.textMuted} value={quality[i.id]?.reason||''} onChangeText={v=>setQuality(q=>({...q,[i.id]:{...q[i.id],reason:v}}))}/><TextInput accessibilityLabel={`Não conformidade de ${i.name}`} editable={!saving} style={input} placeholder="Não conformidade (opcional)" placeholderTextColor={theme.colors.textMuted} value={quality[i.id]?.nonconformity||''} onChangeText={v=>setQuality(q=>({...q,[i.id]:{...q[i.id],nonconformity:v}}))}/></>}
+              </View>;})}
               <Text style={[styles.label, { color: theme.colors.textMuted }]}>REFERÊNCIA / NOTA</Text>
               <TextInput
                 accessibilityLabel="Referência ou nota do recebimento"
@@ -131,17 +141,21 @@ export function ReceiptScreen() {
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>Recebimentos recentes</Text>
           {!receipts.length && <Text style={[styles.empty, { color: theme.colors.textMuted }]}>Nenhum recebimento registrado.</Text>}
           {receipts.map((receipt) => (
-            <View key={receipt.id} style={[styles.receiptCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}> 
-              <View style={[styles.iconBox, { backgroundColor: theme.colors.successSoft }]}> 
+            <View key={receipt.id}><View style={[styles.receiptCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+              <View style={[styles.iconBox, { backgroundColor: theme.colors.successSoft }]}>
                 <Ionicons name="archive-outline" size={22} color={theme.colors.success} />
               </View>
               <View style={styles.receiptInfo}>
                 <Text style={[styles.receiptTitle, { color: theme.colors.text }]}>{receipt.reference || receipt.id}</Text>
                 <Text style={[styles.receiptMeta, { color: theme.colors.textMuted }]}>{receipt.supplier || 'Fornecedor não informado'} • {receipt.items?.length || 0} item(ns)</Text>
+                {!!receipt.client_recorded_at&&<Text style={[styles.receiptMeta,{color:theme.colors.textMuted}]}>Registrado no aparelho: {new Date(receipt.client_recorded_at).toLocaleString('pt-BR')} · sincronizado: {new Date(receipt.receivedAt).toLocaleString('pt-BR')}</Text>}
               </View>
-              <View style={[styles.status, { backgroundColor: theme.colors.successSoft }]}> 
-                <Text style={[styles.statusText, { color: theme.colors.success }]}>Recebido</Text>
+              <View style={[styles.status, { backgroundColor: theme.colors.successSoft }]}>
+                <Text style={[styles.statusText, { color: theme.colors.success }]}>Conferido</Text>
               </View>
+            </View>
+            <ReceiptQualityPanel receipt={receipt}/>
+            <OperationAttachments kind="receipt" entityId={receipt.id} projectId={receipt.projectId||selectedProject?.id}/>
             </View>
           ))}
     </InventoryScreen>
@@ -151,7 +165,7 @@ export function ReceiptScreen() {
 function QuickAction({ background, color, icon, label, onPress }) {
   const styles=useInventoryStyles(baseStyles);
   return (
-    <TouchableOpacity accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={[styles.quickCard, { backgroundColor: background }]}> 
+    <TouchableOpacity accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={[styles.quickCard, { backgroundColor: background }]}>
       <Ionicons name={icon} size={25} color={color} />
       <Text style={[styles.quickText, { color }]}>{label}</Text>
     </TouchableOpacity>

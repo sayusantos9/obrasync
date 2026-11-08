@@ -1,13 +1,15 @@
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity,AccessibleScrollView,AccessibleScrollView as ScrollView,AccessibleImage,AccessibleImage as Image} from '../components/accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../components/accessibility/ReadableText';
 import styled from 'styled-components/native';
 
-const Intro = styled.Text`
+const Intro = styled(ReadableText)`
   margin-top: 18px;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 14px;
   line-height: 21px;
 `;
 
-const Selector = styled.ScrollView.attrs({
+const Selector = styled(AccessibleScrollView).attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
 })`
@@ -15,7 +17,7 @@ const Selector = styled.ScrollView.attrs({
   padding-left: 0px;
 `;
 
-const Chip = styled.TouchableOpacity`
+const Chip = styled(AccessibleTouchableOpacity)`
   min-height: 44px;
   margin-right: 8px;
   padding: 0 15px;
@@ -30,7 +32,7 @@ const Chip = styled.TouchableOpacity`
   border-radius: 20px;
 `;
 
-const ChipText = styled.Text`
+const ChipText = styled(ReadableText)`
   color: ${({ $isActive, theme }) => (
     $isActive ? 'white' : theme.colors.textMuted
   )};
@@ -38,7 +40,7 @@ const ChipText = styled.Text`
   font-weight: 600;
 `;
 
-const LabelCard = styled.View`
+const LabelCard = styled(AccessibleView)`
   margin-top: 18px;
   padding: 20px;
   align-items: center;
@@ -47,36 +49,36 @@ const LabelCard = styled.View`
   border-radius: 24px;
 `;
 
-const BrandRow = styled.View`
+const BrandRow = styled(AccessibleView)`
   align-self: stretch;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 `;
 
-const Brand = styled.Text`
+const Brand = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.primaryDark};
   font-size: 20px;
   font-weight: 700;
 `;
 
-const BrandAccent = styled.Text`
+const BrandAccent = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.accent};
 `;
 
-const Status = styled.View`
+const Status = styled(AccessibleView)`
   padding: 6px 9px;
   background-color: ${({ theme }) => theme.colors.successSoft};
   border-radius: 14px;
 `;
 
-const StatusText = styled.Text`
+const StatusText = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.success};
   font-size: 10px;
   font-weight: 700;
 `;
 
-const QrShell = styled.View`
+const QrShell = styled(AccessibleView)`
   margin: 18px 0 12px;
   padding: 15px;
   background-color: white;
@@ -84,12 +86,12 @@ const QrShell = styled.View`
   border-radius: 18px;
 `;
 
-const QrImage = styled.Image`
+const QrImage = styled(AccessibleImage)`
   width: 188px;
   height: 188px;
 `;
 
-const QrPlaceholder = styled.View`
+const QrPlaceholder = styled(AccessibleView)`
   width: 188px;
   height: 188px;
   padding: 20px;
@@ -99,7 +101,7 @@ const QrPlaceholder = styled.View`
   border-radius: 16px;
 `;
 
-const PlaceholderText = styled.Text`
+const PlaceholderText = styled(ReadableText)`
   margin-top: 10px;
   color: ${({ theme }) => theme.colors.primary};
   font-size: 12px;
@@ -108,40 +110,40 @@ const PlaceholderText = styled.Text`
   text-align: center;
 `;
 
-const MaterialName = styled.Text`
+const MaterialName = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.text};
   font-size: 19px;
   font-weight: 700;
   text-align: center;
 `;
 
-const MaterialCode = styled.Text`
+const MaterialCode = styled(ReadableText)`
   margin-top: 4px;
   color: ${({ theme }) => theme.colors.primary};
   font-size: 12px;
   font-weight: 600;
 `;
 
-const Divider = styled.View`
+const Divider = styled(AccessibleView)`
   height: 1px;
   margin: 17px 0;
   align-self: stretch;
   background-color: ${({ theme }) => theme.colors.border};
 `;
 
-const InfoRow = styled.View`
+const InfoRow = styled(AccessibleView)`
   margin-bottom: 9px;
   align-self: stretch;
   flex-direction: row;
   justify-content: space-between;
 `;
 
-const InfoLabel = styled.Text`
+const InfoLabel = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 12px;
 `;
 
-const InfoValue = styled.Text`
+const InfoValue = styled(ReadableText)`
   max-width: 62%;
   color: ${({ theme }) => theme.colors.text};
   font-size: 12px;
@@ -149,7 +151,7 @@ const InfoValue = styled.Text`
   text-align: right;
 `;
 
-const Hint = styled.View`
+const Hint = styled(AccessibleView)`
   margin-top: 14px;
   padding: 11px;
   flex-direction: row;
@@ -158,7 +160,7 @@ const Hint = styled.View`
   border-radius: 14px;
 `;
 
-const HintText = styled.Text`
+const HintText = styled(ReadableText)`
   flex: 1;
   margin-left: 8px;
   color: #9B4B11;
@@ -166,7 +168,7 @@ const HintText = styled.Text`
   line-height: 16px;
 `;
 
-const GenerateButton = styled.TouchableOpacity`
+const GenerateButton = styled(AccessibleTouchableOpacity)`
   height: 56px;
   margin-top: 16px;
   flex-direction: row;
@@ -177,20 +179,20 @@ const GenerateButton = styled.TouchableOpacity`
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
 `;
 
-const GenerateText = styled.Text`
+const GenerateText = styled(ReadableText)`
   margin-left: 8px;
   color: white;
   font-size: 15px;
   font-weight: 700;
 `;
 
-const ButtonRow = styled.View`
+const ButtonRow = styled(AccessibleView)`
   margin: 16px 0 24px;
   flex-direction: row;
   justify-content: space-between;
 `;
 
-const Button = styled.TouchableOpacity`
+const Button = styled(AccessibleTouchableOpacity)`
   width: 48.5%;
   height: 54px;
   flex-direction: row;
@@ -206,7 +208,7 @@ const Button = styled.TouchableOpacity`
   opacity: ${({ disabled }) => (disabled ? 0.55 : 1)};
 `;
 
-const ButtonText = styled.Text`
+const ButtonText = styled(ReadableText)`
   margin-left: 7px;
   color: ${({ $secondary, theme }) => (
     $secondary ? theme.colors.primary : theme.colors.primaryDark

@@ -1,5 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
+
+
 import { scannerStyles as styles } from './scannerStyles';
 import {useInventoryTheme} from '../layout/InventoryScreen';
 

@@ -1,7 +1,10 @@
-import {Ionicons} from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleScrollView as ScrollView,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
+
 import {LinearGradient} from 'expo-linear-gradient';
 import {useRef,useState} from 'react';
-import {Image,ScrollView,StyleSheet,Text,TouchableOpacity,View,useWindowDimensions} from 'react-native';
+import {StyleSheet,useWindowDimensions} from 'react-native';
 import {useTheme} from 'styled-components/native';
 import {useApp} from '../../contexts/AppContext';
 import {SCREENS,TABS} from '../../navigation/routes';
@@ -37,13 +40,13 @@ export function HomeHighlights(){
  const theme=useTheme();
  const {width,fontScale}=useWindowDimensions();
  const scale=theme.fontScale||1;
- const largeText=fontScale*scale>1.1;
+ const largeText=fontScale*(theme.layoutFontScale||scale)>1.1;
  const text=(style,color='#010028')=>[style,{color,fontSize:style.fontSize*scale}];
  const slides=(HIGHLIGHTS[currentUser?.role]||[]).filter(item=>canAccessRoute(currentUser?.role,item.screen||SCREENS.TABS,item.tab));
  const carousel=useRef(null);
  const [slide,setSlide]=useState(0);
  const [carouselWidth,setCarouselWidth]=useState(0);
- const bannerHeight=Math.max(largeText?Math.ceil(240*fontScale*scale/1.3):(width<350?180:148),(carouselWidth||Math.max(1,width-48))/2.45);
+ const bannerHeight=Math.max(largeText?Math.ceil(240*fontScale*(theme.layoutFontScale||scale)/1.3):(width<350?180:148),(carouselWidth||Math.max(1,width-48))/2.45);
  function moveTo(index){const next=(index+slides.length)%slides.length;carousel.current?.scrollTo({x:next*carouselWidth,animated:!accessibilitySettings?.reduceMotion});setSlide(next);}
  function navigate(item){if(!selectedProject?.id&&(item.needsProject||requiresProject(item.screen,item.tab)))return selectTab(TABS.PROJECTS);item.tab?selectTab(item.tab):openScreen(item.screen);}
  if(!slides.length)return null;

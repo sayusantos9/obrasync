@@ -1,16 +1,20 @@
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleScrollView as ScrollView,AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
 import { useMemo, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Alert, StyleSheet} from 'react-native';
+
 import { useApp } from '../../contexts/AppContext';
 import { formatCurrency } from '../../utils/currency';
 import { parseDecimal,roundMoney } from '../../utils/bdi';
 import { useInventoryTheme, useInventoryStyles } from '../layout/InventoryScreen';
 
 const EMPTY={description:'',unit:'un',unitPrice:'',inputType:'MATERIAL'};
-export function CostInputEditor({items,onChange,disabled}) {
+export function CostInputEditor({items,onChange,disabled,editablePrices=false,lockedItems=false}) {
   const theme = useInventoryTheme();
   const styles = useInventoryStyles(makeStyles(theme));
-  const {costInputs=[],costInputsError,createCostInput,refreshCostInputs}=useApp();
+  const {costInputs=[],costInputsError,createCostInput,refreshCostInputs,currentUser}=useApp();
+  const canCreate=['MASTER','ENGINEERING'].includes(currentUser?.role);
   const [query,setQuery]=useState('');
   const [selected,setSelected]=useState(null);
   const [quantity,setQuantity]=useState('1');
@@ -40,8 +44,10 @@ export function CostInputEditor({items,onChange,disabled}) {
     finally{setLoading(false);}
   }
   return <View style={styles.root} pointerEvents={disabled ? 'none' : 'auto'}>
+    {lockedItems&&<Text style={styles.title}>Preços dos insumos da rodada</Text>}
+    {!lockedItems&&<>
     {!!costInputsError && <Text accessibilityRole="alert" style={styles.empty}>Falha ao carregar insumos: {costInputsError}. Toque em atualizar para tentar novamente.</Text>}
-    <Text style={styles.title}>Insumos do orçamento</Text>
+    <Text style={styles.title}>{editablePrices?'Insumos da proposta':'Insumos do orçamento'}</Text>
     <Text style={styles.description}>Selecione um insumo por código, nome ou unidade. Quantidade/coeficiente × preço unitário = custo do item sem BDI.</Text>
     <View style={styles.searchRow}><TextInput placeholder="Pesquisar código ou nome do insumo" placeholderTextColor={theme.colors.textMuted} accessibilityLabel="Pesquisar insumo" style={[styles.input,{flex:1}]} value={query} onChangeText={setQuery} />
       <TouchableOpacity accessibilityRole="button" accessibilityLabel="Atualizar insumos" style={styles.refresh} onPress={()=>refreshCostInputs().catch(e=>Alert.alert('Erro',e.message))}><Ionicons name="refresh" size={21} color={theme.colors.primary}/></TouchableOpacity></View>
@@ -57,20 +63,22 @@ export function CostInputEditor({items,onChange,disabled}) {
       <Text style={styles.label}>QUANTIDADE / COEFICIENTE ({selected.unit})</Text>
       <TextInput accessibilityLabel="Quantidade do insumo" keyboardType="decimal-pad" value={quantity} onChangeText={setQuantity} style={styles.input}/>
       <Text style={styles.estimate}>Custo do item: {formatCurrency(roundMoney((parseDecimal(quantity)||0)*Number(selected.unitPrice)))}</Text>
-      <TouchableOpacity accessibilityRole="button" style={styles.save} onPress={addItem}><Ionicons name="add-circle-outline" color="#FFF" size={18}/><Text style={styles.white}>Adicionar ao orçamento</Text></TouchableOpacity>
+      <TouchableOpacity accessibilityRole="button" style={styles.save} onPress={addItem}><Ionicons name="add-circle-outline" color="#FFF" size={18}/><Text style={styles.white}>{editablePrices?'Adicionar à proposta':'Adicionar ao orçamento'}</Text></TouchableOpacity>
     </View>}
-    <TouchableOpacity accessibilityRole="button" accessibilityState={{expanded:creating}} style={styles.newInput} onPress={()=>setCreating(v=>!v)}><Ionicons name={creating?'close':'add'} size={18} color={theme.colors.primary}/><Text style={styles.newText}>{creating?'Fechar cadastro':'Cadastrar novo insumo (código automático)'}</Text></TouchableOpacity>
-    {creating&&<View style={styles.form}>
+    {canCreate&&<TouchableOpacity accessibilityRole="button" accessibilityState={{expanded:creating}} style={styles.newInput} onPress={()=>setCreating(v=>!v)}><Ionicons name={creating?'close':'add'} size={18} color={theme.colors.primary}/><Text style={styles.newText}>{creating?'Fechar cadastro':'Cadastrar novo insumo (código automático)'}</Text></TouchableOpacity>}
+    {creating&&canCreate&&<View style={styles.form}>
       <Text style={styles.label}>NOME / DESCRIÇÃO</Text><TextInput value={draft.description} onChangeText={v=>setDraft(d=>({...d,description:v}))} placeholder="Ex.: Cabo de cobre 10 mm²" style={styles.input}/>
-      <Text style={styles.label}>TIPO DE INSUMO</Text><View style={styles.types}>{['MATERIAL','LABOR','EQUIPMENT','COMPLEMENTARY','SERVICE_INPUT','OTHER'].map(t=><TouchableOpacity key={t} onPress={()=>setDraft(d=>({...d,inputType:t}))} style={[styles.type,draft.inputType===t&&styles.typeSelected]}><Text style={styles.typeName}>{({MATERIAL:'Material',LABOR:'Mão de obra',EQUIPMENT:'Equipamento',COMPLEMENTARY:'Encargo complementar',SERVICE_INPUT:'Serviço como insumo',OTHER:'Outro'})[t]}</Text></TouchableOpacity>)}</View>
+      <Text style={styles.label}>TIPO DE INSUMO</Text><View style={styles.types}>{['MATERIAL','EQUIPMENT'].map(t=><TouchableOpacity key={t} onPress={()=>setDraft(d=>({...d,inputType:t}))} style={[styles.type,draft.inputType===t&&styles.typeSelected]}><Text style={styles.typeName}>{({MATERIAL:'Material',LABOR:'Mão de obra',EQUIPMENT:'Equipamento',COMPLEMENTARY:'Encargo complementar',SERVICE_INPUT:'Serviço como insumo',OTHER:'Outro'})[t]}</Text></TouchableOpacity>)}</View>
       <Text style={styles.label}>UNIDADE (UN, M, KG, H, M², M³...)</Text><TextInput value={draft.unit} onChangeText={v=>setDraft(d=>({...d,unit:v}))} style={styles.input}/>
       <Text style={styles.label}>PREÇO UNITÁRIO (R$)</Text><TextInput keyboardType="decimal-pad" value={draft.unitPrice} onChangeText={v=>setDraft(d=>({...d,unitPrice:v}))} placeholder="0,00" style={styles.input}/>
       <TouchableOpacity disabled={loading} style={styles.save} onPress={saveInput}><Text style={styles.white}>{loading?'Cadastrando...':'Salvar insumo'}</Text></TouchableOpacity>
     </View>}
     <Text style={styles.title}>Itens selecionados ({items.length})</Text>
-    {items.map((item,index)=><View key={item.id} style={styles.budgetItem}>
+    </>}
+    {items.map((item,index)=><View key={item.id} style={[styles.budgetItem,editablePrices&&{flexWrap:'wrap'}]}>
       <View style={{flex:1}}><Text style={styles.itemCode}>{index+1}. {item.code}</Text><Text style={styles.itemName}>{item.description}</Text><Text style={styles.itemSub}>{item.quantity} {item.unit} × {formatCurrency(item.unitPrice)} = {formatCurrency(item.total)}</Text></View>
-      <TouchableOpacity accessibilityRole="button" style={{padding:12,minWidth:44,minHeight:44}} accessibilityLabel={`Excluir ${item.code}`} onPress={()=>onChange(items.filter(i=>i.id!==item.id))}><Ionicons name="trash-outline" color={theme.colors.danger} size={21}/></TouchableOpacity>
+      {editablePrices&&<View style={{flex:1}}><Text style={styles.label}>PREÇO DO FORNECEDOR</Text><TextInput accessibilityLabel={`Preço do fornecedor para ${item.code}`} keyboardType="decimal-pad" value={String(item.unitPrice??'')} style={styles.input} onChangeText={value=>onChange(items.map(i=>i.id===item.id?{...i,unitPrice:value,total:roundMoney((parseDecimal(value)||0)*parseDecimal(i.quantity))}:i))}/></View>}
+      {!lockedItems&&<TouchableOpacity accessibilityRole="button" style={{padding:12,minWidth:44,minHeight:44}} accessibilityLabel={`Excluir ${item.code}`} onPress={()=>onChange(items.filter(i=>i.id!==item.id))}><Ionicons name="trash-outline" color={theme.colors.danger} size={21}/></TouchableOpacity>}
     </View>)}
   </View>;
 }

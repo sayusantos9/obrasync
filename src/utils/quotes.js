@@ -30,9 +30,11 @@ export function decodeQuoteMeta(value){
 export function toQuote(row){
   const info=decodeQuoteMeta(row.notes);
   return {id:row.id,number:row.number||`COT-${String(row.id).slice(0,6)}`,projectId:row.project_id,
+    requestId:row.request_id||null,originSnapshot:row.quote_rounds?.origin_snapshot||{},traceVersion:row.quote_rounds?.trace_version||0,roundId:row.round_id||null,roundTitle:row.quote_rounds?.title||'',awardedQuoteId:row.quote_rounds?.awarded_quote_id||null,awardReason:row.quote_rounds?.award_reason||'',orderId:row.quote_rounds?.order_id||null,
+    freight:Number(row.freight||0),taxes:Number(row.taxes||0),discount:Number(row.discount||0),expectedAt:row.expected_at||null,
     companyId:row.company_id,status:row.status||'OPEN',total:Number(row.total||0),validUntil:dateForDisplay(row.expires_at),
     title:info.title||`Cotação ${row.number||''}`,clientName:info.clientName||'',clientDocument:info.clientDocument||'',
     supplierName:info.supplierName||'',supplierDocument:info.supplierDocument||'',supplierContact:info.supplierContact||'',
     supplierEmail:info.supplierEmail||'',paymentTerms:info.paymentTerms||'',notes:info.notes||'',
-    items:(row.quotation_items||[]).map(item=>({id:item.id,description:item.description,unit:item.unit||'un',quantity:Number(item.quantity||0),unitPrice:Number(item.unit_price||0),total:Number(item.total??(Number(item.quantity||0)*Number(item.unit_price||0)))}))};
+    items:(row.quotation_items||[]).map(item=>({id:item.id,requestItemId:item.request_item_id||null,budgetRefs:item.budget_refs||[],budgetItemId:item.budget_item_id||null,inputId:item.catalog_input_id||item.cost_input_id,source:item.catalog_input_id?'shared':item.cost_input_id?'company':null,code:item.input_code||'',inputType:item.input_type||null,description:item.description,unit:item.unit||'un',quantity:Number(item.quantity||0),unitPrice:Number(item.unit_price||0),total:Number(item.total??(Number(item.quantity||0)*Number(item.unit_price||0)))}))};
 }

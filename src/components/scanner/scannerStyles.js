@@ -28,8 +28,9 @@ export const scannerStyles = StyleSheet.create({
   subtitle: { color: theme.colors.textMuted, fontSize: 12, marginTop: 2 },
   cameraArea: {
     backgroundColor: '#010028',
-    flex: 1,
-    minHeight: 380,
+    height: 440,
+    width: '100%',
+    flexShrink: 0,
     borderRadius:20,
     overflow: 'hidden',
   },

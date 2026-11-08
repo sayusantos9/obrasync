@@ -1,9 +1,12 @@
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import {useEffect,useMemo,useState,useRef} from 'react';
-import {Alert,Linking,StyleSheet,Switch,Text,TextInput,TouchableOpacity,View} from 'react-native';
-import {Ionicons} from '@expo/vector-icons';
+import {Alert,Linking,StyleSheet,Switch} from 'react-native';
+
 import {PlanengenScreen,usePlanengenStyle} from '../components/layout/PlanengenScreen';
 import {useApp} from '../contexts/AppContext';
-import {fetchMarketPrices,saveMarketPrice} from '../services/marketPriceService';
+import {fetchMarketPrices,saveMarketPrice,searchMarketPrices} from '../services/marketPriceService';
 import {marketComparison} from '../utils/marketPrices';
 import {parseDecimal} from '../utils/bdi';
 import {formatCurrency} from '../utils/currency';
@@ -26,6 +29,20 @@ function MarketContent() {
  const [quantity,setQuantity]=useState('1'),[cep,setCep]=useState(''),[payment,setPayment]=useState('À vista');
  const [form,setForm]=useState(empty),[showForm,setShowForm]=useState(false),[saving,setSaving]=useState(false);
  const saveLock=useRef(false);
+ const searchLock=useRef(false),searchVersion=useRef(0);
+ const [store,setStore]=useState(''),[searching,setSearching]=useState(false),[searchError,setSearchError]=useState(''),[research,setResearch]=useState(null);
+ const [searchTerm,setSearchTerm]=useState(''),[checkedOffers,setCheckedOffers]=useState({});
+ useEffect(()=>{setSearchTerm(selected?.description||'');},[selected?.id,selected?.source]);
+ useEffect(()=>{searchVersion.current++;setResearch(null);setSearchError('');setCheckedOffers({});},[selected?.id,selected?.source,searchTerm,store,quantity,cep,payment]);
+ useEffect(()=>()=>{searchVersion.current++;},[]);
+ async function search(){
+  if(searchLock.current)return;
+  if(!selected||searchTerm.trim().length<3||!validQuantity||postal.length!==8||payment.trim().length<2)return Alert.alert('Revise a pesquisa','Escolha o insumo e informe descrição, quantidade, CEP e pagamento.');
+  const version=++searchVersion.current;searchLock.current=true;setSearching(true);setSearchError('');setResearch(null);
+  try{const data=await searchMarketPrices({projectId:selectedProject.id,query:searchTerm.trim(),unit:selected.unit,store,quantity:qty,postalCode:postal,payment:payment.trim()});if(version===searchVersion.current)setResearch(data);}
+  catch(e){if(version===searchVersion.current)setSearchError(e.message);}
+  finally{searchLock.current=false;setSearching(false);}
+ }
  const set=(key)=>(value)=>setForm(f=>({...f,[key]:value}));
  async function load(){setLoading(true);setError('');try{setOffers(await fetchMarketPrices(selectedProject.id));}catch(e){setError(e.message);}finally{setLoading(false);}}
  useEffect(()=>{if(selectedProject?.id)load();},[]);
@@ -55,7 +72,7 @@ function MarketContent() {
  const button=(label,onPress,secondary=false,disabled=false)=><TouchableOpacity accessibilityRole="button" disabled={disabled} onPress={onPress} style={[styles.button,{backgroundColor:secondary?'#E7F2FE':colors.navy,opacity:disabled?0.5:1}]}><Text style={text(styles.buttonText,secondary?colors.blue:'#FFFFFF')}>{label}</Text></TouchableOpacity>;
  return <PlanengenScreen title="Preços de mercado">
   <View style={[styles.hero,{backgroundColor:colors.navy}]}><Ionicons name="pricetags-outline" size={28} color="#6AB9FF"/><Text style={text(styles.heading,'#FFFFFF')}>Pesquise antes de comprar.</Text><Text style={text(styles.body,'#D5E6FF')}>{selectedProject?.name} · Compare ofertas pesquisadas para o mesmo insumo e destino.</Text></View>
-  <Text style={text(styles.note,colors.muted)}>Pesquisa assistida: os preços são informados pela equipe. Não há consulta automática às lojas. Compras realizadas continuam no módulo de compras.</Text>
+  <Text style={text(styles.note,colors.muted)}>Pesquise preços públicos nas lojas e compare com o orçamento. Os resultados trazem fontes para conferência; frete e disponibilidade precisam ser confirmados com a loja.</Text>
   <Text style={text(styles.section)}>1. Escolha o insumo</Text>
   <Field label="Buscar por código ou descrição" value={query} onChangeText={setQuery}/>
   {!!costInputsError&&<Text accessibilityRole="alert" style={text(styles.body,'#B42318')}>{costInputsError}</Text>}
@@ -71,6 +88,39 @@ function MarketContent() {
    <Field label={`Quantidade necessária (${selected.unit})`} value={quantity} onChangeText={setQuantity} numeric/>
    <Field label="CEP de entrega (8 dígitos)" value={cep} onChangeText={setCep} keyboardType="number-pad" maxLength={9}/>
    <Field label="Condição de pagamento" value={payment} onChangeText={setPayment} placeholder="Ex.: À vista ou 3x sem juros"/>
+   <View style={[styles.card,{borderColor:colors.border}]}>
+    <Text style={text(styles.section)}>Pesquisa automática</Text>
+    <Field label="Descrição para pesquisar nas lojas" value={searchTerm} onChangeText={setSearchTerm} maxLength={500} placeholder="Ex.: cimento branco 1kg"/>
+    <Text style={text(styles.label)}>Onde pesquisar</Text>
+    {[['','Todas as lojas integradas'],['potiguar','Potiguar'],['telhanorte','Telhanorte']].map(([id,label])=><TouchableOpacity accessibilityRole="radio" accessibilityState={{checked:store===id}} key={id} onPress={()=>setStore(id)} style={[styles.option,{borderColor:store===id?colors.blue:colors.border}]}><Text style={text(styles.body,store===id?colors.blue:colors.text)}>{store===id?'✓ ':''}{label}</Text></TouchableOpacity>)}
+    <Text style={text(styles.note,colors.muted)}>Consulta direta aos sites, sem API de IA paga. Pesquisa geral cobre apenas as lojas integradas. CEP e pagamento não são confirmados pela busca: confira essas condições na loja.</Text>
+    {button(searching?'Pesquisando nas lojas...':'Pesquisar e comparar',search,false,searching)}
+    {!!searchError&&<Text accessibilityRole="alert" style={text(styles.body,'#B42318')}>{searchError}</Text>}
+    {research&&<>
+     <Text style={text(styles.note,colors.muted)}>Consultado em {new Date(research.searchedAt).toLocaleString('pt-BR')}</Text>
+     {!!research.summary&&<Text style={text(styles.body)}>{research.summary}</Text>}
+     {(research.stores||[]).map(s=><Text key={s.name} style={text(styles.note,s.status==='unavailable'?'#946000':colors.muted)}>{s.name}: {s.status==='ok'?'ofertas encontradas':s.status==='empty'?'nenhum preço compatível encontrado':'consulta indisponível; tente depois ou consulte o site'}</Text>)}
+     {!research.offers.length&&<Text style={text(styles.body)}>Nenhum preço público verificável encontrado para esta pesquisa. Tente outra loja ou registre uma cotação manual.</Text>}
+     {research.offers.map((o,index)=>{
+      const packs=Math.ceil(qty/o.packQuantity),subtotal=packs*o.price,unitPrice=o.price/o.packQuantity;
+      const comparable=o.unitKnown===true&&checkedOffers[o.url]===true;
+      const difference=estimated!==null&&comparable?estimated*qty-subtotal:null;
+      return <View key={o.url+index} style={[styles.option,{borderColor:colors.border}]}>
+       <Text style={text(styles.section)}>{o.supplier}</Text><Text style={text(styles.body)}>{o.product}</Text>
+       <Text style={text(styles.heading)}>{formatCurrency(o.price)} / embalagem</Text>
+       {o.unitKnown?<Text style={text(styles.body)}>Embalagem identificada: {o.packQuantity} {o.unit} · {formatCurrency(unitPrice)} / {o.unit}</Text>:<Text style={text(styles.note,'#946000')}>Unidade da embalagem não identificada com segurança. Revise o cadastro para informar a quantidade correta em {selected.unit}.</Text>}
+       {o.unitKnown&&<View style={styles.switchRow}><Text style={[text(styles.body),{flex:1}]}>Conferi que produto e embalagem correspondem ao insumo selecionado</Text><Switch accessibilityLabel={`Confirmar equivalência: ${o.product}`} value={!!checkedOffers[o.url]} onValueChange={v=>setCheckedOffers(old=>({...old,[o.url]:v}))}/></View>}
+       {comparable?<Text style={text(styles.body)}>Para {qty} {selected.unit}: {packs} embalagem(ns), subtotal {formatCurrency(subtotal)} sem frete.</Text>:<Text style={text(styles.note,'#946000')}>Equivalência não confirmada. Não incluído na comparação com o orçamento.</Text>}
+       {difference!==null&&<Text style={text(styles.body,colors.blue)}>{difference>=0?'Abaixo':'Acima'} do previsto: {formatCurrency(Math.abs(difference))}{estimated>0?` (${(Math.abs(difference)/(estimated*qty)*100).toFixed(1)}%)`:''}, sem frete e sujeito às condições da oferta.</Text>}
+       {!!o.notes&&<Text style={text(styles.note,colors.muted)}>{o.notes}</Text>}
+       {button('Ver preço na fonte',()=>Linking.openURL(o.url).catch(()=>Alert.alert('Não foi possível abrir o link')),true)}
+       {button('Revisar e registrar oferta',()=>{setForm({...empty(),supplier:o.supplier,product:o.product,url:o.url,pack:o.unitKnown?String(o.packQuantity):'',price:String(o.price),notes:`Pesquisa direta ${research.searchedAt}. ${o.notes}. Conferir embalagem em ${selected.unit}, equivalência e condições.`,verified:false,available:false});setShowForm(true);},true)}
+      </View>;
+     })}
+     {!!research.sources?.length&&<Text style={text(styles.label)}>Fontes consultadas</Text>}
+     {(research.sources||[]).map(s=><TouchableOpacity key={s.url} accessibilityRole="link" onPress={()=>Linking.openURL(s.url).catch(()=>Alert.alert('Não foi possível abrir o link'))}><Text style={[text(styles.note,colors.blue),{textDecorationLine:'underline'}]}>{s.title||s.url}</Text></TouchableOpacity>)}
+    </>}
+   </View>
    {button(showForm?'Fechar cadastro de oferta':'Registrar oferta pesquisada',()=>setShowForm(v=>!v),false,saving)}
    {showForm&&<View style={[styles.card,{borderColor:colors.border}]}>
     <Text style={text(styles.section)}>Nova consulta</Text>

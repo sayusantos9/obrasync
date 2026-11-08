@@ -1,9 +1,12 @@
+import {AccessibleSafeAreaView as SafeAreaView,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleScrollView as ScrollView,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import {HomeIndicators} from '../components/home/HomeIndicators';
 import {HomeHighlights} from '../components/home/HomeHighlights';
-import { Ionicons } from '@expo/vector-icons';
+
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator, RefreshControl, StyleSheet, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 import { formatCompactCurrency } from '../utils/currency';
 import { useApp } from '../contexts/AppContext';
@@ -12,7 +15,7 @@ import { SCREENS, TABS } from '../navigation/routes';
 const ACTIONS = [
  {id:'budget',title:'Criar orçamento',subtitle:'Quantidades e preços dos insumos',icon:'calculator-outline',route:SCREENS.CREATE_BUDGET},
  {id:'budgets',title:'Meus orçamentos',subtitle:'Consulte os documentos da obra',icon:'document-text-outline',tab:TABS.BUDGET},
- {id:'quotes',title:'Cotações',subtitle:'Consulte e organize as cotações',icon:'documents-outline',route:SCREENS.QUOTES},
+ {id:'quotes',title:'Mapa de cotações',subtitle:'Compare propostas e fornecedores',icon:'documents-outline',route:SCREENS.QUOTES},
  {id:'costs',title:'Custos',subtitle:'Acompanhe e compare os valores',icon:'wallet-outline',tab:TABS.COSTS},
  {id:'projects',title:'Obras',subtitle:'Dados e andamento das obras',icon:'construct-outline',tab:TABS.PROJECTS},
  {id:'reports',title:'Relatórios',subtitle:'Documentos em PDF e Excel',icon:'bar-chart-outline',route:SCREENS.REPORTS},

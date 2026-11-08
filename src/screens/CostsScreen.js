@@ -1,5 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import { InventoryScreen, useInventoryTheme, useInventoryStyles } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
 import { SCREENS, TABS } from '../navigation/routes';

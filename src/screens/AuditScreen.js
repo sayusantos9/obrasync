@@ -1,9 +1,11 @@
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import {useEffect,useState} from 'react';
-import {Text,TouchableOpacity,View} from 'react-native';
+
 import {PlanengenScreen,usePlanengenStyle} from '../components/layout/PlanengenScreen';
 import {supabase} from '../lib/supabase';
 import {useApp} from '../contexts/AppContext';
-const labels={REQUEST:'Solicitação criada',ORDER:'Pedido criado',APPROVE:'Pedido aprovado',REJECT:'Pedido rejeitado',PURCHASE:'Compra confirmada',RECEIVE:'Recebimento',STOCK:'Movimentação de estoque',EXPENSE:'Despesa registrada',ARCHIVE_BUDGET:'Orçamento arquivado',ARCHIVE_QUOTE:'Cotação arquivada'};
+const labels={REQUEST:'Solicitação criada',ORDER:'Pedido criado',APPROVE:'Pedido aprovado',REJECT:'Pedido rejeitado',PURCHASE:'Compra confirmada',RECEIVE:'Recebimento',STOCK:'Movimentação de estoque',EXPENSE:'Despesa registrada',ARCHIVE_BUDGET:'Orçamento arquivado',ARCHIVE_QUOTE:'Cotação arquivada',SUPPLIER_CREATED:'Fornecedor cadastrado',SUPPLIER_UPDATED:'Fornecedor atualizado',QUOTE_ORIGIN_LINKED:'Origem da rodada vinculada',QUOTE_CREATED:'Proposta cadastrada',QUOTE_AWARDED:'Fornecedor escolhido e pedido gerado',ATTACHMENT_ADDED:'Anexo incluído',BUDGET_VERSION:'Versão de orçamento criada',BUDGET_BASELINE:'Orçamento-base definido'};
 export function AuditScreen() {
  const {colors}=usePlanengenStyle();
  const {currentUser}=useApp();

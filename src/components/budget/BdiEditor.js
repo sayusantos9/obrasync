@@ -1,23 +1,26 @@
-import { useWindowDimensions, StyleSheet, Text, TextInput, View } from 'react-native';
-import { BDI_FIELDS, calculateBdi, parseDecimal } from '../../utils/bdi';
-import { useInventoryTheme, useInventoryStyles } from '../layout/InventoryScreen';
-const numberText=(n)=>String(n).replace('.',',');
-export function BdiEditor({value,onChange}) {
-  const theme = useInventoryTheme();
-  const styles = useInventoryStyles(makeStyles(theme));
-  const {width,fontScale}=useWindowDimensions();
-  const compact=width<360 || fontScale * (theme.fontScale || 1)>1.2;
-  let result, error;
-  try{result=calculateBdi(value);}catch(e){error=e.message;}
-  return <View style={styles.card}>
-    <Text style={styles.title}>Cálculo do BDI — sem desoneração</Text>
-    <Text style={styles.subtitle}>Fórmula do modelo enviado • ISS efetivo = base × alíquota / 100.</Text>
-    <View style={styles.grid}>{BDI_FIELDS.map(field=><View key={field.key} style={[styles.field,compact&&{width:'100%'}]}>
-      <Text style={styles.label}>{field.label}</Text>
-      <TextInput accessibilityLabel={field.label} keyboardType="decimal-pad" value={value?.[field.key]===undefined?'':numberText(value[field.key])} onChangeText={text=>onChange({...value,[field.key]:text===''?Number.NaN:parseDecimal(text)})} style={styles.input}/>
-    </View>)}</View>
-    {!!error&&<Text style={styles.error}>{error}</Text>}
-    {result&&<View style={styles.total}><Text style={styles.totalText}>ISS efetivo: {numberText(result.issEffective.toFixed(2))}%</Text><Text style={styles.totalBold}>BDI calculado: {numberText(result.rate.toFixed(2))}%</Text></View>}
-  </View>;
+import {useState} from 'react';
+import {Switch,useWindowDimensions} from 'react-native';
+import {AccessibleTextInput as Input,AccessibleTouchableOpacity as Button,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
+import {BDI_FIELDS,calculateBdi,roundMoney} from '../../utils/bdi';
+import {formatCurrency} from '../../utils/currency';
+import {useInventoryTheme} from '../layout/InventoryScreen';
+const numberText=v=>String(v??'').replace('.',',');
+export function BdiEditor({value,onChange,subtotal=0,disabled=false,applyLabel='Aplicar BDI neste orçamento'}){
+ const theme=useInventoryTheme(),{width,fontScale}=useWindowDimensions(),[advanced,setAdvanced]=useState(false);
+ const compact=width<360||fontScale*(theme.fontScale||1)>1.2,enabled=value?.enabled!==false,mode=value?.mode||'COMPONENTS';
+ let result=null,error='';try{result=calculateBdi(value);}catch(e){error=e.message;}
+ const text={color:theme.colors.text,fontSize:15,lineHeight:23},card={marginTop:18,padding:18,borderWidth:1,borderColor:theme.colors.border,borderRadius:18,backgroundColor:theme.colors.surface},button={padding:14,minHeight:48,marginTop:10,borderRadius:12,backgroundColor:theme.colors.primarySoft},input={...text,padding:12,minHeight:48,borderWidth:1,borderColor:theme.colors.border,borderRadius:12,marginTop:7};
+ function change(patch){onChange({...value,schemaVersion:2,enabled,mode,...patch});}
+ const amount=result?roundMoney(subtotal*result.rate/100):null;
+ return <View style={card}><Text accessibilityRole="header" style={{...text,fontWeight:'700',fontSize:20}}>BDI do orçamento</Text><View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',gap:12}}><Text style={[text,{flex:1}]}>{applyLabel}</Text><Switch accessibilityLabel={applyLabel} disabled={disabled} value={enabled} trackColor={{false:theme.colors.border,true:theme.colors.accent}} onValueChange={v=>change({enabled:v})}/></View>
+ <Text style={text}>{enabled?'Percentual adicional sobre o subtotal dos insumos.':'BDI não aplicado: o total será igual ao subtotal dos insumos.'}</Text>
+ <Text style={{...text,marginTop:12,fontWeight:'700'}}>Percentual de BDI (%)</Text>{mode==='PERCENT'?<Input accessibilityLabel="Percentual de BDI" keyboardType="decimal-pad" editable={!disabled&&enabled} value={numberText(value?.rate??0)} onChangeText={v=>change({rate:v})} style={input}/>:<Text style={{...text,fontSize:22,fontWeight:'700'}}>{result?numberText(result.rate.toFixed(2))+'%':'Revise os componentes'}</Text>}
+ {result&&<View style={[card,{backgroundColor:theme.colors.primarySoft}]}><Text style={text}>BDI aplicado: {numberText(result.rate.toFixed(2))}%</Text><Text style={{...text,fontSize:21,fontWeight:'700'}}>Acréscimo: {formatCurrency(amount)}</Text><Text style={text}>Total: {formatCurrency(roundMoney(subtotal+amount))}</Text></View>}
+ {!!error&&<Text accessibilityRole="alert" style={{...text,color:theme.colors.danger}}>{error}</Text>}
+ <Button accessibilityRole="button" accessibilityState={{expanded:advanced}} disabled={disabled} style={button} onPress={()=>setAdvanced(v=>!v)}><Text style={text}>{advanced?'Recolher configuração avançada do BDI':'Configuração avançada do BDI'}</Text></Button>
+ {advanced&&<><Text style={text}>Escolha um percentual direto ou calcule pelos componentes definidos pela empresa. Esses parâmetros não são determinados automaticamente pelo app.</Text>{[['PERCENT','Percentual direto'],['COMPONENTS','Calcular pelos componentes']].map(([v,label])=><Button key={v} accessibilityRole="radio" accessibilityState={{checked:mode===v}} disabled={disabled} style={button} onPress={()=>change({mode:v,rate:result?.rate??value.rate??0})}><Text style={text}>{mode===v?'● ':'○ '}{label}</Text></Button>)}
+ {mode==='COMPONENTS'&&<><Text style={text}>Modelo sem desoneração: ((1+AC+SG+R) × (1+DF) × (1+L) ÷ (1−CP−ISS))−1. ISS efetivo = base × alíquota ÷ 100. Configure os tributos conforme a finalidade do orçamento.</Text><View style={{flexDirection:'row',flexWrap:'wrap',gap:12}}>{BDI_FIELDS.map(field=><View key={field.key} style={{width:compact?'100%':'47%',marginTop:12}}><Text style={text}>{field.label}</Text><Input accessibilityLabel={field.label} value={numberText(value?.[field.key]??0)} onChangeText={v=>change({[field.key]:v})} editable={!disabled} keyboardType="decimal-pad" style={input}/></View>)}</View>{result&&enabled&&<Text style={text}>ISS efetivo: {numberText(result.issEffective.toFixed(2))}%</Text>}</>}
+ </>}
+ </View>;
 }
-const makeStyles = (theme) => StyleSheet.create({card:{marginTop:20,backgroundColor:'#FFF',borderWidth:1,borderColor:theme.colors.border,borderRadius:18,padding:15},title:{fontSize:17,fontWeight:'700',color:theme.colors.text},subtitle:{fontSize:11,color:theme.colors.textMuted,lineHeight:16,marginTop:5},grid:{flexDirection:'row',flexWrap:'wrap',justifyContent:'space-between',gap:8,marginTop:7},field:{width:'48%',marginTop:8},label:{fontSize:10,fontWeight:'800',color:theme.colors.textMuted,minHeight:28},input:{backgroundColor:theme.colors.surface,borderWidth:1,borderColor:theme.colors.border,borderRadius:10,paddingHorizontal:12,minHeight:44,color:theme.colors.text,fontSize:14},error:{color:theme.colors.danger,fontSize:12,marginTop:12},total:{marginTop:14,backgroundColor:theme.colors.primarySoft,padding:13,borderRadius:12},totalText:{color:theme.colors.primaryDark,fontSize:12},totalBold:{color:theme.colors.primaryDark,fontWeight:'700',fontSize:18,marginTop:4}});

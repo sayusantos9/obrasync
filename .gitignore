@@ -49,3 +49,16 @@ yarn-error.*
 backend/data/*.sqlite
 backend/data/*.sqlite-wal
 backend/data/*.sqlite-shm
+
+# Recovery artifacts and credentials must never enter the repository
+backups/
+*.obsbackup
+*.dump
+*.dpapi
+
+# Python runtime files
+__pycache__/
+*.pyc
+
+# Supabase CLI local state
+supabase/.temp/

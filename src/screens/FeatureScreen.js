@@ -1,4 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+
 import { Alert } from 'react-native';
 import { ScreenHeader } from '../components/layout/ScreenHeader';
 import { Content, Screen, Scroll } from '../components/ui/primitives';

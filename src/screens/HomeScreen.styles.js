@@ -1,12 +1,14 @@
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity,AccessibleScrollView,AccessibleScrollView as ScrollView} from '../components/accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../components/accessibility/ReadableText';
 import styled from 'styled-components/native';
 
-export const QuickActionsGrid = styled.View`
+export const QuickActionsGrid = styled(AccessibleView)`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
 `;
 
-export const MetricsList = styled.ScrollView.attrs({
+export const MetricsList = styled(AccessibleScrollView).attrs({
   horizontal: true,
   showsHorizontalScrollIndicator: false,
 })`
@@ -14,13 +16,13 @@ export const MetricsList = styled.ScrollView.attrs({
   padding-left: 20px;
 `;
 
-export const LoadingArea = styled.View`
+export const LoadingArea = styled(AccessibleView)`
   min-height: 126px;
   align-items: center;
   justify-content: center;
 `;
 
-export const ErrorCard = styled.TouchableOpacity`
+export const ErrorCard = styled(AccessibleTouchableOpacity)`
   min-height: 90px;
   padding: 16px;
   align-items: center;
@@ -30,7 +32,7 @@ export const ErrorCard = styled.TouchableOpacity`
   border-radius: 16px;
 `;
 
-export const ErrorText = styled.Text`
+export const ErrorText = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.danger};
   font-size: 13px;
   font-weight: 700;

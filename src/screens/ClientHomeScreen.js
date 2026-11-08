@@ -1,8 +1,11 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleSafeAreaView as SafeAreaView,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleScrollView as ScrollView,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRef, useState } from 'react';
-import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RefreshControl, StyleSheet, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 import { useApp } from '../contexts/AppContext';
 import { SCREENS, TABS } from '../navigation/routes';
@@ -40,7 +43,7 @@ export function ClientHomeScreen() {
   const { currentUser, projects, selectedProject, budgetDocuments, selectTab, selectProject, openScreen, logout,
     accessibilitySettings, isRefreshing, refreshCurrentProject, isOffline } = useApp();
   const scale = theme.fontScale || 1;
-  const largeText = fontScale * scale > 1.3;
+  const largeText = fontScale * (theme.layoutFontScale||scale) > 1.3;
   const narrow = width < 350;
   const contrast = accessibilitySettings?.highContrast;
   const muted = contrast ? '#222B3C' : '#52596C';
@@ -80,7 +83,6 @@ export function ClientHomeScreen() {
             <Image source={require('../assets/brand/planengen-light.png')} style={styles.logo} resizeMode="contain" accessibilityLabel="Planengen"/>
             <View style={styles.headerActions}>
               <TouchableOpacity accessibilityRole="button" accessibilityLabel="Sair da conta" onPress={logout} style={styles.headerButton}><Ionicons name="log-out-outline" size={25} color="#FFFFFF"/></TouchableOpacity>
-              <TouchableOpacity accessibilityRole="button" accessibilityLabel="Abrir configurações" onPress={() => openScreen(SCREENS.SETTINGS)} style={styles.settings}><Ionicons name="settings" size={26} color="#FFFFFF"/></TouchableOpacity>
             </View>
           </View>
           <Text style={text(styles.eyebrow, '#8FE5FF')}>OBRASYNC / CONSULTA CLIENTE</Text>
@@ -153,7 +155,6 @@ const styles = StyleSheet.create({
   logo: { width: 158, height: 47, flexShrink: 1 },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   headerButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  settings: { width: 45, height: 45, borderRadius: 25, backgroundColor: '#0086F7', borderColor: '#0762AC', borderWidth: 3, alignItems: 'center', justifyContent: 'center' },
   eyebrow: { fontSize: 10, letterSpacing: 1.8, fontWeight: '700', marginTop: 22 },
   greeting: { fontSize: 29, fontWeight: '700', letterSpacing: -0.7, marginTop: 5 },
   subtitle: { fontSize: 14, marginTop: 4 },

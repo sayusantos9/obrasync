@@ -1,3 +1,5 @@
+import {AccessibilityToolsProvider} from './src/components/accessibility/AccessibilityTools';
+import {ReauthenticationModal} from './src/components/security/ReauthenticationModal';
 import { useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider } from 'styled-components/native';
@@ -15,7 +17,7 @@ function AppShell() {
   return (
     <ThemeProvider theme={theme}>
       <StatusBar style="light" />
-      <AppNavigator />
+      <AccessibilityToolsProvider><AppNavigator /><ReauthenticationModal/></AccessibilityToolsProvider>
     </ThemeProvider>
   );
 }

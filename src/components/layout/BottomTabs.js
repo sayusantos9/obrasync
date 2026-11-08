@@ -1,6 +1,9 @@
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
 import {useEffect, useState} from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { Keyboard, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+
+import { Keyboard, StyleSheet, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 import { useApp } from '../../contexts/AppContext';

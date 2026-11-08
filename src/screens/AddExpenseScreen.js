@@ -1,5 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Alert, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
+import { Alert, useWindowDimensions } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { ChoiceChips } from '../components/forms/ChoiceChips';
 import { FormField } from '../components/forms/FormField';

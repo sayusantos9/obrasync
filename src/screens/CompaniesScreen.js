@@ -1,5 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
+import { StyleSheet} from 'react-native';
 import { PlanengenScreen, usePlanengenStyle } from '../components/layout/PlanengenScreen';
 import { useApp } from '../contexts/AppContext';
 

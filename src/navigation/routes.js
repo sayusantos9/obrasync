@@ -12,6 +12,11 @@ export const SCREENS = Object.freeze({
   TABS: 'tabs',
   REQUEST: 'request',
   QUOTES: 'quotes',
+  SUPPLIERS: 'suppliers',
+  USERS: 'users',
+  COMPANY_BDI: 'company-bdi',
+  SECURITY: 'security',
+  PURCHASE_PLANNING: 'purchase-planning',
   CREATE_QUOTE: 'create-quote',
   CREATE_BUDGET: 'create-budget',
   RECEIPT: 'receipt',
@@ -52,7 +57,7 @@ export function getRoleTabs(role) {
     return [
       { id: 'home', label: 'Início', icon: 'home', tab: TABS.HOME },
       { id: 'companies', label: 'Empresas', icon: 'business', screen: SCREENS.COMPANIES },
-      { id: 'members', label: 'Usuários', icon: 'people', screen: SCREENS.CREATE_MEMBER },
+      { id: 'members', label: 'Usuários', icon: 'people', screen: SCREENS.USERS },
       { id: 'projects', label: 'Obras', icon: 'business', tab: TABS.PROJECTS },
       { id: 'more', label: 'Mais', icon: 'menu', screen: SCREENS.SETTINGS },
     ];

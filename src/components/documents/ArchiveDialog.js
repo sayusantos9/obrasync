@@ -1,5 +1,8 @@
+import {AccessibleModal as Modal} from '../accessibility/AccessibleNative';
+import {AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
 import {useState} from 'react';
-import {Alert,Modal,Text,TextInput,TouchableOpacity,View} from 'react-native';
+import {Alert} from 'react-native';
 export function ArchiveDialog({document,onCancel,onConfirm}) {
  const [reason,setReason]=useState('');
  const [busy,setBusy]=useState(false);

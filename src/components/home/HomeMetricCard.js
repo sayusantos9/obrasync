@@ -1,7 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity} from '../accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../accessibility/ReadableText';
+
 import styled from 'styled-components/native';
 
-const Card = styled.TouchableOpacity`
+const Card = styled(AccessibleTouchableOpacity)`
   width: 158px;
   min-height: 126px;
   margin-right: 10px;
@@ -11,7 +14,7 @@ const Card = styled.TouchableOpacity`
   border-radius: 18px;
 `;
 
-const IconBox = styled.View`
+const IconBox = styled(AccessibleView)`
   width: 38px;
   height: 38px;
   align-items: center;
@@ -20,13 +23,13 @@ const IconBox = styled.View`
   border-radius: 12px;
 `;
 
-const Label = styled.Text`
+const Label = styled(ReadableText)`
   margin-top: 11px;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 12px;
 `;
 
-const Value = styled.Text`
+const Value = styled(ReadableText)`
   margin-top: 4px;
   color: ${({ $color, theme }) => $color || theme.colors.text};
   font-size: 18px;

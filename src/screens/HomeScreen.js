@@ -1,6 +1,7 @@
+import {AccessibleScrollView as ScrollView} from '../components/accessibility/AccessibleNative';
 import {HomeIndicators} from '../components/home/HomeIndicators';
 import {HomeHighlights} from '../components/home/HomeHighlights';
-import { ActivityIndicator, ScrollView } from 'react-native';
+import { ActivityIndicator} from 'react-native';
 import { QuickAction } from '../components/common/QuickAction';
 import { HomeAlertCard, HomeHero, SyncStatusCard } from '../components/home';
 import { AppHeader } from '../components/layout/AppHeader';

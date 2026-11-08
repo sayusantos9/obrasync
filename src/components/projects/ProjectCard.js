@@ -1,4 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity} from '../accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../accessibility/ReadableText';
+
 import styled from 'styled-components/native';
 
 const PROJECT_COLORS = [
@@ -7,7 +10,7 @@ const PROJECT_COLORS = [
   { color: '#2F9E7A', backgroundColor: '#E5F5EF' },
 ];
 
-const Card = styled.TouchableOpacity`
+const Card = styled(AccessibleTouchableOpacity)`
   margin-top: 14px;
   padding: 18px;
   background-color: white;
@@ -17,13 +20,13 @@ const Card = styled.TouchableOpacity`
   border-radius: 20px;
 `;
 
-const Top = styled.View`
+const Top = styled(AccessibleView)`
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
 `;
 
-const IconBox = styled.View`
+const IconBox = styled(AccessibleView)`
   width: 48px;
   height: 48px;
   align-items: center;
@@ -32,24 +35,24 @@ const IconBox = styled.View`
   border-radius: 15px;
 `;
 
-const Info = styled.View`
+const Info = styled(AccessibleView)`
   flex: 1;
   margin-left: 13px;
 `;
 
-const Name = styled.Text`
+const Name = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.text};
   font-size: 16px;
   font-weight: 900;
 `;
 
-const Meta = styled.Text`
+const Meta = styled(ReadableText)`
   margin-top: 4px;
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 13px;
 `;
 
-const ActiveBadge = styled.View`
+const ActiveBadge = styled(AccessibleView)`
   padding: 5px 8px;
   flex-direction: row;
   align-items: center;
@@ -57,14 +60,14 @@ const ActiveBadge = styled.View`
   border-radius: 999px;
 `;
 
-const ActiveText = styled.Text`
+const ActiveText = styled(ReadableText)`
   margin-left: 4px;
   color: ${({ theme }) => theme.colors.success};
   font-size: 10px;
   font-weight: 900;
 `;
 
-const ProgressTrack = styled.View`
+const ProgressTrack = styled(AccessibleView)`
   height: 7px;
   margin-top: 18px;
   overflow: hidden;
@@ -72,19 +75,19 @@ const ProgressTrack = styled.View`
   border-radius: 5px;
 `;
 
-const ProgressFill = styled.View`
+const ProgressFill = styled(AccessibleView)`
   width: ${({ $progress }) => $progress}%;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.accent};
 `;
 
-const Footer = styled.View`
+const Footer = styled(AccessibleView)`
   margin-top: 9px;
   flex-direction: row;
   justify-content: space-between;
 `;
 
-const SmallText = styled.Text`
+const SmallText = styled(ReadableText)`
   color: ${({ theme }) => theme.colors.textMuted};
   font-size: 12px;
 `;

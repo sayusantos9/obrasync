@@ -1,12 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleModal as Modal,AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessiblePressable as Pressable,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
+
 import { useMemo, useState } from 'react';
 import {
-  Modal,
-  Pressable,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
 } from 'react-native';
 import { useController } from 'react-hook-form';
 import { useInventoryTheme, useInventoryStyles } from '../layout/InventoryScreen';
@@ -88,6 +86,7 @@ export function CalendarField({ control, name, rules, label, placeholder = 'Sele
       <Text style={styles.label}>{label}</Text>
       <TouchableOpacity
         accessibilityRole="button"
+        accessibilityLabel={`Selecionar ${label.toLowerCase()}`}
         onPress={() => {
           setVisibleMonth(parseDate(value));
           setIsVisible(true);

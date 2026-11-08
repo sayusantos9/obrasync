@@ -40,7 +40,9 @@ export function createTheme(accessibility = {}, purchasing = false) {
   return {
     ...baseTheme,
     purchasing,
-    fontScale: accessibility.largeText ? 1.16 : 1,
+    accessibility,
+    fontScale: 1,
+    layoutFontScale: 1+(accessibility.fontLevel||0)*0.15+(accessibility.largeText?0.16:0),
     colors: highContrast
       ? {
           ...colors,

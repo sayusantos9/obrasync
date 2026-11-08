@@ -1,4 +1,6 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import {AccessibleTextInput as TextInput,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
+import { StyleSheet} from 'react-native';
 import { useController } from 'react-hook-form';
 import { useTheme } from 'styled-components/native';
 

@@ -1,8 +1,13 @@
+import {dateForDisplay} from '../utils/dates';
+import {downloadBudgetOriginal} from '../services/budgetImportService';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import {ArchiveDialog} from '../components/documents/ArchiveDialog';
-import { Ionicons } from '@expo/vector-icons';
+
 import { ProjectSelector } from '../components/budget/ProjectSelector';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet} from 'react-native';
 import { InventoryScreen } from '../components/layout/InventoryScreen';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
@@ -14,7 +19,7 @@ import { formatCurrency } from '../utils/currency';
 export function BudgetScreen() {
   const theme = useInventoryTheme();
   const styles = useInventoryStyles(makeStyles(theme));
-  const {budgetDocuments,currentUser,dashboard,openScreen,removeBudgetDocument,selectedProject,selectTab}=useApp();
+  const {budgetDocuments,currentUser,dashboard,openScreen,removeBudgetDocument,setBudgetBaseline,selectedProject,selectTab}=useApp();
   const [loading,setLoading]=useState('');
   const canWrite=[USER_ROLES.MASTER,USER_ROLES.ENGINEERING].includes(currentUser?.role);
   const documents=budgetDocuments.filter(doc=>selectedProject?.id && doc.projectId===selectedProject.id);
@@ -24,6 +29,14 @@ export function BudgetScreen() {
     catch(e){Alert.alert(`Não foi possível gerar ${format==='pdf'?'PDF':'Excel'}`,e?.message||'Falha na exportação');}
     finally{setLoading('');}
   }
+  async function defineBase(doc){
+    if(loading)return;setLoading(doc.id+'-base');
+    try{await setBudgetBaseline(doc);}catch(e){Alert.alert('Não foi possível definir a base',e.message);}finally{setLoading('');}
+  }
+  async function original(doc){
+    if(loading)return;setLoading(doc.id+'-original');
+    try{await downloadBudgetOriginal(doc.id);}catch(e){Alert.alert('Arquivo original',e.message);}finally{setLoading('');}
+  }
   const [archive,setArchive]=useState(null);
  function confirmDelete(doc){setArchive(doc);}
   return <InventoryScreen title="Orçamentos"><ArchiveDialog document={archive} onCancel={()=>setArchive(null)} onConfirm={removeBudgetDocument}/><ProjectSelector label="SELECIONAR OBRA PARA ORÇAMENTO"/>
@@ -31,12 +44,16 @@ export function BudgetScreen() {
       <TouchableOpacity style={styles.createButton} onPress={()=>selectTab(TABS.PROJECTS)}><Text style={styles.createText}>Selecionar obra</Text></TouchableOpacity></View> : <>
       <View style={styles.summary}><Text style={styles.eyebrow}>ORÇAMENTO PREVISTO</Text>
         <Text style={styles.big}>{formatCurrency(Number(dashboard?.budget ?? selectedProject?.budget ?? 0))}</Text>
-        <Text style={styles.summarySub}>{documents.length} documento(s) • {formatCurrency(documents.reduce((n,b)=>n+Number(b.total||0),0))} em documentos</Text><Text style={styles.summarySub}>Documentos podem representar alternativas. A soma não corresponde ao custo real da obra.</Text></View>
+        <Text style={styles.summarySub}>{documents.length} documento(s) • {formatCurrency(documents.reduce((n,b)=>n+Number(b.total||0),0))} em documentos</Text><Text style={styles.summarySub}>Revisões e alternativas não são somadas à previsão. O Gestor define uma única versão como base da obra.</Text></View>
       {canWrite&&<TouchableOpacity style={styles.createButton} onPress={()=>openScreen(SCREENS.CREATE_BUDGET)}><Ionicons name="add-circle" color="#FFF" size={22}/><Text style={styles.createText}>Criar novo orçamento</Text></TouchableOpacity>}
       <Text style={styles.sectionTitle}>{currentUser?.role===USER_ROLES.CLIENT?'Meus orçamentos':'Orçamentos cadastrados'}</Text>
       {!documents.length&&<View style={styles.empty}><Ionicons name="calculator-outline" color={theme.colors.primary} size={30}/><Text style={styles.emptyTitle}>Nenhum orçamento para esta obra</Text><Text style={styles.emptyText}>Quando um orçamento for cadastrado, poderá ser compartilhado em PDF e Excel.</Text></View>}
       {documents.map(doc=><View key={doc.id} style={styles.card}><View style={styles.cardTop}><View style={{flex:1}}><Text style={styles.number}>{doc.number}</Text><Text style={styles.title}>{doc.title}</Text></View>
         {canWrite&&<TouchableOpacity accessibilityRole="button" accessibilityLabel={`Arquivar ${doc.number}`} onPress={()=>confirmDelete(doc)} style={styles.iconButton}><Ionicons name="archive-outline" color={theme.colors.danger} size={18}/></TouchableOpacity>}</View>
+        <Text style={styles.meta}>{selectedProject.baselineBudgetId===doc.id?'● ORÇAMENTO-BASE ATIVO · ':''}Revisão {doc.revisionNumber} · Data-base: {dateForDisplay(doc.baseDate)||'Não informada (legado)'}</Text>
+        {!!doc.revisionOf&&<Text style={styles.meta}>Origem: {documents.find(b=>b.id===doc.revisionOf)?.number||doc.revisionOf} · {doc.revisionReason}</Text>}
+        {currentUser?.role===USER_ROLES.MASTER&&selectedProject.baselineBudgetId!==doc.id&&<TouchableOpacity accessibilityRole="button" disabled={!!loading||!doc.baseDate} style={styles.exportButton} onPress={()=>Alert.alert('Definir orçamento-base?',`A previsão da obra passará a ${formatCurrency(doc.total)}. O histórico será preservado.`,[{text:'Cancelar',style:'cancel'},{text:'Definir base',onPress:()=>defineBase(doc)}])}><Text style={styles.exportText}>{doc.baseDate?'Definir como orçamento-base':'Crie uma revisão com data-base para usar como base'}</Text></TouchableOpacity>}
+        {canWrite&&<TouchableOpacity accessibilityRole="button" disabled={!!loading} style={styles.exportButton} onPress={()=>original(doc)}><Text style={styles.exportText}>Baixar planilha original (se importado)</Text></TouchableOpacity>}
         <Text style={styles.meta}>Cliente: {doc.clientName||'Não informado'}</Text><Text style={styles.meta}>{doc.items?.length||0} item(ns) • validade {doc.validUntil||'não informada'}</Text>
         <View style={styles.totalRow}><Text style={styles.totalLabel}>Total</Text><Text style={styles.total}>{formatCurrency(Number(doc.total||0))}</Text></View>
         <View style={styles.exportRow}><TouchableOpacity accessibilityRole="button" disabled={!!loading} style={styles.exportButton} onPress={()=>exportBudget(doc,'pdf')}><Ionicons name="document-text-outline" size={18} color={theme.colors.primary}/><Text style={styles.exportText}>{loading===`${doc.id}-pdf`?'Gerando...':'Gerar PDF'}</Text></TouchableOpacity>

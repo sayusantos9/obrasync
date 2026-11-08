@@ -1,7 +1,9 @@
+import {AccessibleTouchableOpacity as TouchableOpacity} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import { ScannerActions } from '../components/scanner/ScannerActions';
 import { ScannerCameraPanel } from '../components/scanner/ScannerCameraPanel';
 import { InventoryScreen } from '../components/layout/InventoryScreen';
-import {Text,TouchableOpacity} from 'react-native';
+
 import { useScanner } from '../hooks/useScanner';
 
 export function ScannerScreen() {

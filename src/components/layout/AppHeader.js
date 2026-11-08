@@ -1,27 +1,30 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../accessibility/AccessibleNative';
+import {AccessibleView,AccessibleView as View,AccessibleTouchableOpacity,AccessibleTouchableOpacity as TouchableOpacity} from '../accessibility/AccessibleNative';
+import {ReadableText,ReadableText as Text} from '../accessibility/ReadableText';
+
 import styled from 'styled-components/native';
 import { useApp } from '../../contexts/AppContext';
 import { ROLE_LABELS } from '../../data/authData';
 import { SCREENS, TABS } from '../../navigation/routes';
 
-const Wrapper = styled.View`
+const Wrapper = styled(AccessibleView)`
   padding: 18px 20px 22px;
   background-color: ${({ theme }) => theme.colors.primary};
 `;
-const Top = styled.View`flex-direction: row; align-items: center; justify-content: space-between;`;
-const OperationalLabel = styled.View`margin-top: 12px; flex-direction: row; align-items: center;`;
-const OperationalDot = styled.View`width: 8px; height: 8px; margin-right: 7px; background-color: #34D399; border-radius: 4px;`;
-const OperationalText = styled.Text`color: #BFDBFE; font-size: 10px; font-weight: 800; letter-spacing: 1px;`;
-const Brand = styled.Text`color: white; font-size: ${({ theme }) => 27 * theme.fontScale}px; font-weight: 900;`;
-const Accent = styled.Text`color: ${({ theme }) => theme.colors.accent};`;
-const Actions = styled.View`flex-direction: row; gap: 8px;`;
-const Action = styled.TouchableOpacity`width: 42px; height: 42px; align-items: center; justify-content: center; background-color: rgba(255,255,255,.12); border-radius: 21px;`;
-const Badge = styled.View`position:absolute; top:-2px; right:-2px; min-width:18px; height:18px; padding:0 5px; align-items:center; justify-content:center; background-color:${({theme})=>theme.colors.danger}; border-radius:9px;`;
-const BadgeText = styled.Text`color:white; font-size:10px; font-weight:900;`;
-const Greeting = styled.Text`margin-top:22px; color:white; font-size:${({theme})=>25*theme.fontScale}px; font-weight:900;`;
-const Subtitle = styled.Text`margin-top:3px; color:rgba(255,255,255,.75); font-size:${({theme})=>12*theme.fontScale}px;`;
-const ProjectButton = styled.TouchableOpacity`min-height:46px; margin-top:16px; padding:0 14px; flex-direction:row; align-items:center; background-color:rgba(255,255,255,.14); border-radius:14px;`;
-const ProjectName = styled.Text`flex:1; margin-left:9px; color:white; font-size:${({theme})=>14*theme.fontScale}px; font-weight:800;`;
+const Top = styled(AccessibleView)`flex-direction: row; align-items: center; justify-content: space-between;`;
+const OperationalLabel = styled(AccessibleView)`margin-top: 12px; flex-direction: row; align-items: center;`;
+const OperationalDot = styled(AccessibleView)`width: 8px; height: 8px; margin-right: 7px; background-color: #34D399; border-radius: 4px;`;
+const OperationalText = styled(ReadableText)`color: #BFDBFE; font-size: 10px; font-weight: 800; letter-spacing: 1px;`;
+const Brand = styled(ReadableText)`color: white; font-size: ${({ theme }) => 27 * theme.fontScale}px; font-weight: 900;`;
+const Accent = styled(ReadableText)`color: ${({ theme }) => theme.colors.accent};`;
+const Actions = styled(AccessibleView)`flex-direction: row; gap: 8px;`;
+const Action = styled(AccessibleTouchableOpacity)`width: 42px; height: 42px; align-items: center; justify-content: center; background-color: rgba(255,255,255,.12); border-radius: 21px;`;
+const Badge = styled(AccessibleView)`position:absolute; top:-2px; right:-2px; min-width:18px; height:18px; padding:0 5px; align-items:center; justify-content:center; background-color:${({theme})=>theme.colors.danger}; border-radius:9px;`;
+const BadgeText = styled(ReadableText)`color:white; font-size:10px; font-weight:900;`;
+const Greeting = styled(ReadableText)`margin-top:22px; color:white; font-size:${({theme})=>25*theme.fontScale}px; font-weight:900;`;
+const Subtitle = styled(ReadableText)`margin-top:3px; color:rgba(255,255,255,.75); font-size:${({theme})=>12*theme.fontScale}px;`;
+const ProjectButton = styled(AccessibleTouchableOpacity)`min-height:46px; margin-top:16px; padding:0 14px; flex-direction:row; align-items:center; background-color:rgba(255,255,255,.14); border-radius:14px;`;
+const ProjectName = styled(ReadableText)`flex:1; margin-left:9px; color:white; font-size:${({theme})=>14*theme.fontScale}px; font-weight:800;`;
 
 export function AppHeader({ showOperationalLabel = false }) {
   const { currentUser, dashboard, openScreen, selectedProject, selectTab } = useApp();

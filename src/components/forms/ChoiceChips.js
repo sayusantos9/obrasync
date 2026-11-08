@@ -1,4 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../accessibility/AccessibleNative';
+import {ReadableText as Text} from '../accessibility/ReadableText';
+import { StyleSheet} from 'react-native';
 import { useController } from 'react-hook-form';
 import {useTheme} from 'styled-components/native';
 import {useInventoryStyles} from '../layout/InventoryScreen';

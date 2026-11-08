@@ -1,46 +1,46 @@
+import {OriginCard} from '../components/procurement/OriginCard';
+import {useEffect,useState} from 'react';
+import {Alert} from 'react-native';
+import {AccessibleView as View,AccessibleTouchableOpacity as Button,AccessibleTextInput as Input} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+import {InventoryScreen,useInventoryTheme} from '../components/layout/InventoryScreen';
+import {ProjectSelector} from '../components/budget/ProjectSelector';
 import {ArchiveDialog} from '../components/documents/ArchiveDialog';
-import { Ionicons } from '@expo/vector-icons';
-import { ProjectSelector } from '../components/budget/ProjectSelector';
-import { useState } from 'react';
-import { Alert,StyleSheet,Text,TouchableOpacity,View } from 'react-native';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
-import { useApp } from '../contexts/AppContext';
-import { USER_ROLES } from '../data/authData';
-import { SCREENS,TABS } from '../navigation/routes';
-import { exportDocument } from '../services/documentExportService';
-import { theme } from '../theme';
-import { formatCurrency } from '../utils/currency';
-import { getProjectQuotes } from '../utils/quotes';
-
+import {OperationAttachments} from '../components/documents/OperationAttachments';
+import {useApp} from '../contexts/AppContext';
+import {SCREENS} from '../navigation/routes';
+import {formatCurrency} from '../utils/currency';
+import {dateForDisplay} from '../utils/dates';
+import {compareQuoteRound} from '../utils/quoteComparison';
+import {exportDocument,shareWorkbook} from '../services/documentExportService';
 export function QuotesScreen(){
- const {openScreen,quotes,removeQuote,selectedProject,selectTab,currentUser}=useApp();
- const [busy,setBusy]=useState('');
- const canManage=[USER_ROLES.MASTER,USER_ROLES.ENGINEERING,USER_ROLES.PURCHASING].includes(currentUser?.role);
- const projectQuotes=getProjectQuotes(quotes,selectedProject?.id);
- async function generate(quote,format){
-  if(busy)return;setBusy(`${quote.id}-${format}`);
-  try{await exportDocument(quote,selectedProject,format,'Cotação');}
-  catch(e){Alert.alert('Erro ao exportar cotação',e?.message||'Falha ao gerar o arquivo.');}
-  finally{setBusy('');}
- }
- const [archive,setArchive]=useState(null);
- function confirmRemove(doc){setArchive(doc);}
- return <Screen><ArchiveDialog document={archive} onCancel={()=>setArchive(null)} onConfirm={removeQuote}/><ScreenHeader title="Cotações"/><Scroll><Content>
-  <View style={styles.hero}><Ionicons name="document-text-outline" size={25} color="#FFF"/><View style={{flex:1,marginLeft:12}}><Text style={styles.heroTitle}>Cotações da obra</Text><Text style={styles.heroSubtitle}>{selectedProject?.name||'Nenhuma obra selecionada'}</Text></View></View>
-  <ProjectSelector label="OBRA DAS COTAÇÕES"/>
-  {!selectedProject&&<View style={styles.emptyCard}><Text style={styles.emptyTitle}>Escolha uma obra</Text><Text style={styles.emptyText}>Selecione uma obra antes de cadastrar ou consultar cotações.</Text>
-  <TouchableOpacity style={styles.createButton} onPress={()=>selectTab(TABS.PROJECTS)}><Text style={styles.createText}>Selecionar obra</Text></TouchableOpacity></View>}
-  {selectedProject&&canManage&&<TouchableOpacity style={styles.createButton} onPress={()=>openScreen(SCREENS.CREATE_QUOTE)}><Ionicons name="add-circle" size={22} color="#FFF"/><Text style={styles.createText}>Nova cotação / Modelo-base</Text></TouchableOpacity>}
-  <Text style={styles.sectionTitle}>Cotações cadastradas</Text>
-  {selectedProject&&!projectQuotes.length&&<View style={styles.emptyCard}><Ionicons name="documents-outline" size={34} color={theme.colors.primary}/><Text style={styles.emptyTitle}>Nenhuma cotação cadastrada</Text><Text style={styles.emptyText}>Crie uma cotação e informe fornecedor, cliente, validade e itens.</Text></View>}
-  {projectQuotes.map(quote=><View key={quote.id} style={styles.card}><View style={{flexDirection:'row',alignItems:'flex-start'}}><View style={{flex:1}}><Text style={styles.number}>{quote.number}</Text><Text style={styles.title}>{quote.title}</Text></View>
-  {canManage&&<TouchableOpacity accessibilityLabel={`Excluir ${quote.number}`} onPress={()=>confirmRemove(quote)}><Ionicons name="trash-outline" color={theme.colors.danger} size={19}/></TouchableOpacity>}</View>
-  <Text style={styles.meta}>Cliente: {quote.clientName||'Não informado'}</Text><Text style={styles.meta}>Fornecedor: {quote.supplierName||'Não informado'}</Text>
-  <Text style={styles.meta}>{quote.items?.length||0} itens • válida até {quote.validUntil||'não informada'}</Text>
-  <Text style={styles.total}>Total: {formatCurrency(Number(quote.total||0))}</Text>
-  <View style={styles.actions}><TouchableOpacity disabled={!!busy} style={styles.docButton} onPress={()=>generate(quote,'pdf')}><Ionicons name="document-outline" size={16} color={theme.colors.primary}/><Text style={styles.docText}>PDF</Text></TouchableOpacity>
-  <TouchableOpacity disabled={!!busy} style={styles.docButton} onPress={()=>generate(quote,'excel')}><Ionicons name="grid-outline" size={16} color={theme.colors.primary}/><Text style={styles.docText}>Excel</Text></TouchableOpacity></View></View>)}
-  <View style={{height:60}}/></Content></Scroll></Screen>;
+ const {openScreen,quotes=[],removeQuote,awardQuote,selectedProject,currentUser,currentScreenParams={}}=useApp(),theme=useInventoryTheme();
+ const [busy,setBusy]=useState(''),[archive,setArchive]=useState(null),[roundId,setRoundId]=useState(''),[winner,setWinner]=useState(''),[reason,setReason]=useState('');
+ useEffect(()=>{setRoundId(currentScreenParams.roundId||'');setWinner('');setReason('');},[selectedProject?.id,currentScreenParams.roundId]);
+ const projectQuotes=quotes.filter(q=>q.projectId===selectedProject?.id),rounds=[...new Map(projectQuotes.filter(q=>q.roundId).map(q=>[q.roundId,q])).values()];
+ const round=rounds.find(q=>q.roundId===roundId)||rounds[0],proposals=round?projectQuotes.filter(q=>q.roundId===round.roundId):[];
+ const comparison=compareQuoteRound(proposals),canManage=['MASTER','ENGINEERING','PURCHASING'].includes(currentUser?.role),canAward=['MASTER','ENGINEERING','PURCHASING'].includes(currentUser?.role);
+ const text={color:theme.colors.text,fontSize:13},heading={...text,fontSize:20,fontWeight:'700',marginTop:22},card={padding:16,borderRadius:16,borderWidth:1,borderColor:theme.colors.border,backgroundColor:theme.colors.surface,marginTop:12,gap:8},button={padding:14,borderRadius:12,minHeight:48,backgroundColor:theme.colors.primarySoft,marginTop:8},label={...text,fontWeight:'700'};
+ async function run(key,fn){if(busy)return;setBusy(key);try{await fn();}catch(e){Alert.alert('Não foi possível concluir',e.message);}finally{setBusy('');}}
+ function approve(){const q=proposals.find(q=>q.id===winner);if(!q||reason.trim().length<10)return Alert.alert('Justifique a escolha','Selecione uma proposta e escreva ao menos 10 caracteres.');Alert.alert('Aprovar fornecedor e gerar pedido?',`${q.supplierName} — ${formatCurrency(q.total)}. O pedido será aprovado, mas a compra só será registrada quando for confirmada em Compras.`,[{text:'Cancelar',style:'cancel'},{text:'Aprovar e gerar pedido',onPress:()=>run('award',async()=>{await awardQuote(q.id,reason);setWinner('');setReason('');Alert.alert('Pedido gerado','A escolha e a justificativa foram registradas. O pedido está disponível em Compras.');})}]);}
+ async function exportMap(){await shareWorkbook([{name:'Propostas',rows:[['Rodada',round.roundTitle],['Solicitação',round.originSnapshot?.request?.number||'Sem vínculo'],['Orçamento de origem',round.originSnapshot?.budget?.number||'Sem base'],['Revisão de origem',round.originSnapshot?.budget?.revision||''],['Fornecedor','Cotação','Frete','Tributos adicionais','Desconto','Total','Entrega','Validade','Pagamento','Observações','Vencedora','Justificativa'],...comparison.rows.map(q=>[q.supplierName,q.number,q.freight,q.taxes,q.discount,q.total,q.expectedAt,q.validUntil,q.paymentTerms,q.notes,round.awardedQuoteId===q.id?'Sim':'Não',round.awardedQuoteId===q.id?round.awardReason:''])]},{name:'Insumos',rows:[['Fornecedor','Código','Descrição','Unidade','Quantidade','Preço unitário','Total sem adicionais'],...proposals.flatMap(q=>q.items.map(i=>[q.supplierName,i.code,i.description,i.unit,i.quantity,i.unitPrice,i.total]))]}],'Mapa_cotacoes');}
+ return <InventoryScreen title="Cotações"><ArchiveDialog document={archive} onCancel={()=>setArchive(null)} onConfirm={removeQuote}/><ProjectSelector label="OBRA DAS COTAÇÕES"/>
+ <View style={[card,{backgroundColor:theme.colors.primary}]}><Text style={{color:'#FFF',fontSize:24,fontWeight:'700'}}>Escolha com critério.</Text><Text style={{color:'#DCE4F0'}}>Compare propostas com o mesmo conjunto de insumos. Preço, prazo, pagamento e especificações devem ser avaliados juntos.</Text></View>
+ {selectedProject&&canManage&&<Button accessibilityRole="button" style={button} onPress={()=>openScreen(SCREENS.CREATE_QUOTE)}><Text style={label}>Nova proposta / rodada</Text></Button>}
+ <Text style={heading}>Mapa comparativo</Text>
+ {!rounds.length&&<Text style={text}>Cadastre propostas de pelo menos dois fornecedores na mesma rodada. Cotações antigas sem vínculo ao catálogo continuam disponíveis abaixo, mas não entram na comparação automática.</Text>}
+ {rounds.map(q=><Button accessibilityRole="radio" accessibilityState={{checked:round?.roundId===q.roundId}} key={q.roundId} style={button} onPress={()=>{setRoundId(q.roundId);setWinner('');setReason('');}}><Text style={label}>{round?.roundId===q.roundId?'● ':'○ '}{q.roundTitle}{q.awardedQuoteId?' · Escolha aprovada':''}</Text></Button>)}
+ {round&&<><OriginCard origin={round.originSnapshot} traceVersion={round.traceVersion} items={round.items}/><Text style={[text,{marginTop:12}]}>Totais incluem frete + tributos adicionais − desconto. Os preços unitários abaixo não incluem esses adicionais. Marcas, condições e equivalência técnica devem ser conferidas pelo Gestor.</Text>
+ {comparison.rows.map(q=><View key={q.id} style={[card,winner===q.id&&{borderColor:theme.colors.accent,borderWidth:2}]}><Text style={[label,{fontSize:17}]}>{q.supplierName}</Text><Text style={text}>{q.number} · {q.expired?'Proposta vencida':q.lowest?'Menor total vigente':'Proposta vigente'}</Text>
+ <Text style={[label,{fontSize:23}]}>{formatCurrency(q.total)}</Text><Text style={text}>Frete {formatCurrency(q.freight)} · Tributos {formatCurrency(q.taxes)} · Desconto {formatCurrency(q.discount)}</Text>
+ <Text style={text}>Entrega: {dateForDisplay(q.expectedAt)} · Validade: {q.validUntil}</Text><Text style={text}>Pagamento: {q.paymentTerms||'Não informado'}</Text><Text style={text}>Especificações: {q.notes||'Não informadas'}</Text>
+ {q.items.map(i=><Text key={i.id} style={text}>{i.code} · {i.description} · {i.quantity} {i.unit} × {formatCurrency(i.unitPrice)}</Text>)}
+ {!q.comparable&&<Text style={{...text,color:theme.colors.danger}}>Proposta incompatível. Revise insumos, unidades e quantidades.</Text>}
+ {round.awardedQuoteId===q.id&&<><Text style={label}>Fornecedor escolhido</Text><Text style={text}>{round.awardReason}</Text></>}
+ {canAward&&!round.awardedQuoteId&&<Button accessibilityRole="radio" accessibilityState={{checked:winner===q.id}} disabled={q.expired||!q.comparable||!!busy} onPress={()=>setWinner(q.id)} style={button}><Text style={label}>{winner===q.id?'● Selecionada':'Escolher proposta'}</Text></Button>}</View>)}
+ {canAward&&!round.awardedQuoteId&&<View style={card}><Text style={label}>Justificativa da escolha</Text><Input accessibilityLabel="Justificativa da escolha" value={reason} onChangeText={setReason} multiline style={{...text,borderWidth:1,borderColor:theme.colors.border,padding:12,borderRadius:10,minHeight:80}} placeholder="Considere preço, prazo, pagamento e especificações."/><Button accessibilityRole="button" disabled={!!busy||!winner||comparison.rows.filter(q=>!q.expired&&q.comparable).length<2} onPress={approve} style={button}><Text style={label}>{busy==='award'?'Registrando…':'Aprovar escolha e gerar pedido'}</Text></Button><Text style={text}>O servidor verifica sua alçada antes de aprovar; fora do limite, encaminhe ao Gestor. São necessárias duas propostas vigentes de fornecedores distintos. A escolha é por lote completo; não há escolha automática apenas pelo menor preço.</Text></View>}
+ <Button accessibilityRole="button" disabled={!!busy} style={button} onPress={()=>run('map',exportMap)}><Text style={label}>Exportar mapa em Excel</Text></Button>
+ {!!round.orderId&&<Button accessibilityRole="button" style={button} onPress={()=>openScreen(SCREENS.PURCHASES)}><Text style={label}>Abrir pedidos de compra</Text></Button>}</>}
+ <Text style={heading}>Propostas e anexos</Text>{projectQuotes.map(q=><View key={q.id} style={card}><Text style={label}>{q.number} · {q.supplierName}</Text><Text style={text}>{q.title} · {formatCurrency(q.total)}</Text><OperationAttachments kind="quote" entityId={q.id} projectId={selectedProject.id}/><View style={{flexDirection:'row',flexWrap:'wrap',gap:8}}>{['pdf','excel'].map(format=><Button accessibilityRole="button" key={format} style={button} disabled={!!busy} onPress={()=>run(q.id,()=>exportDocument(q,selectedProject,format,'Cotação'))}><Text style={label}>Exportar {format.toUpperCase()}</Text></Button>)}{canManage&&!q.awardedQuoteId&&<Button accessibilityRole="button" style={button} onPress={()=>setArchive(q)}><Text style={text}>Arquivar</Text></Button>}</View></View>)}
+ </InventoryScreen>;
 }
-const styles=StyleSheet.create({hero:{backgroundColor:theme.colors.primaryDark,borderRadius:18,marginTop:20,padding:18,flexDirection:'row',alignItems:'center'},heroTitle:{color:'#FFF',fontSize:18,fontWeight:'900'},heroSubtitle:{color:'#D6E1F0',fontSize:12,marginTop:4},createButton:{backgroundColor:theme.colors.primary,borderRadius:14,marginTop:15,minHeight:52,alignItems:'center',justifyContent:'center',flexDirection:'row'},createText:{color:'#FFF',fontWeight:'900',fontSize:14,marginLeft:7},sectionTitle:{color:theme.colors.text,fontWeight:'900',fontSize:19,marginTop:24,marginBottom:14},emptyCard:{backgroundColor:'#FFF',borderColor:theme.colors.border,borderWidth:1,borderRadius:16,padding:22,marginTop:12,alignItems:'center'},emptyTitle:{color:theme.colors.text,fontWeight:'900',fontSize:15,marginTop:8},emptyText:{color:theme.colors.textMuted,fontSize:12,textAlign:'center',marginTop:6},card:{backgroundColor:'#FFF',borderColor:theme.colors.border,borderWidth:1,borderRadius:16,padding:16,marginTop:12},number:{color:theme.colors.primary,fontSize:11,fontWeight:'900'},title:{color:theme.colors.text,fontSize:16,fontWeight:'900',marginTop:4},meta:{color:theme.colors.textMuted,fontSize:11,marginTop:6},total:{color:theme.colors.primaryDark,fontWeight:'900',fontSize:17,marginTop:12},actions:{flexDirection:'row',gap:10,marginTop:12},docButton:{alignItems:'center',justifyContent:'center',flexDirection:'row',backgroundColor:theme.colors.primarySoft,paddingHorizontal:20,paddingVertical:12,borderRadius:11,gap:6},docText:{color:theme.colors.primary,fontSize:12,fontWeight:'900'}});

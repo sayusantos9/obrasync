@@ -1,4 +1,6 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+import { Alert, StyleSheet} from 'react-native';
 import { useForm } from 'react-hook-form';
 import { FormField } from '../components/forms/FormField';
 import { ScreenHeader } from '../components/layout/ScreenHeader';

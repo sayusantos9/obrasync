@@ -17,7 +17,7 @@ export async function fetchCostInputs() {
     if (!data || data.length < 500) break;
   }
   return [...shared.map(row => ({
-    id: row.id, source: 'shared', code: row.catalog_code, description: row.description,
+    id: row.id, source: 'shared', code: row.catalog_code, sourceCode:row.source_code, sourceBank:row.source_bank, description: row.description,
     unit: row.unit, unitPrice: Number(row.reference_unit_price), inputType: row.input_type || 'OTHER',
   })), ...own];
 }
@@ -27,7 +27,7 @@ export async function saveCompanyInput(draft, user) {
     throw new Error('Somente o Gestor e a Engenharia podem cadastrar insumos.');
   }
   const price = Number(draft.unitPrice);
-  if (!['MATERIAL','LABOR','EQUIPMENT','COMPLEMENTARY','SERVICE_INPUT','OTHER'].includes(draft.inputType) || !draft.description?.trim() || !draft.unit?.trim()
+  if (!['MATERIAL','EQUIPMENT'].includes(draft.inputType) || !draft.description?.trim() || !draft.unit?.trim()
       || !Number.isFinite(price) || price < 0) throw new Error('Informe um insumo, unidade e preço válido.');
   // A data é a data real do cadastro manual, não uma data inventada para a planilha.
   const reference = { company_id: user.companyId, source_code: 'CADASTRO_MANUAL',

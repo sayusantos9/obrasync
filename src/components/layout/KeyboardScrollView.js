@@ -1,5 +1,6 @@
+import {AccessibleScrollView as ScrollView,AccessibleTextInput as TextInput} from '../accessibility/AccessibleNative';
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import { Keyboard, Platform, ScrollView, TextInput } from 'react-native';
+import { Keyboard, Platform} from 'react-native';
 
 // The navigator makes room for the keyboard; scroll only the remaining overlap.
 // Measuring the viewport also handles fields below headers and nested forms.

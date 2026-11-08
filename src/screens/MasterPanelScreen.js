@@ -1,16 +1,20 @@
+import {AccessibleSafeAreaView as SafeAreaView,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleScrollView as ScrollView,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import {HomeIndicators} from '../components/home/HomeIndicators';
 import {HomeHighlights} from '../components/home/HomeHighlights';
-import { Ionicons } from '@expo/vector-icons';
+
 import { useRef, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 import { useApp } from '../contexts/AppContext';
 import { SCREENS, TABS } from '../navigation/routes';
 
 const ACTIONS = [
+  { id: 'quotes', title: 'Mapa de cotações', subtitle: 'Compare fornecedores e aprove a escolha', icon: 'documents-outline', route: SCREENS.QUOTES },
   { id: 'companies', title: 'Empresas', subtitle: 'Cadastros e dados empresariais', icon: 'business-outline', route: SCREENS.COMPANIES },
-  { id: 'members', title: 'Funcionários', subtitle: 'Cadastre usuários e seus perfis', icon: 'people-outline', route: SCREENS.CREATE_MEMBER },
+  { id: 'members', title: 'Funcionários', subtitle: 'Consulte e gerencie a equipe por obra', icon: 'people-outline', route: SCREENS.USERS },
   { id: 'projects', title: 'Obras', subtitle: 'Projetos vinculados à empresa', icon: 'construct-outline', tab: TABS.PROJECTS },
   { id: 'permissions', title: 'Permissões', subtitle: 'Consulte a equipe e os acessos', icon: 'shield-checkmark-outline', route: SCREENS.COMPANY_PERMISSIONS },
   { id: 'reports', title: 'Relatórios', subtitle: 'Consulte os relatórios disponíveis', icon: 'bar-chart-outline', route: SCREENS.REPORTS },

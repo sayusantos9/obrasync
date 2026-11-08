@@ -1,7 +1,10 @@
+import {AccessibleSafeAreaView as SafeAreaView,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleImage as Image,AccessibleScrollView as ScrollView,AccessibleTextInput as TextInput,AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { useController, useForm } from 'react-hook-form';
 import { useTheme } from 'styled-components/native';
 import { useApp } from '../contexts/AppContext';
@@ -49,7 +52,7 @@ export function CreateMemberScreen() {
     saving.current = true;
     try {
       const member = await createMember({ ...values, role });
-      Alert.alert('Usuário cadastrado', `${member.name} já pode entrar no ObraSync como ${ROLE_LABELS[member.role]}.`, [
+      Alert.alert('Usuário cadastrado', `${member.name} já pode entrar no ObraSync como ${ROLE_LABELS[member.role]}. Para liberar obras, use Mais → Permissões e alçadas. Para Consulta/Cliente, faça o vínculo no cadastro da obra.`, [
         { text: 'Cadastrar outro', onPress: () => { reset(DEFAULT_VALUES); setRole(USER_ROLES.REQUESTER); setShowPassword(false); scrollRef.current?.scrollTo({ y: 0, animated: !accessibilitySettings?.reduceMotion }); } },
         { text: 'Concluir', onPress: goBack },
       ]);

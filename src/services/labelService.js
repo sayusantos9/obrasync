@@ -1,3 +1,4 @@
+import {generateAndSharePdf} from './pdfSharingService';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
@@ -18,7 +19,6 @@ export const printMaterialLabel = async (item, qrBase64) => {
 
 export const shareMaterialLabel = async (item, qrBase64) => {
   if (!(await Sharing.isAvailableAsync())) return false;
-  const { uri } = await Print.printToFileAsync({ html: createLabelHtml(item, qrBase64) });
-  await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: `Etiqueta ${item.id}` });
+  await generateAndSharePdf(createLabelHtml(item,qrBase64),`Etiqueta ${item.id}`);
   return true;
 };

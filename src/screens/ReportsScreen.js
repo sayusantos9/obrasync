@@ -1,7 +1,11 @@
-import { Ionicons } from '@expo/vector-icons';
+import {ExecutiveReportPanel} from '../components/reports/ExecutiveReportPanel';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {AccessibleTouchableOpacity as TouchableOpacity,AccessibleView as View} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+
 import { ProjectSelector } from '../components/budget/ProjectSelector';
 import { useMemo, useRef, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet} from 'react-native';
 import { PlanengenScreen, usePlanengenStyle } from '../components/layout/PlanengenScreen';
 import { useApp } from '../contexts/AppContext';
 import { USER_ROLES } from '../data/authData';
@@ -68,12 +72,13 @@ export function ReportsScreen() {
       <Text style={text(styles.heading)}>Escolha a obra para começar</Text><Text style={text(styles.body,colors.muted)}>Os relatórios serão organizados pelos registros da obra selecionada.</Text>
       <TouchableOpacity accessibilityRole="button" onPress={()=>selectTab(TABS.PROJECTS)} style={[styles.primary,{backgroundColor:colors.navy}]}><Text style={text(styles.actionText,'#FFFFFF')}>Selecionar obra</Text></TouchableOpacity>
     </View> : <>
+      {[USER_ROLES.MASTER,USER_ROLES.ENGINEERING,USER_ROLES.PURCHASING].includes(currentUser?.role)&&<ExecutiveReportPanel key={selectedProject.id} projectId={selectedProject.id}/>}
       <View style={styles.kpis}>{[[String(available.length),'Tipos de relatório'],[String(count),'Registros disponíveis']].map(([value,label])=><View key={label} style={[styles.kpi,{borderColor:colors.border}]}><Text style={text(styles.value,colors.navy)}>{value}</Text><Text style={text(styles.small,colors.muted)}>{label}</Text></View>)}</View>
       {!!loading&&<View accessibilityLiveRegion="polite" style={styles.notice}><Text style={text(styles.body,colors.blue)}>Preparando arquivo para compartilhar…</Text></View>}
       <Text accessibilityRole="header" style={text(styles.heading)}>Exportar relatórios</Text>
       {!isClient&&<View style={[...cardStyle,{borderColor:colors.blue}]}>
-        <View style={styles.cardHeading}><View style={styles.icon}><Ionicons name="layers-outline" size={24} color={colors.blue}/></View><View style={{flex:1}}><Text style={text(styles.cardTitle)}>Relatório consolidado</Text><Text style={text(styles.small,colors.muted)}>Todos os módulos disponíveis em um arquivo.</Text></View></View>
-        <View style={styles.actions}><Action label="PDF" context="Relatório consolidado" disabled={!!loading} onPress={()=>generate('all','pdf')}/><Action label="Excel" context="Relatório consolidado" disabled={!!loading} onPress={()=>generate('all','excel')}/></View>
+        <View style={styles.cardHeading}><View style={styles.icon}><Ionicons name="layers-outline" size={24} color={colors.blue}/></View><View style={{flex:1}}><Text style={text(styles.cardTitle)}>Arquivo de registros</Text><Text style={text(styles.small,colors.muted)}>Listagem documental. Consulte os indicadores financeiros no relatório executivo.</Text></View></View>
+        <View style={styles.actions}><Action label="PDF" context="Arquivo de registros" disabled={!!loading} onPress={()=>generate('all','pdf')}/><Action label="Excel" context="Arquivo de registros" disabled={!!loading} onPress={()=>generate('all','excel')}/></View>
       </View>}
       {available.map(item=><View key={item.id} style={cardStyle}>
         <View style={styles.cardHeading}><View style={styles.icon}><Ionicons name={item.icon} size={23} color={colors.blue}/></View><View style={{flex:1}}><Text style={text(styles.cardTitle)}>{item.title}</Text><Text style={text(styles.small,colors.muted)}>{reports[item.id].rows.length} registro(s)</Text></View></View>
@@ -87,7 +92,7 @@ export function ReportsScreen() {
         <View style={styles.actions}><Action label="PDF" context={doc.number} disabled={!!loading} onPress={()=>exportBudget(doc,'pdf')}/><Action label="Excel" context={doc.number} disabled={!!loading} onPress={()=>exportBudget(doc,'excel')}/></View>
       </View>)}
       {currentUser?.role===USER_ROLES.ENGINEERING&&<TouchableOpacity accessibilityRole="button" onPress={()=>openScreen(SCREENS.QUOTES)} style={styles.link}><Text style={text(styles.actionText,colors.blue)}>Consultar cotações →</Text></TouchableOpacity>}
-      <View style={styles.notice}><Ionicons name="information-circle-outline" size={22} color={colors.blue}/><Text style={[text(styles.small,colors.muted),{flex:1}]}>Os arquivos refletem os dados carregados e as permissões do seu perfil. A soma de orçamentos pode incluir alternativas; não representa uma única previsão da obra. Pedidos não equivalem automaticamente a compras realizadas.</Text></View>
+      <View style={styles.notice}><Ionicons name="information-circle-outline" size={22} color={colors.blue}/><Text style={[text(styles.small,colors.muted),{flex:1}]}>Os arquivos refletem os dados carregados e as permissões do seu perfil. Orçamentos e cotações são documentos alternativos e não são somados. Os indicadores do executivo usam a base oficial e distinguem aprovação, compra e recebimento.</Text></View>
     </>}
   </PlanengenScreen>;
 }

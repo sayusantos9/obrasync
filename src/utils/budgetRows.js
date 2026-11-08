@@ -1,4 +1,4 @@
-import { calculateBdi,roundMoney,DEFAULT_BDI } from './bdi.js';
+import { calculateBdi,roundMoney,budgetBdiSnapshot } from './bdi.js';
 export function getBudgetLines(doc){
   const bdi=Number(doc?.bdiRate ?? doc?.bdi_percent ?? 0);
   return (doc?.items||[]).map(i=>{const qty=Number(i.quantity||0),price=Number(i.unitPrice??i.unit_price??0);const subtotal=roundMoney(qty*price);
@@ -13,7 +13,8 @@ export function getBudgetTotals(doc){
   return {subtotal:Number(subtotal),bdiRate,bdiAmount,total};
 }
 export function bdiTableRows(doc){
-  const cfg={...DEFAULT_BDI,...(doc?.bdiConfig||doc?.bdi_config||{})};
+  const cfg=budgetBdiSnapshot(doc);
   const calc=calculateBdi(cfg);
-  return {rows:[['Administração Central','AC',cfg.ac],['Seguro e Garantia','SG',cfg.sg],['Risco','R',cfg.r],['Despesas Financeiras','DF',cfg.df],['Lucro','L',cfg.l],['Tributos (PIS/COFINS)','CP',cfg.cp],['ISS efetivo','ISS',calc.issEffective],['BDI sem desoneração','BDI PAD',calc.rate]],config:cfg,calc};
+  const hasComponents=cfg.enabled&&cfg.mode==='COMPONENTS';
+  return {rows:hasComponents?[['Administração Central','AC',cfg.ac],['Seguro e Garantia','SG',cfg.sg],['Risco','R',cfg.r],['Despesas Financeiras','DF',cfg.df],['Lucro','L',cfg.l],['Tributos (PIS/COFINS)','CP',cfg.cp],['ISS efetivo','ISS',calc.issEffective],['BDI sem desoneração','BDI PAD',calc.rate]]:[[cfg.enabled?'Percentual direto':'BDI não aplicado','BDI',calc.rate]],config:cfg,calc,hasComponents,title:!cfg.enabled?'BDI não aplicado':hasComponents?'BDI por componentes':'BDI percentual direto'};
 }

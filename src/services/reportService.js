@@ -15,12 +15,10 @@ export function buildReports(data = {}, projectId) {
     budgets: {
       title: 'Orçamentos',headers:['Número','Título','Cliente','Status','Total (R$)'],
       rows: budgets.map(b=>[b.number,b.title,b.clientName,b.status,money(b.total)]),
-      total:budgets.reduce((n,b)=>n+money(b.total),0),
     },
     quotes: {
       title:'Cotações',headers:['Número','Título','Fornecedor','Status','Total (R$)'],
       rows:quotes.map(q=>[q.number,q.title,q.supplierName,q.status,money(q.total)]),
-      total:quotes.reduce((n,q)=>n+money(q.total),0),
     },
     expenses: {
       title:'Despesas',headers:['Data','Descrição','Categoria','Valor (R$)'],
@@ -34,11 +32,14 @@ export function buildReports(data = {}, projectId) {
     orders: {
       title:'Pedidos de compra',headers:['Número','Status','Fornecedor','Total (R$)'],
       rows:orders.map(o=>[o.number||o.id,o.status||'',o.supplierName||o.supplier||'',money(o.total)]),
-      total:orders.reduce((n,o)=>n+money(o.total),0),
     },
     receipts: {
-      title:'Recebimentos',headers:['Referência','Data','Observações'],
-      rows:receipts.map(r=>[r.reference||r.id||'',r.receivedAt||'',r.notes||'']),
+      title:'Recebimentos',headers:['Referência','Data','Aceitos na conferência','Rejeições / não conformidades','Devoluções ao fornecedor','Observações'],
+      rows:receipts.map(r=>[r.reference||r.id||'',r.receivedAt||'',
+        (r.items||[]).map(i=>`${i.description}: ${i.quantity} ${i.unit}`).join('; '),
+        (r.receipt_quality||[]).filter(q=>Number(q.rejected_quantity)>0).map(q=>`Item ${q.order_item_id}: ${q.rejected_quantity} rejeitada(s) — ${q.reason||''}${q.nonconformity?` / ${q.nonconformity}`:''}`).join('; '),
+        (r.items||[]).flatMap(i=>(i.supplier_returns||[]).map(d=>`${i.description}: ${d.quantity} ${i.unit} — ${d.reason}${d.nonconformity?` / ${d.nonconformity}`:''}${d.reference?` / ${d.reference}`:''}`)).join('; '),
+        r.notes||'']),
     },
   };
 }

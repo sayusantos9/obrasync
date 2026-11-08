@@ -1,3 +1,4 @@
+import {generateAndSharePdf} from './pdfSharingService';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { formatCurrency } from '../utils/currency';
@@ -32,10 +33,7 @@ function buildHtml(document, project) {
 }
 
 export async function generateBudgetDocumentPdf(document, project) {
-  const { uri } = await Print.printToFileAsync({ html: buildHtml(document, project) });
-  const available = await Sharing.isAvailableAsync();
-  if (available) await Sharing.shareAsync(uri, { mimeType:'application/pdf', dialogTitle:`${document.number || 'Orçamento'} - ${project?.name || 'ObraSync'}` });
-  return { uri, wasShared: available };
+  return generateAndSharePdf(buildHtml(document,project),`${document.number || 'Orçamento'} - ${project?.name || 'ObraSync'}`);
 }
 
 export const generateBudgetPdf = async ({ project, budgetItems = [], ...rest }) => generateBudgetDocumentPdf({

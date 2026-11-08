@@ -1,4 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
+import {AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';

@@ -1,163 +1,25 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useMemo, useState } from 'react';
-import { Text } from 'react-native';
-import { ScreenHeader } from '../components/layout/ScreenHeader';
-import { Content, Screen, Scroll } from '../components/ui/primitives';
-import { useApp } from '../contexts/AppContext';
-import {
-  AlertCard,
-  AlertIcon,
-  AlertInfo,
-  AlertTitle,
-  Description,
-  FilterChip,
-  FilterRow,
-  FilterText,
-  MarkButton,
-  Time,
-} from './AlertsScreen.styles';
-
-const ALERT_FILTERS = ['Todos', 'Custos', 'Prazos', 'Aprovações'];
-const ALERT_PALETTE = {
-  danger: { backgroundColor: '#FBE9E7', color: '#B5473E' },
-  warning: { backgroundColor: '#FFF2E8', color: '#C85E0D' },
-  info: { backgroundColor: '#EEF3FF', color: '#1D6BD6' },
-  success: { backgroundColor: '#E9F8EF', color: '#2BA569' },
-};
-
-function buildAlerts({ dashboard, orders, requests, budgetDocuments }) {
-  const result = [];
-
-  if (Number(dashboard?.deviation) > 0) {
-    result.push({
-      id: 'cost-deviation',
-      category: 'Custos',
-      type: 'danger',
-      icon: 'trending-up-outline',
-      title: 'Desvio de custos',
-      description: `A obra está ${Number(dashboard.deviation).toLocaleString('pt-BR')}% acima do orçamento previsto.`,
-      time: 'Agora',
-    });
-  }
-
-  const lateOrders = orders.filter((order) => {
-    if (!order.expected_at || !order.purchased_at || ['RECEIVED', 'CANCELLED', 'Recebido', 'Cancelado'].includes(order.status)) return false;
-    return new Date(`${order.expected_at.slice(0,10)}T23:59:59`) < new Date();
-  });
-
-  if (lateOrders.length) {
-    result.push({
-      id: 'late-orders',
-      category: 'Prazos',
-      type: 'warning',
-      icon: 'time-outline',
-      title: 'Entregas em atraso',
-      description: `${lateOrders.length} pedido(s) ainda aguardam recebimento.`,
-      time: 'Hoje',
-    });
-  }
-
-  const pendingRequests = requests.filter((request) => ['PENDING','Pendente'].includes(request.status));
-  if (pendingRequests.length) {
-    result.push({
-      id: 'pending-requests',
-      category: 'Aprovações',
-      type: 'info',
-      icon: 'clipboard-outline',
-      title: 'Solicitações pendentes',
-      description: `${pendingRequests.length} solicitação(ões) aguardam andamento.`,
-      time: 'Hoje',
-    });
-  }
-
-  if (budgetDocuments.length) {
-    result.push({
-      id: 'latest-budget',
-      category: 'Custos',
-      type: 'success',
-      icon: 'document-text-outline',
-      title: 'Orçamento disponível',
-      description: `${budgetDocuments[0].number || 'Documento'} está disponível na demonstração e pronto para gerar PDF.`,
-      time: 'Atual',
-    });
-  }
-
-  if (!result.length) {
-    result.push({
-      id: 'all-good',
-      category: 'Todos',
-      type: 'success',
-      icon: 'checkmark-circle-outline',
-      title: 'Nenhum alerta crítico',
-      description: 'Não há pendências relevantes para a obra selecionada.',
-      time: 'Agora',
-    });
-  }
-
-  return result;
-}
-
-export function AlertsScreen() {
-  const { budgetDocuments, dashboard, orders, requests } = useApp();
-  const [activeFilter, setActiveFilter] = useState('Todos');
-  const alerts = useMemo(
-    () => buildAlerts({ dashboard, orders, requests, budgetDocuments }),
-    [budgetDocuments, dashboard, orders, requests],
-  );
-  const visibleAlerts = activeFilter === 'Todos'
-    ? alerts
-    : alerts.filter((alert) => alert.category === activeFilter);
-
-  return (
-    <Screen>
-      <ScreenHeader title="Alertas" right={
-          <MarkButton accessibilityRole="button" accessibilityLabel="Alertas atualizados">
-            <Ionicons name="checkmark-done" size={25} color="white" />
-          </MarkButton>
-      } />
-      <Scroll>
-        <Content>
-          <FilterRow>
-            {ALERT_FILTERS.map((label) => {
-              const isActive = activeFilter === label;
-              return (
-                <FilterChip
-                  accessibilityRole="button"
-                  key={label}
-                  $isActive={isActive}
-                  onPress={() => setActiveFilter(label)}
-                >
-                  <FilterText $isActive={isActive}>{label}</FilterText>
-                </FilterChip>
-              );
-            })}
-          </FilterRow>
-
-          {!visibleAlerts.length && (
-            <Text accessibilityRole="text">Nenhum alerta nesta categoria.</Text>
-          )}
-
-          {visibleAlerts.map((alert) => {
-            const palette = ALERT_PALETTE[alert.type] ?? ALERT_PALETTE.info;
-            return (
-              <AlertCard
-                accessible
-                accessibilityLabel={`${alert.title}. ${alert.description}. ${alert.time}`}
-                key={alert.id}
-              >
-                <AlertIcon $backgroundColor={palette.backgroundColor}>
-                  <Ionicons name={alert.icon} size={23} color={palette.color} />
-                </AlertIcon>
-                <AlertInfo>
-                  <AlertTitle>{alert.title}</AlertTitle>
-                  <Description>{alert.description}</Description>
-                </AlertInfo>
-                <Time>{alert.time}</Time>
-              </AlertCard>
-            );
-          })}
-        </Content>
-      </Scroll>
-    </Screen>
-  );
+import {useMemo,useState} from 'react';
+import {AccessibleView as View,AccessibleTouchableOpacity as TouchableOpacity,AccessibleScrollView as ScrollView,AccessibleIonicons as Ionicons} from '../components/accessibility/AccessibleNative';
+import {ReadableText as Text} from '../components/accessibility/ReadableText';
+import {InventoryScreen} from '../components/layout/InventoryScreen';
+import {ProjectSelector} from '../components/budget/ProjectSelector';
+import {useApp} from '../contexts/AppContext';
+import {buildAlerts} from '../utils/alerts';
+import {operationsStyles as styles} from './Operations.styles';
+const palette={danger:['#FDEBEC','#B42318'],warning:['#FFF5D9','#805C00'],info:['#E7F3FD','#0066BE'],success:['#E7F5EF','#187548']};
+export function AlertsScreen(){
+ const {dashboard,orders,requests,budgetDocuments,selectedProject}=useApp();
+ const [filter,setFilter]=useState('Todos');
+ const alerts=useMemo(()=>selectedProject?buildAlerts({dashboard,orders,requests,budgetDocuments:budgetDocuments.filter(b=>b.projectId===selectedProject.id)}):[],[dashboard,orders,requests,budgetDocuments,selectedProject?.id]);
+ const visible=filter==='Todos'?alerts:alerts.filter(a=>a.category===filter);
+ const pending=alerts.filter(a=>!['all-good','latest-budget'].includes(a.id)).length;
+ return <InventoryScreen title="Alertas">
+  <ProjectSelector label="OBRA DOS ALERTAS"/>
+  <View style={styles.hero}><Text style={styles.eyebrow}>ATENÇÃO HOJE</Text><Text style={styles.big}>{pending} {pending===1?'ponto de atenção':'pontos de atenção'}</Text><Text style={styles.heroText}>Acompanhe custos, entregas e aprovações de {selectedProject?.name||'sua obra'}.</Text></View>
+  <View style={styles.metrics}>{[['Custos','trending-up-outline'],['Prazos','time-outline'],['Aprovações','checkmark-done-outline']].map(([label,icon])=><TouchableOpacity key={label} accessibilityRole="button" accessibilityLabel={label} onPress={()=>setFilter(label)} style={styles.metric}><Ionicons name={icon} size={25} color="#0066BE"/><Text style={styles.metricValue}>{alerts.filter(a=>a.category===label).length}</Text><Text style={styles.metricLabel}>{label}</Text></TouchableOpacity>)}</View>
+  <Text accessibilityRole="header" style={styles.section}>Atualizações da obra</Text>
+  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filters}>{['Todos','Custos','Prazos','Aprovações'].map(label=><TouchableOpacity key={label} accessibilityRole="button" accessibilityState={{selected:label===filter}} onPress={()=>setFilter(label)} style={[styles.chip,filter===label&&{backgroundColor:'#010028'}]}><Text style={[styles.chipText,filter===label&&{color:'white'}]}>{label}</Text></TouchableOpacity>)}</ScrollView>
+  {!visible.length&&<View style={styles.empty}><Ionicons name="notifications-outline" size={30} color="#0066BE"/><Text style={styles.name}>{selectedProject?'Nenhuma atualização nesta categoria':'Selecione uma obra'}</Text><Text style={styles.meta}>{selectedProject?'Escolha outra categoria para ver as demais atualizações.':'Os alertas correspondem à obra escolhida acima.'}</Text></View>}
+  {visible.map(alert=>{const [background,color]=palette[alert.type]||palette.info;return <View key={alert.id} style={styles.card}><View style={styles.row}><View style={[styles.icon,{backgroundColor:background}]}><Ionicons name={alert.icon} size={24} color={color}/></View><View style={styles.info}><Text accessibilityRole="header" style={styles.name}>{alert.title}</Text><Text style={[styles.badgeText,{color,marginTop:4}]}>{alert.category==='Todos'?'Tudo em dia':alert.category}</Text></View></View><Text style={styles.meta}>{alert.description}</Text><Text style={[styles.meta,{fontSize:11}]}>{alert.time} · Calculado com os dados carregados da obra</Text></View>;})}
+ </InventoryScreen>;
 }
