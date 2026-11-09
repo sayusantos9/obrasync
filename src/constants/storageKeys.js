@@ -1,4 +1,5 @@
 export const STORAGE_KEYS = Object.freeze({
+  ONBOARDING_COMPLETE: '@obrasync:onboarding-complete',
   AUTH_TOKEN: '@obrasync:auth-token',
   SELECTED_PROJECT: '@obrasync:selected-project',
   PENDING_REQUESTS: '@obrasync:pending-requests',

@@ -38,7 +38,7 @@ export function AccessibilityPanel({initialTab='visual'}){
  </View>;
 }
 
-export function AccessibilityToolsProvider({children}){
+export function AccessibilityToolsProvider({children,showToolbar=true}){
  const app=useApp(),{accessibilitySettings:settings,currentScreen,activeTab}=app;
  const [opened,setOpened]=useState(false),[keyboardTop,setKeyboardTop]=useState(null),[initialTab,setInitialTab]=useState('visual');
  const {height}=useWindowDimensions();
@@ -71,7 +71,7 @@ export function AccessibilityToolsProvider({children}){
   {!!translation&&!opened&&<FloatingLibras text={translation} onClose={()=>{setTranslation(null);lastText.current='';}}/>}
   {settings.readingMask&&!opened&&<View pointerEvents="none" style={[StyleSheet.absoluteFill,{zIndex:80}]}><View style={{position:'absolute',top:0,left:0,right:0,height:'36%',backgroundColor:'rgba(0,0,0,0.35)'}}/><View style={{position:'absolute',bottom:0,left:0,right:0,height:'36%',backgroundColor:'rgba(0,0,0,0.35)'}}/></View>}
   {settings.readingGuide&&!opened&&keyboardTop===null&&<View pointerEvents="none" accessible={false} importantForAccessibility="no-hide-descendants" style={styles.guide}/>}
-  {settings.accessibilityToolbar!==false&&!opened&&<View testID="accessibility-toolbar" style={[styles.toolbar,{right:Math.max(4,insets.right),top:Math.max(insets.top+8,(Math.min(height,keyboardTop??height)-144)/2)}]}>
+  {showToolbar&&settings.accessibilityToolbar!==false&&!opened&&<View testID="accessibility-toolbar" style={[styles.toolbar,{right:Math.max(4,insets.right),top:Math.max(insets.top+8,(Math.min(height,keyboardTop??height)-144)/2)}]}>
    {[['libras','hand-left-outline','Abrir Libras'],['voice','volume-high-outline','Abrir leitura em voz'],['visual','eye-outline','Abrir ajustes visuais']].map(([tab,icon,label],index)=><TouchableOpacity key={tab} accessibilityRole="button" accessibilityLabel={label} accessibilityHint="Abre o painel de acessibilidade sobre a tela atual" onPress={()=>tab==='visual'?openAccessibility(tab):mode===tab?stopExploring():startExploring(tab)} style={[styles.toolbarButton,index>0&&styles.toolbarDivider]}><Ionicons name={icon} size={23} color="#FFFFFF"/></TouchableOpacity>)}
   </View>}
   <Modal visible={opened} animationType={settings.reduceMotion?'none':'slide'} onRequestClose={close} onShow={()=>{if(Platform.OS==='web'){heading.current?.focus?.();return;}const node=findNodeHandle(heading.current);if(node)AccessibilityInfo.setAccessibilityFocus(node);}}>
