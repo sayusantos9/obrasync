@@ -1,62 +1,34 @@
 import {useEffect,useState} from 'react';
 import {Alert,AppState} from 'react-native';
-import {AccessibleView as View,AccessibleTouchableOpacity as Button,AccessibleTextInput as Input} from '../components/accessibility/AccessibleNative';
-import {ReadableText as Text} from '../components/accessibility/ReadableText';
-import {InventoryScreen,useInventoryTheme} from '../components/layout/InventoryScreen';
-import {ProjectSelector} from '../components/budget/ProjectSelector';
+import {FinancialComparisonContent} from './FinancialComparisonContent';
 import {useApp} from '../contexts/AppContext';
 import {SCREENS} from '../navigation/routes';
-import {fetchFinancialComparison,reserveBudgetStock} from '../services/financialComparisonService';
-import {buildFinancialComparison,financialComparisonSheets,PROJECTION_MODES} from '../utils/financialComparison';
+import {fetchFinancialComparison} from '../services/financialComparisonService';
+import {buildFinancialComparison,financialComparisonSheets} from '../utils/financialComparison';
 import {shareWorkbook,sharePdf,safe} from '../services/documentExportService';
-import {formatCurrency} from '../utils/currency';
 const decimal=v=>String(v).trim()===''?null:Number(String(v).replace(',','.'));
-const money=v=>v==null?'Sem referência':formatCurrency(v);
 export function FinancialComparisonScreen(){
- const {selectedProject,budgetDocuments,openScreen,orders=[],stock=[]}=useApp(),theme=useInventoryTheme();
+ const {selectedProject,budgetDocuments,openScreen,orders=[],stock=[]}=useApp();
  const sourceVersion=JSON.stringify([orders.map(o=>[o.id,o.total,o.purchased_at,o.status,o.updated_at]),stock.map(s=>[s.id,s.quantity,s.updated_at])]);
  const [selected,setSelected]=useState(''),[snapshot,setSnapshot]=useState(null),[loading,setLoading]=useState(false),[error,setError]=useState(''),[revision,setRevision]=useState(0),[tolerance,setTolerance]=useState('5'),[mode,setMode]=useState('average'),[scenarios,setScenarios]=useState({}),[query,setQuery]=useState(''),[limit,setLimit]=useState(20),[exporting,setExporting]=useState(false);
- useEffect(()=>{setSelected('');setScenarios({});setLimit(20);},[selectedProject?.id]);
- useEffect(()=>{let live=true;setSnapshot(null);setError('');if(!selectedProject?.id)return;setLoading(true);fetchFinancialComparison(selectedProject.id,selected).then(v=>{if(live)setSnapshot(v);}).catch(e=>{if(live)setError(e.message);}).finally(()=>{if(live)setLoading(false);});return()=>{live=false;};},[selectedProject?.id,selectedProject?.baselineBudgetId,selected,revision,sourceVersion]);
+ useEffect(()=>{setSelected('');setScenarios({});setLimit(20);setQuery('');},[selectedProject?.id]);
+ useEffect(()=>{let live=true;setSnapshot(null);setError('');if(!selectedProject?.id){setLoading(false);return;}setLoading(true);fetchFinancialComparison(selectedProject.id,selected).then(v=>{if(live)setSnapshot(v);}).catch(e=>{if(live)setError(e.message);}).finally(()=>{if(live)setLoading(false);});return()=>{live=false;};},[selectedProject?.id,selectedProject?.baselineBudgetId,selected,revision,sourceVersion]);
  useEffect(()=>{const sub=AppState.addEventListener('change',state=>{if(state==='active')setRevision(v=>v+1);});return()=>sub.remove();},[]);
- const text={color:theme.colors.text,fontSize:15,lineHeight:23},card={padding:18,marginTop:14,borderRadius:18,backgroundColor:theme.colors.surface,borderWidth:1,borderColor:theme.colors.border},button={padding:14,minHeight:48,marginTop:10,borderRadius:12,backgroundColor:theme.colors.primarySoft};
  const parsedScenarios=mode==='scenario'?Object.fromEntries(Object.entries(scenarios).map(([k,v])=>[k,{...v,price:decimal(v.price??''),quantity:decimal(v.quantity??'')}])):{};
  let report=null,validation='';
  try{if(snapshot)report=buildFinancialComparison(snapshot,{tolerance:decimal(tolerance)??NaN,mode,scenarios:parsedScenarios});}
  catch(e){validation=e.message;if(snapshot){const t=decimal(tolerance);report=buildFinancialComparison(snapshot,{tolerance:Number.isFinite(t)&&t>=0&&t<=100?t:5,mode,scenarios:Object.fromEntries(Object.entries(parsedScenarios).map(([k,v])=>[k,{...v,price:Number.isFinite(v.price)&&v.price>=0?v.price:null,quantity:Number.isFinite(v.quantity)&&v.quantity>=0?v.quantity:null}]))});}}
 
- const budgets=budgetDocuments.filter(b=>b.projectId===selectedProject?.id),s=report?.summary,visible=report?.rows.filter(r=>r.description.toLocaleLowerCase('pt-BR').includes(query.toLocaleLowerCase('pt-BR')))||[];
+ const budgets=budgetDocuments.filter(b=>b.projectId===selectedProject?.id),visible=report?.rows.filter(r=>r.description.toLocaleLowerCase('pt-BR').includes(query.toLocaleLowerCase('pt-BR')))||[];
  async function exportFile(format){if(!report||exporting||validation)return;setExporting(true);try{const sheets=financialComparisonSheets(report);if(format==='excel')await shareWorkbook(sheets,'Comparacao_financeira');else {
  const html='<html><head><meta charset="utf-8"><style>body{font-family:Arial;color:#010028;font-size:11px}h1,h2{color:#0066be}table{border-collapse:collapse;width:100%;margin-bottom:16px}td{border:1px solid #ccc;padding:5px;overflow-wrap:anywhere}tr{break-inside:avoid}h3{break-after:avoid}</style></head><body><h1>Comparação financeira — '+safe(report.project.name)+'</h1>'+sheets.map(sheet=>'<h2>'+safe(sheet.name)+'</h2>'+(sheet.name==='Resumo'?'<table>'+sheet.rows.map(r=>'<tr>'+r.map(v=>'<td>'+safe(v)+'</td>').join('')+'</tr>').join('')+'</table>':sheet.rows.slice(1).map((r,index)=>'<h3>Registro '+(index+1)+'</h3><table>'+r.map((v,i)=>'<tr><td>'+safe(sheet.rows[0][i])+'</td><td>'+safe(typeof v==='number'?Math.round(v*10000)/10000:v)+'</td></tr>').join('')+'</table>').join(''))).join('')+'</body></html>';await sharePdf(html,'Comparacao_financeira');}
  }catch(e){Alert.alert('Erro ao exportar',e.message);}finally{setExporting(false);}}
- return <InventoryScreen title="Previsto × compra"><ProjectSelector/><View style={[card,{backgroundColor:theme.colors.primary}]}><Text style={{...text,color:'#FFF',fontSize:25,fontWeight:'700'}}>Entenda cada desvio.</Text><Text style={{...text,color:'#FFF'}}>Preço, quantidade, aderência e projeção dos insumos.</Text></View>
- <Button accessibilityRole="button" style={button} onPress={()=>openScreen(SCREENS.MARKET_PRICES)}><Text style={text}>Pesquisar preços de mercado</Text></Button>
- <Text style={text}>Base de comparação — versões não são somadas</Text><Button accessibilityRole="radio" accessibilityState={{checked:!selected}} style={button} onPress={()=>setSelected('')}><Text style={text}>{!selected?'● ':'○ '}Orçamento-base oficial</Text></Button>{budgets.map(b=><Button key={b.id} accessibilityRole="radio" accessibilityState={{checked:selected===b.id}} style={button} onPress={()=>setSelected(b.id)}><Text style={text}>{selected===b.id?'● ':'○ '}{b.number} · {b.title} · revisão {b.revisionNumber}</Text></Button>)}
- <Button accessibilityRole="button" disabled={loading} style={button} onPress={()=>setRevision(n=>n+1)}><Text style={text}>Atualizar comparação</Text></Button>{loading&&<Text style={text}>Carregando snapshot da obra…</Text>}{!!error&&<Text accessibilityRole="alert" style={text}>{error}</Text>}
- <View style={card}><Text style={text}>Tolerância superior de preço (%)</Text><Input accessibilityLabel="Tolerância percentual" value={tolerance} onChangeText={setTolerance} keyboardType="decimal-pad" style={[card,text]}/><Text style={text}>Aderência = valor das compras dentro do limite ÷ total comprado. Preços abaixo do orçamento são favoráveis. Compras sem referência não contam como aderentes.</Text>
- <Text accessibilityRole="header" style={{...text,fontWeight:'700'}}>Critério de projeção</Text>{Object.entries(PROJECTION_MODES).map(([value,label])=><Button key={value} accessibilityRole="radio" accessibilityState={{checked:mode===value}} onPress={()=>setMode(value)} style={button}><Text style={text}>{mode===value?'● ':'○ '}{label}</Text></Button>)}</View>
- {!!validation&&<Text accessibilityRole="alert" style={text}>{validation}</Text>}
- {report&&<><View style={card}><Text style={text}>Dados: {new Date(report.generatedAt).toLocaleString('pt-BR')} · data-base {report.baseline?.base_date||'não informada'}</Text>{[['Previsto sem BDI',s.planned],['Comprado confirmado',s.actual],['Aprovado ainda não comprado',s.committed],['Efeito preço',s.priceEffect],['Efeito quantidade',s.quantityEffect],['Efeito combinado',s.combinedEffect],['Diferença sem referência',s.unmatched],['Comprado − previsto',s.difference],['Desembolso projetado',s.projectedSpend],['Estoque externo: valor estimado',s.reservedEstimate],['Custo projetado com estoque externo',s.projection]].map(([label,v])=><View key={label} style={{marginTop:10}}><Text style={text}>{label}</Text><Text style={{...text,fontSize:21,fontWeight:'700'}}>{money(v)}</Text></View>)}<Text style={text}>Aderência: {s.adherence==null?'Sem compra':s.adherence.toFixed(1)+'%'} · cobertura comparável: {s.coverage==null?'—':s.coverage.toFixed(1)+'%'}</Text></View>
- <View style={card}><Text style={text}>Diferença negativa durante a execução não significa economia final. Os três efeitos se somam à diferença comprado − previsto; os itens sem referência ficam separados.</Text><Text style={text}>Preço = Q prevista × variação de preço. Quantidade = PP × variação de quantidade. Combinado = variação de preço × variação de quantidade. Impacto de preço realizado = preço + combinado.</Text><Text style={text}>Projeção inclui compras confirmadas, pedidos já aprovados e necessidade adicional. A reserva cobre apenas estoque externo comprovável, sem descontar novamente compras desta obra. O custo desse estoque é estimado separadamente. Despesas sem vínculo ao insumo e BDI ficam fora desta comparação.</Text>{report.warnings.map(w=><Text key={w} accessibilityRole="alert" style={text}>{w}</Text>)}</View>
- <View style={{flexDirection:'row',flexWrap:'wrap',gap:10}}>{['pdf','excel'].map(f=><Button key={f} accessibilityRole="button" disabled={exporting||!!validation} style={button} onPress={()=>exportFile(f)}><Text style={text}>{exporting?'Exportando…':`Exportar ${f.toUpperCase()}`}</Text></Button>)}</View>
- <Input accessibilityLabel="Buscar insumo na comparação" placeholder="Buscar insumo" value={query} onChangeText={v=>{setQuery(v);setLimit(20);}} style={[card,text]}/>
- {visible.slice(0,limit).map(r=><FinancialRow key={r.key} row={r} mode={mode} text={text} card={card} button={button} scenario={scenarios[r.key]||{}} onScenario={v=>setScenarios(old=>({...old,[r.key]:{...old[r.key],...v}}))} projectId={selectedProject.id} budgetId={report.baseline?.id} canReserve={report.baseline?.id===report.project.baseline_budget_id} onReserved={()=>setRevision(n=>n+1)}/>)}
- {visible.length>limit&&<Button accessibilityRole="button" style={button} onPress={()=>setLimit(n=>n+20)}><Text style={text}>Mostrar mais insumos</Text></Button>}
- </>}
- </InventoryScreen>;
-}
-function FinancialRow({row:r,mode,text,card,button,scenario,onScenario,projectId,budgetId,canReserve,onReserved}){
- const [open,setOpen]=useState(false);
- return <View style={card}><Text accessibilityRole="header" style={{...text,fontWeight:'700',fontSize:18}}>{r.description}</Text><Text style={text}>{r.status} · {r.unit}</Text><Text style={text}>PP {money(r.pp)} · PR {money(r.pr)}</Text><Text style={text}>Previsto {r.plannedQuantity} · comprado {r.purchasedQuantity} · consumido registrado {r.consumed}</Text><Text style={text}>Preço {money(r.priceEffect)} · quantidade {money(r.quantityEffect)} · combinado {money(r.combinedEffect)}</Text><Text style={text}>Saldo a contratar {r.remaining} · reserva externa {r.reserved} · já comprometido {r.committedQuantity}</Text><Text style={text}>Custo projetado: {money(r.projection)}</Text><Button accessibilityRole="button" accessibilityState={{expanded:open}} style={button} onPress={()=>setOpen(!open)}><Text style={text}>{open?'Recolher detalhes':'Detalhes, cenário e reserva'}</Text></Button>
- {open&&<><Text style={text}>Desvio: {r.percent==null?'Sem referência':r.percent.toFixed(2)+'%'} · impacto de preço realizado: {money(r.priceImpact)}</Text><Text style={text}>Preço da projeção: {money(r.projectionPrice)}{r.fallback?' (referência orçamentária; sem histórico suficiente)':''}</Text><Text style={text}>Compra adicional: {r.projectedQuantity} {r.unit} · desembolso projetado {money(r.projectedSpend)}</Text>
- {mode==='scenario'&&<><Text style={text}>Simulação, sem criar pedidos. Deixe em branco para usar média e necessidade calculada.</Text>{[['price','Preço líquido equivalente por unidade'],['quantity','Quantidade adicional a comprar'],['supplier','Fornecedor simulado'],['terms','Condição de pagamento simulada']].map(([k,label])=><View key={k}><Text style={text}>{label}</Text><Input accessibilityLabel={`${label}: ${r.description}`} value={scenario[k]||''} onChangeText={v=>onScenario({[k]:v})} keyboardType={['price','quantity'].includes(k)?'decimal-pad':'default'} style={[card,text]}/></View>)}</>}
- {r.stock.map(stock=><Reservation key={stock.materialId} stock={stock} description={r.description} projectId={projectId} budgetId={budgetId} canReserve={canReserve} onReserved={onReserved} text={text} card={card} button={button}/>)}
- </>}
- </View>;
-}
-function Reservation({stock,description,projectId,budgetId,canReserve,onReserved,text,card,button}){
- const [qty,setQty]=useState(String(stock.savedReservation)),[reason,setReason]=useState(''),[busy,setBusy]=useState(false);
- useEffect(()=>setQty(String(stock.savedReservation)),[stock.savedReservation]);
- async function save(){const value=decimal(qty);if(value==null||!Number.isFinite(value)||value<0||reason.trim().length<5)return Alert.alert('Revise a reserva','Informe quantidade não negativa e motivo com 5 caracteres.');setBusy(true);try{await reserveBudgetStock(projectId,stock.materialId,value,reason.trim(),budgetId);onReserved();}catch(e){Alert.alert('Não foi possível reservar',e.message);}finally{setBusy(false);}}
- return <View style={card}><Text style={text}>Estoque físico: {stock.quantity} · externo comprovável: {stock.external} · reservado: {stock.savedReservation}</Text><Text style={text}>A estimativa externa subtrai todos os recebimentos locais do saldo físico, conservadoramente. Libere a reserva antes de consumir ou transferir o saldo reservado.</Text>{canReserve?<><Input accessibilityLabel={`Reserva externa de ${description}`} value={qty} onChangeText={setQty} keyboardType="decimal-pad" style={[card,text]}/><Input accessibilityLabel={`Motivo da reserva de ${description}`} placeholder="Motivo da reserva ou liberação" value={reason} onChangeText={setReason} style={[card,text]}/><Button accessibilityRole="button" disabled={busy} style={button} onPress={save}><Text style={text}>{busy?'Salvando…':'Salvar reserva (zero libera)'}</Text></Button></>:<Text style={text}>Reservas são configuradas somente no orçamento-base oficial.</Text>}</View>;
+ return <FinancialComparisonContent
+   selectedProject={selectedProject} budgets={budgets} selected={selected} setSelected={setSelected}
+   report={report} loading={loading} error={error} refresh={()=>setRevision(n=>n+1)}
+   tolerance={tolerance} setTolerance={setTolerance} mode={mode} setMode={setMode} validation={validation}
+   exporting={exporting} exportFile={exportFile} query={query} setQuery={setQuery}
+   visible={visible} limit={limit} setLimit={setLimit} scenarios={scenarios} setScenarios={setScenarios}
+   openMarket={()=>openScreen(SCREENS.MARKET_PRICES)}
+ />;
 }
